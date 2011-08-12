@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Course">
+		<message>Course</message>
+	</layout>
+	<state>
+		<name>Course</name>
+		<description>Starts a Course</description>
+
+		<url addpath="/administrator/components/com_continued/elements">
+			<param name="course" type="course" label="Course" description="Choose a course..." />
+		</url>
+	</state>
+</metadata>

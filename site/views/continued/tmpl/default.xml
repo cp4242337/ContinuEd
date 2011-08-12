@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Course Catalog">
+		<message>Course Catalog</message>
+	</layout>
+	<state>
+		<name>Course Catalog</name>
+		<description>Listing of courses in a paticular category.</description>
+
+		<url addpath="/administrator/components/com_continued/elements">
+			<param name="cat" type="continued" label="Category"
+				description="Choose a category..." />
+		</url>
+	</state>
+</metadata>

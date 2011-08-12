@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: question.xml 62 2010-11-28 16:08:16Z chdemko $ -->
+<form>
+	<fieldset name="details">
+		<field
+			name="ug_id"
+			type="hidden"
+		/>
+		<field
+			name="published"
+			type="list"
+			id="published"
+			class="inputbox"
+			label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC"
+			size="1"
+			default="1"
+			filter="integer">
+			<option	value="1">JPUBLISHED</option>
+			<option	value="0">JUNPUBLISHED</option>
+		</field>
+		<field
+			name="access"
+			type="accesslevel"
+			id="access"
+			class="inputbox"
+			label="JFIELD_ACCESS_LABEL"
+			description="JFIELD_ACCESS_DESC"
+			default="1"
+			filter="integer"/>
+		<field
+			name="ug_name"
+			type="text"
+			label="COM_CONTINUED_UGROUP_FIELD_NAME_LABEL"
+			description="COM_CONTINUED_UGROUP_FIELD_NAME_DESC"
+			size="40"
+			class="inputbox"
+			required="true"
+			default=""
+		/>
+
+	</fieldset>
+	
+
+</form>
+

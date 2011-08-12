@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.7" method="upgrade">
+	<name>com_continued</name>
+	<creationDate>2009.01</creationDate>
+	<author>Corona Productions</author>
+	<authorEmail>mamundsen@coronapro.com</authorEmail>
+	<authorUrl>http://www.coronapro.com</authorUrl>
+	<copyright>Copyright 2008-2011 Corona Productions</copyright>
+	<license>GPL v2</license>
+	<version>1.20.0</version>
+	<releaseDate>2011.06.30</releaseDate>
+	<releaseType>Update</releaseType>
+	<downloadUrl>http://www.coronapro.com/</downloadUrl>
+	<description>COM_CONTINUED_DESC</description>
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">install.sql</file>
+		</sql>
+	</install>
+	<files folder="site">
+		<filename>index.html</filename>
+		<filename>interq.php</filename>
+		<filename>qanda.php</filename>
+		<filename>continued.php</filename>
+		<filename>controller.php</filename>
+		<filename>metadata.xml</filename>
+		<filename>printButton.png</filename>
+		<folder>models</folder>
+		<folder>certif</folder>
+		<folder>views</folder>
+		<folder>helpers</folder>
+	</files>
+    <media destination="com_continued" folder="media">
+            <filename>index.html</filename>
+            <filename>bar_1.jpg</filename>
+            <filename>bar_2.jpg</filename>
+            <filename>bar_3.jpg</filename>
+            <filename>bar_4.jpg</filename>
+            <folder>template</folder>
+            <folder>scripts</folder>
+			<folder>images</folder>
+    </media>
+	<administration>
+		<!-- Administration Menu Section -->
+		<menu img="../media/com_continued/images/continued-16x16.png">COM_CONTINUED_MENU</menu>
+		<submenu>
+			<menu view="config">COM_CONTINUED_SUBMENU_CONFIG</menu>
+			<menu view="courses">COM_CONTINUED_SUBMENU_COURSES</menu>
+			<menu view="reports">COM_CONTINUED_SUBMENU_REPORTS</menu>
+			<menu view="cats">COM_CONTINUED_SUBMENU_CATEGORIES</menu>
+			<menu view="provs">COM_CONTINUED_SUBMENU_PROVIDERS</menu>
+			<menu view="certifs">COM_CONTINUED_SUBMENU_CERTIFICATES</menu>
+			<menu view="degrees">COM_CONTINUED_SUBMENU_DEGREES</menu>
+			<menu view="certtypes">COM_CONTINUED_SUBMENU_CERTTYPES</menu>
+			<menu view="coursestat">COM_CONTINUED_SUBMENU_COURSESTATS</menu>
+			<menu view="catstat">COM_CONTINUED_SUBMENU_CATSTATS</menu>
+			<menu view="ugroups">COM_CONTINUED_SUBMENU_UGROUPS</menu>
+		</submenu>
+		<files folder="admin">
+			<filename>index.html</filename>
+			<filename>controller.php</filename>
+			<filename>continued.php</filename>
+			<filename>install.sql</filename>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<folder>models</folder>
+			<folder>certif</folder>
+			<folder>controllers</folder>
+			<folder>elements</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+			<folder>helpers</folder>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB.com_continued.ini</language>
+			<language tag="en-GB">language/en-GB.com_continued.sys.ini</language>
+		</languages>	
+	</administration>
+</extension>
