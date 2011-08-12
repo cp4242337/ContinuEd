@@ -1,15 +1,22 @@
 <?php
+
+
+// No direct access
 defined('_JEXEC') or die('Restricted access');
 
-class TableProv extends JTable
+// import Joomla table library
+jimport('joomla.database.table');
+
+class ContinuEdTableProv extends JTable
 {
-	var $pid = null;
-
-	var $pname = null;
-	var $plogo = null;
-
-	function TableProv(& $db) {
-		parent::__construct('#__ce_providers', 'pid', $db);
+	/**
+	 * Constructor
+	 *
+	 * @param object Database connector object
+	 */
+	function __construct(&$db) 
+	{
+		parent::__construct('#__ce_providers', 'prov_id', $db);
 	}
+	
 }
-?>

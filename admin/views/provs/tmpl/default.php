@@ -1,44 +1,41 @@
-<?php defined('_JEXEC') or die('Restricted access');
-$order = JHTML::_('grid.order', $this->items);
+<?php
+
+// No direct access to this file
+defined('_JEXEC') or die('Restricted Access');
+// load tooltip behavior
+JHtml::_('behavior.tooltip');
+
+$listOrder	= $this->escape($this->state->get('list.ordering'));
+$listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
-<form action="index.php" method="post" name="adminForm">
-<div id="editcell">
-<table class="adminlist">
-	<thead>
-		<tr>
-			<th width="5"><?php echo JText::_( 'id' ); ?></th>
-			<th width="20"><input type="checkbox" name="toggle" value=""
-				onclick="checkAll(<?php echo count( $this->items ); ?>);" /></th>
-			<th><?php echo JText::_( 'Provider Name' ); ?></th>
-			<th><?php echo JText::_( 'Provider Logo Image' ); ?></th>
-		</tr>
-	</thead>
-	<?php
-	$k = 0;
-	for ($i=0, $n=count( $this->items ); $i < $n; $i++)
-	{
-		$row = &$this->items[$i];
-		$checked 	= JHTML::_('grid.id',   $i, $row->pid,'','lid' );
-		$published 	= JHTML::_('grid.published',   $row, $i,'tick.png','publish_x.png', 'crct'  );
-		$link 		= JRoute::_( 'index.php?option=com_continued&controller=prov&task=edit&question='.$this->questionid.'&lid[]='. $row->pid );
+<form action="<?php echo JRoute::_('index.php?option=com_continued&view=provs'); ?>" method="post" name="adminForm">
+	<fieldset id="filter-bar">
+		<div class="filter-search fltlft">
+			
+		</div>
+		<div class="filter-select fltrt">
+			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true);?>
+			</select>
 
-		?>
-	<tr class="<?php echo "row$k"; ?>">
-		<td><?php echo $row->pid; ?></td>
-		<td><?php echo $checked; ?></td>
-		<td><a href="<?php echo $link; ?>"><?php echo $row->pname; ?></a></td>
-		<td><?php echo $row->plogo; ?></td>
+		</div>
+	</fieldset>
+	
+	<div class="clr"> </div>
+	
+	<table class="adminlist">
+		<thead><?php echo $this->loadTemplate('head');?></thead>
+		<tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
+		<tbody><?php echo $this->loadTemplate('body');?></tbody>
+	</table>
+	<div>
+		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="boxchecked" value="0" />
+		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+		<?php echo JHtml::_('form.token'); ?>
+	</div>
+</form>
 
-	</tr>
-	<?php
-	$k = 1 - $k;
-	}
-	?>
-</table>
-</div>
 
-<input type="hidden" name="option" value="com_continued" /> <input
-	type="hidden" name="task" value="" /> <input
-	type="hidden" name="view" value="prov" /> <input type="hidden"
-	name="boxchecked" value="0" /> <input type="hidden" name="controller"
-	value="prov" /></form>

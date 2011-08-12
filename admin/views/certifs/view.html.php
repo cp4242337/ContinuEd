@@ -1,42 +1,67 @@
 <?php
-/**
- * Hellos View for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-jimport( 'joomla.application.component.view' );
+// import Joomla view library
+jimport('joomla.application.component.view');
 
-/**
- * Hellos View
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
-class ContinuEdViewCertifs extends JView
+class ContinuedViewCertifs extends JView
 {
-	/**
-	 * Hellos view display method
-	 * @return void
-	 **/
-	function display($tpl = null)
+	function display($tpl = null) 
 	{
-		JToolBarHelper::title(   JText::_( 'ContinuEd Certificate Template Manager' ), 'continued' );
-		//JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
-
 		// Get data from the model
-		$items		= & $this->get( 'Data');
+		$items = $this->get('Items');
+		$pagination = $this->get('Pagination');
+		$this->state		= $this->get('State');
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) 
+		{
+			JError::raiseError(500, implode('<br />', $errors));
+			return false;
+		}
+		// Assign data to the view
+		$this->items = $items;
+		$this->pagination = $pagination;
+		$this->qlist = $qlist;
+		// Set the toolbar
+		$this->addToolBar();
 
-		$this->assignRef('items',		$items);
-
+		// Display the template
 		parent::display($tpl);
+
+		// Set the document
+		$this->setDocument();
+	}
+
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		$state	= $this->get('State');
+		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_CERTIFS'), 'continued');
+		JToolBarHelper::addNew('certif.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::editList('certif.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::divider();
+		JToolBarHelper::custom('certifs.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
+		JToolBarHelper::custom('certifs.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);
+		JToolBarHelper::divider();
+		if ($state->get('filter.published') == -2) {
+			JToolBarHelper::deleteList('', 'certifs.delete', 'JTOOLBAR_EMPTY_TRASH');
+			JToolBarHelper::divider();
+		} else  {
+			JToolBarHelper::trash('certifs.trash');
+		}
+	}
+	/**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_('COM_CONTINUED_MANAGER_CERTIFS'));
 	}
 }

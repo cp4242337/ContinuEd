@@ -17,7 +17,7 @@ defined('_JEXEC') or die('Restricted Access');
 				<?php echo $this->escape($item->ug_name); ?></a>
 		</td>
 		<td class="center">
-			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'options.', true);?>
+			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'ugroups.', true);?>
 		</td>
 		<td>
 			<?php echo $item->access_level; ?>

@@ -9,13 +9,13 @@ defined('_JEXEC') or die('Restricted Access');
 		<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 	</th>			
 	<th>
-		<?php echo JText::_('COM_CONTINUED_UGROUP_HEADING_NAME'); ?>
+		<?php echo JHtml::_('grid.sort','COM_CONTINUED_UGROUP_HEADING_NAME','ug.ug_name', $listDirn, $listOrder); ?>
 	</th>	
 	<th width="100">
 		<?php echo JText::_('JPUBLISHED'); ?>
 	</th>	
 	<th width="100">
-		<?php echo JHtml::_('grid.sort','JGRID_HEADING_ACCESS','p.access', $listDirn, $listOrder); ?>
+		<?php echo JHtml::_('grid.sort','JGRID_HEADING_ACCESS','ug.access', $listDirn, $listOrder); ?>
 	</th>
 </tr>
 

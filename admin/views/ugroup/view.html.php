@@ -79,7 +79,7 @@ class ContinuEdViewUGroup extends JView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_CONTINUED_UGROUP_CREATING') : JText::_('COM_CONTINUED_UGROUP_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "/administrator/components/com_ugroup/views/ugroup/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_continued/views/ugroup/submitbutton.js");
 		JText::script('COM_CONTINUED_UGROUP_ERROR_UNACCEPTABLE');
 	}
 }

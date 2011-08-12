@@ -1,156 +1,85 @@
 <?php
-/**
- * Hello Model for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
+// import Joomla modelform library
+jimport('joomla.application.component.modeladmin');
 
-/**
- * Hello Hello Model
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
-class ContinuEdModelCertif extends JModel
+class ContinuEdModelCertif extends JModelAdmin
 {
 	/**
-	 * Constructor that retrieves the ID from the request
+	 * Method override to check if you can edit an existing record.
 	 *
-	 * @access	public
-	 * @return	void
-	 */
-	function __construct()
-	{
-		parent::__construct();
-
-		$array = JRequest::getVar('lid',  0, '', 'array');
-		$this->setId((int)$array[0]);
-	}
-
-	/**
-	 * Method to set the hello identifier
+	 * @param	array	$data	An array of input data.
+	 * @param	string	$key	The name of the key for the primary key.
 	 *
-	 * @access	public
-	 * @param	int Hello identifier
-	 * @return	void
+	 * @return	boolean
+	 * @since	1.6
 	 */
-	function setId($id)
+	protected function allowEdit($data = array(), $key = 'ctmpl_id')
 	{
-		// Set id and wipe data
-		$this->_id		= $id;
-		$this->_data	= null;
+		// Check specific edit permission then general edit permission.
+		return JFactory::getUser()->authorise('core.edit', 'com_continued.certif.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
 	}
-
-
 	/**
-	 * Method to get a hello
-	 * @return object with data
-	 */
-	function &getData()
-	{
-		// Load the data
-		if (empty( $this->_data )) {
-			$query = ' SELECT * FROM #__ce_certiftempl '.
-					'  WHERE ctmpl_id = '.$this->_id;
-			$this->_db->setQuery( $query );
-			$this->_data = $this->_db->loadObject();
-		}
-		if (!$this->_data) {
-			$this->_data = new stdClass();
-			$this->_data->id = 0;
-		}
-		return $this->_data;
-	}
-
-	function getProList()
-	{
-		$db =& JFactory::getDBO();
-		$query = ' SELECT * FROM #__ce_providers ';
-		$db->setQuery( $query );
-		return $db->loadObjectList();
-	}
-	function getCertList()
-	{
-		$db =& JFactory::getDBO();
-		$query = ' SELECT * FROM #__ce_certifs ';
-		$db->setQuery( $query );
-		return $db->loadObjectList();
-	}
-
-	/**
-	 * Method to store a record
+	 * Returns a reference to the a Table object, always creating it.
 	 *
-	 * @access	public
-	 * @return	boolean	True on success
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
 	 */
-	function store()
+	public function getTable($type = 'certif', $prefix = 'ContinuEdTable', $config = array()) 
 	{
-		$row =& $this->getTable();
-
-		//$data = JRequest::get( 'post' );
-		$data->ctmpl_id = JRequest::getVar('ctmpl_id');
-		$data->ctmpl_cert = JRequest::getVar('ctmpl_cert');
-		$data->ctmpl_prov = JRequest::getVar('ctmpl_prov');
-		$data->ctmpl_content = JRequest::getVar('ctmpl_content',null,'default','none',2);
-		//i hate that i have so many fields
-
-
-		//JRequest::_cleanVar($data->PostBody,4);
-
-
-		// Bind the form fields to the hello table
-		if (!$row->bind($data)) {
-			$this->setError($this->_db->getErrorMsg());
-			return false;
-		}
-
-		// Make sure the hello record is valid
-		if (!$row->check()) {
-			$this->setError($this->_db->getErrorMsg());
-			return false;
-		}
-
-		// Store the web link table to the database
-		if (!$row->store()) {
-			$this->setError( $row->getErrorMsg() );
-			return false;
-		}
-
-		return true;
+		return JTable::getInstance($type, $prefix, $config);
 	}
-
 	/**
-	 * Method to delete record(s)
+	 * Method to get the record form.
 	 *
-	 * @access	public
-	 * @return	boolean	True on success
-
-	 function delete()
-	 {
-		$lids = JRequest::getVar( 'lid', array(0), 'post', 'array' );
-
-		$row =& $this->getTable();
-
-		if (count( $lids ))
+	 * @param	array	$data		Data for the form.
+	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+	 * @return	mixed	A JForm object on success, false on failure
+	 * @since	1.6
+	 */
+	public function getForm($data = array(), $loadData = true) 
+	{
+		// Get the form.
+		$form = $this->loadForm('com_continued.certif', 'certif', array('control' => 'jform', 'load_data' => $loadData));
+		if (empty($form)) 
 		{
-		foreach($lids as $lid) {
-		if (!$row->delete( $lid )) {
-		$this->setError( $row->getErrorMsg() );
-		return false;
+			return false;
 		}
+		return $form;
+	}
+	/**
+	 * Method to get the script that have to be included on the form
+	 *
+	 * @return string	Script files
+	 */
+	public function getScript() 
+	{
+		return 'administrator/components/com_contined/models/forms/certif.js';
+	}
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return	mixed	The data for the form.
+	 * @since	1.6
+	 */
+	protected function loadFormData() 
+	{
+		// Check the session for previously entered form data.
+		$data = JFactory::getApplication()->getUserState('com_continued.edit.certif.data', array());
+		if (empty($data)) 
+		{
+			$data = $this->getItem();
+			if ($this->getState('certif.ctmpl_id') == 0) {
+				
+			}
 		}
-		}
-		return true;
-		}
-		*/
-
+		return $data;
+	}
+	
 }
-?>
