@@ -1,57 +1,85 @@
 <?php
-/**
- * Hello View for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-jimport( 'joomla.application.component.view' );
+// import Joomla view library
+jimport('joomla.application.component.view');
 
-/**
- * Hello View
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
 class ContinuEdViewQuestion extends JView
 {
 	/**
-	 * display method of Hello view
+	 * display method of view
 	 * @return void
-	 **/
-	function display($tpl = null)
+	 */
+	public function display($tpl = null) 
 	{
-		//get the hello
-		$courseid = JRequest::getVar('course');
-		$question		=& $this->get('Data');
-		$isNew		= ($question->id < 1);
-		if ($isNew) $question->ordering = JRequest::getVar('nextnum');
-		$model = $this->getModel('question');
-		$user =& JFactory::getUser();
-		$text = $isNew ? JText::_( 'New' ) : JText::_( 'Edit' );
-		if ($isNew) $question->q_area=JRequest::getVar('area');
-		if (!$question->q_addedby) $question->q_addedby=$user->id;
-		JToolBarHelper::title(   JText::_( 'ContinuEd Question' ).': <small><small>[ ' . $text.' ]</small></small>' );
-		JToolBarHelper::save();
-		if ($isNew)  {
-			JToolBarHelper::cancel();
-		} else {
-			// for existing items the button is renamed `close`
-			JToolBarHelper::cancel( 'cancel', 'Close' );
-		}
+		// get the Data
+		$form = $this->get('Form');
+		$item = $this->get('Item');
+		$script = $this->get('Script');
 
-		$numparts = $model->getNumParts($courseid,$question->q_area);
-		$this->assignRef('question',		$question);
-		$this->assignRef('courseid',$courseid);
-		$this->assignRef('numparts',$numparts);
-		$editor =& JFactory::getEditor();
-		$this->assignref('editor',$editor);
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) 
+		{
+			JError::raiseError(500, implode('<br />', $errors));
+			return false;
+		}
+		// Assign the Data
+		$this->form = $form;
+		$this->item = $item;
+		$this->script = $script;
+
+		// Set the toolbar
+		$this->addToolBar();
+
+		// Display the template
 		parent::display($tpl);
+
+		// Set the document
+		$this->setDocument();
+	}
+
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		JRequest::setVar('hidemainmenu', true);
+		$user = JFactory::getUser();
+		$userId = $user->id;
+		$isNew = $this->item->q_id == 0;
+		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_QUESTION_NEW') : JText::_('COM_CONTINUE_MANAGER_QUESTION_EDIT'), 'question');
+		// Built the actions for new and existing records.
+		if ($isNew) 
+		{
+			// For new records, check the create permission.
+			JToolBarHelper::apply('question.apply', 'JTOOLBAR_APPLY');
+			JToolBarHelper::save('question.save', 'JTOOLBAR_SAVE');
+			JToolBarHelper::custom('question.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			JToolBarHelper::cancel('question.cancel', 'JTOOLBAR_CANCEL');
+		}
+		else
+		{
+			JToolBarHelper::apply('question.apply', 'JTOOLBAR_APPLY');
+			JToolBarHelper::save('question.save', 'JTOOLBAR_SAVE');
+			JToolBarHelper::custom('question.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			JToolBarHelper::custom('question.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+			JToolBarHelper::cancel('question.cancel', 'JTOOLBAR_CLOSE');
+		}
+	}
+	/**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$isNew = $this->item->q_id == 0;
+		$document = JFactory::getDocument();
+		$document->setTitle($isNew ? JText::_('COM_CONTINUED_QUESTION_CREATING') : JText::_('COM_CONTINUED_QUESTION_EDITING'));
+		$document->addScript(JURI::root() . $this->script);
+		$document->addScript(JURI::root() . "/administrator/components/com_continued/views/question/submitbutton.js");
+		JText::script('COM_CONTINUED_QUESTION_ERROR_UNACCEPTABLE');
 	}
 }

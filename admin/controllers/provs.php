@@ -7,12 +7,12 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controlleradmin');
 
 
-class ContinuEdControllerQuestions extends JControllerAdmin
+class ContinuEdControllerProvs extends JControllerAdmin
 {
 
-	protected $text_prefix = "COM_CONTINUEDL_QUESTION";
+	protected $text_prefix = "COM_CONTINUED_PROV";
 	
-	public function getModel($name = 'Question', $prefix = 'ContinuEdModel') 
+	public function getModel($name = 'Prov', $prefix = 'ContinuEdModel') 
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

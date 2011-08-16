@@ -1,215 +1,127 @@
 <?php
-/**
- * Hello Model for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-jimport('joomla.application.component.model');
+// import Joomla modelform library
+jimport('joomla.application.component.modeladmin');
 
-/**
- * Hello Hello Model
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
-class ContinuEdModelAnswer extends JModel
+class ContinuEdModelAnswer extends JModelAdmin
 {
 	/**
-	 * Constructor that retrieves the ID from the request
+	 * Method override to check if you can edit an existing record.
 	 *
-	 * @access	public
-	 * @return	void
-	 */
-	function __construct()
-	{
-		parent::__construct();
-
-		$array = JRequest::getVar('cid',  0, '', 'array');
-		$this->setId((int)$array[0]);
-	}
-
-	/**
-	 * Method to set the hello identifier
+	 * @param	array	$data	An array of input data.
+	 * @param	string	$key	The name of the key for the primary key.
 	 *
-	 * @access	public
-	 * @param	int Hello identifier
-	 * @return	void
+	 * @return	boolean
+	 * @since	1.6
 	 */
-	function setId($id)
+	protected function allowEdit($data = array(), $key = 'opt_id')
 	{
-		// Set id and wipe data
-		$this->_id		= $id;
-		$this->_data	= null;
+		// Check specific edit permission then general edit permission.
+		return JFactory::getUser()->authorise('core.edit', 'com_continued.answer.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
 	}
-
-
 	/**
-	 * Method to get a hello
-	 * @return object with data
-	 */
-	function &getData()
-	{
-		// Load the data
-		if (empty( $this->_data )) {
-			$query = ' SELECT * FROM #__ce_questions_opts '.
-					'  WHERE id = '.$this->_id;
-			$this->_db->setQuery( $query );
-			$this->_data = $this->_db->loadObject();
-		}
-		if (!$this->_data) {
-			$this->_data = new stdClass();
-			$this->_data->id = 0;
-		}
-		return $this->_data;
-	}
-
-
-	/**
-	 * Method to store a record
+	 * Returns a reference to the a Table object, always creating it.
 	 *
-	 * @access	public
-	 * @return	boolean	True on success
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
 	 */
-	function store()
+	public function getTable($type = 'Answer', $prefix = 'ContinuEdTable', $config = array()) 
 	{
-		$row =& $this->getTable();
-
-		//$data = JRequest::get( 'post' );
-		$data->id = JRequest::getVar('id');
-		$data->question = JRequest::getVar('question');
-		$data->opttxt = JRequest::getVar('opttxt',null,'default','none',4);
-		$data->correct = JRequest::getVar('correct');
-		$data->optexpl = JRequest::getVar('optexpl',null,'default','none',4);
-		$data->ordering = JRequest::getVar('ordering');
-		//i hate that i have so many fields
-
-
-		//JRequest::_cleanVar($data->PostBody,4);
-
-
-		// Bind the form fields to the hello table
-		if (!$row->bind($data)) {
-			$this->setError($this->_db->getErrorMsg());
-			return false;
-		}
-
-		// Make sure the hello record is valid
-		if (!$row->check()) {
-			$this->setError($this->_db->getErrorMsg());
-			return false;
-		}
-
-		// Store the web link table to the database
-		if (!$row->store()) {
-			$this->setError( $row->getErrorMsg() );
-			return false;
-		}
-
-		return true;
+		return JTable::getInstance($type, $prefix, $config);
 	}
-
 	/**
-	 * Method to delete record(s)
+	 * Method to get the record form.
 	 *
-	 * @access	public
-	 * @return	boolean	True on success
+	 * @param	array	$data		Data for the form.
+	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+	 * @return	mixed	A JForm object on success, false on failure
+	 * @since	1.6
 	 */
-	function delete()
+	public function getForm($data = array(), $loadData = true) 
 	{
-		$cids = JRequest::getVar( 'cid', array(0), 'post', 'array' );
-
-		$row =& $this->getTable();
-
-		if (count( $cids ))
+		// Get the form.
+		$form = $this->loadForm('com_continued.answer', 'answer', array('control' => 'jform', 'load_data' => $loadData));
+		if (empty($form)) 
 		{
-			foreach($cids as $cid) {
-				if (!$row->delete( $cid )) {
-					$this->setError( $row->getErrorMsg() );
-					return false;
-				}
+			return false;
+		}
+		return $form;
+	}
+	/**
+	 * Method to get the script that have to be included on the form
+	 *
+	 * @return string	Script files
+	 */
+	public function getScript() 
+	{
+		return 'administrator/components/com_continued/models/forms/answer.js';
+	}
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return	mixed	The data for the form.
+	 * @since	1.6
+	 */
+	protected function loadFormData() 
+	{
+		// Check the session for previously entered form data.
+		$data = JFactory::getApplication()->getUserState('com_continued.edit.answer.data', array());
+		if (empty($data)) 
+		{
+			$data = $this->getItem();
+			if ($this->getState('answer.opt_id') == 0) {
+				$app = JFactory::getApplication();
+				$data->set('opt_question', JRequest::getInt('opt_question', $app->getUserState('com_continued.answers.filter.question')));
 			}
 		}
-		return true;
+		return $data;
 	}
-	function copyans()
+	
+	/**
+	 * Prepare and sanitise the table prior to saving.
+	 *
+	 * @since	1.6
+	 */
+	protected function prepareTable(&$table)
 	{
-		$cid = JRequest::getVar( 'cid', array(), 'post', 'array' );
-		JArrayHelper::toInteger($cid);
-		$total		= count( $cid );
-		$row =& $this->getTable();
-		//$q='SELECT * FROM #__ce_questions_opts WHERE id IN ('.implode(",",$cid).')';
-		//$this->_db->setQuery($q);
-		//$ans = $this->_db->loadObjectList();
-		if ($cid)
-		{
-			for( $i=0; $i < $total; $i++ ) {
-				$row->load($cid[$i]);
-				$row->id=0;
-				$row->ordering=$row->getNextOrder('question = '.$row->question);
-				if(!$row->store()) return false;
-			}
-		} else return false;
-		return true;
-	}
+		jimport('joomla.filter.output');
+		$date = JFactory::getDate();
+		$user = JFactory::getUser();
 
-	function setOrder($items,$question) {
-		$total		= count( $items );
-		$row		=& $this->getTable();
+		if (empty($table->opt_id)) {
+			// Set the values
 
-		$order		= JRequest::getVar( 'order', array(), 'post', 'array' );
-		JArrayHelper::toInteger($order);
+			// Set ordering to the last item if not set
+			if (empty($table->ordering)) {
+				$db = JFactory::getDbo();
+				$db->setQuery('SELECT MAX(ordering) FROM #__continued_questions_opts WHERE opt_question = '.$table->opt_qid);
+				$max = $db->loadResult();
 
-		// update ordering values
-		for( $i=0; $i < $total; $i++ ) {
-			$row->load( $items[$i] );
-			if ($row->ordering != $order[$i]) {
-				$row->ordering = $order[$i];
-				if (!$row->store()) {
-					$this->setError($row->getError());
-					return false;
-				}
-			} // if
-		} // for
-		$row->reorder('question = '.$question);
-		return true;
-	}
-	function orderItem($item, $movement, $question)
-	{
-		$row =& $this->getTable();
-		$row->load( $item );
-		if (!$row->move( $movement, 'question = '.$question )) {
-			$this->setError($row->getError());
-			return false;
-		}
-		return true;
-	}
-	function correct($cid = array(), $publish = 1)
-	{
-
-		if (count( $cid ))
-		{
-			$cids = implode( ',', $cid );
-
-			$query = 'UPDATE #__ce_questions_opts'
-			. ' SET correct = ' . intval( $publish )
-			. ' WHERE id IN ( '.$cids.' )'
-				
-			;
-			$this->_db->setQuery( $query );
-			if (!$this->_db->query()) {
-				$this->setError($this->_db->getErrorMsg());
-				return false;
+				$table->ordering = $max+1;
 			}
 		}
-		return true;
+		else {
+			// Set the values
+		}
 	}
 
+	/**
+	 * A protected method to get a set of ordering conditions.
+	 *
+	 * @param	object	A record object.
+	 * @return	array	An array of conditions to add to add to ordering queries.
+	 * @since	1.6
+	 */
+	protected function getReorderConditions($table)
+	{
+		$condition = array();
+		$condition[] = 'opt_question = '.(int) $table->opt_question;
+		return $condition;
+	}
 }
-?>

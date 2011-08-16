@@ -1,68 +1,41 @@
-<?php defined('_JEXEC') or die('Restricted access');
-$order = JHTML::_('grid.order', $this->items);
+<?php
+
+// No direct access to this file
+defined('_JEXEC') or die('Restricted Access');
+// load tooltip behavior
+JHtml::_('behavior.tooltip');
+
+$listOrder	= $this->escape($this->state->get('list.ordering'));
+$listDirn	= $this->escape($this->state->get('list.direction'));
+$saveOrder	= $listOrder == 'o.ordering';
 ?>
-<table>
-	<tr>
-		<td align="left" width="100%">Question: <b><?php echo $this->ques; ?></b>
-		</td>
-		<td nowrap="nowrap" align="right">Course: <b><?php echo $this->cname; ?></b>
-		</td>
-	</tr>
-</table>
-<form action="" method="post" name="adminForm"><input type="hidden"
-	name="question" value="<?php echo $this->questionid; ?>"> <input
-	type="hidden" name="course" value="<?php echo $this->courseid; ?>">
-<div id="editcell">
-<table class="adminlist">
-	<thead>
-		<tr>
-			<th width="5"><?php echo JText::_( 'id' ); ?></th>
-			<th width="20"><input type="checkbox" name="toggle" value=""
-				onclick="checkAll(<?php echo count( $this->items ); ?>);" /></th>
-			<th><?php echo JText::_( 'Option Text' ); ?></th>
-			<th><?php echo JText::_( 'Explination' ); ?></th>
-			<th width="50"><?php echo JText::_( 'Correct' ); ?></th>
-			<th width="70"><?php echo JText::_( 'Order' ).$order; ?></th>
-		</tr>
-	</thead>
-	<?php
-	$k = 0;
-	$cq = 1;
-	for ($i=0, $n=count( $this->items ); $i < $n; $i++)
-	{
-		$row = &$this->items[$i];
-		$checked 	= JHTML::_('grid.id',   $i, $row->id );
-		$published 	= JHTML::_('grid.published',   $row, $i,'tick.png','publish_x.png', 'crct'  );
-		$link 		= JRoute::_( 'index.php?option=com_continued&controller=answer&task=edit&course='.$this->courseid.'&area='.JRequest::getVar('area').'&question='.$this->questionid.'&cid[]='. $row->id );
+<form action="<?php echo JRoute::_('index.php?option=com_continued&view=answers'); ?>" method="post" name="adminForm">
+	<fieldset id="filter-bar">
+		<div class="filter-search fltlft">
+			
+		</div>
+		<div class="filter-select fltrt">
+			<select name="filter_question" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('COM_CONTINUED_ANSWER_SELECT_QUESTION');?></option>
+				<?php echo $html[] = JHtml::_('select.options',$this->qlist,"value","text",$this->state->get('filter.question')); ?>
+			</select>
+		</div>
+	</fieldset>
+	
+	<div class="clr"> </div>
+	
+	<table class="adminlist">
+		<thead><?php echo $this->loadTemplate('head');?></thead>
+		<tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
+		<tbody><?php echo $this->loadTemplate('body');?></tbody>
+	</table>
+	<div>
+		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="boxchecked" value="0" />
+		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+		<?php echo JHtml::_('form.token'); ?>
+	</div>
+</form>
 
-		?>
-	<tr class="<?php echo "row$k"; ?>">
-		<td><?php echo $row->id; ?></td>
-		<td><?php echo $checked; ?></td>
-		<td><a href="<?php echo $link; ?>"><?php echo $row->opttxt; ?></a></td>
-		<td><?php echo $row->optexpl; ?></td>
-		<td><?php echo $published; ?></td>
-		<td class="order"><span><?php echo $this->pagination->orderUpIcon( $i, true,'orderup','Move Up',true); ?></span>
-		<span><?php echo $this->pagination->orderDownIcon( $i, $n, true,'orderdown','Move Down',true); ?></span><input
-			size="3" type="text" name="order[]" style="text-align: center;"
-			value="<?php echo $row->ordering; ?>"
-			<?php if($this->filter_part) echo 'disabled="true"'; ?> /></td>
 
-	</tr>
-	<?php
-	$k = 1 - $k;
-	$cq = $row->ordering+1;
-	}
-	?>
-	<tfoot>
-		<td colspan="6"><?php echo $this->pagination->getListFooter(); ?></td>
-	</tfoot>
-
-</table>
-</div>
-
-<input type="hidden" name="nextnum" value="<?php echo $cq; ?>" /> <input
-	type="hidden" name="option" value="com_continued" /> <input
-	type="hidden" name="task" value="" /> <input type="hidden"
-	name="boxchecked" value="0" /> <input type="hidden" name="controller"
-	value="answer" /></form>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: question.xml 62 2010-11-28 16:08:16Z chdemko $ -->
+<form>
+	<fieldset name="details">
+		<field
+			name="opt_id"
+			type="hidden"
+		/>
+		<field
+			name="published"
+			type="list"
+			id="published"
+			class="inputbox"
+			label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC"
+			size="1"
+			default="1"
+			filter="integer">
+			<option	value="1">JPUBLISHED</option>
+			<option	value="0">JUNPUBLISHED</option>
+		</field>
+		<field 
+			name="opt_question" 
+			type="hidden" 
+		/>
+		<field 
+			name="ordering" 
+			type="OrderAnswer" 
+			class="inputbox"
+			label="JFIELD_ORDERING_LABEL"
+			description="JFIELD_ORDERING_DESC" 
+		/>
+		<field
+			name="opt_correct"
+			type="radio"
+			label="COM_MPOLL_ANSWER_FIELD_CORRECT_LABEL"
+			description="COM_MPOLL_ANSWER_FIELD_CORRECT_DESC"
+			size="1"
+			class="inputbox"
+			required="true"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+	</fieldset>
+	<fieldset name="content">
+		<field
+			name="opt_text"
+			type="editor"
+			label="COM_CONTINUED_ANSWER_FIELD_NAME_LABEL"
+			description="COM_CONTINUED_ANSWER_FIELD_NAME_DESC"
+			class="inputbox"
+			required="true"
+			filter="safehtml"
+			buttons="false"
+		/>
+		<field
+			name="opt_expl"
+			type="editor"
+			label="COM_CONTINUED_OPTION_FIELD_EXPL_LABEL"
+			description="COM_CONTINUED_OPTION_FIELD_EXPL_DESC"
+			class="inputbox"
+			filter="safehtml"
+			buttons="false"
+		/>
+	</fieldset>
+
+</form>
+

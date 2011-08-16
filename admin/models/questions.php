@@ -1,122 +1,78 @@
 <?php
 
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// import the Joomla modellist library
+jimport('joomla.application.component.modellist');
 
-jimport( 'joomla.application.component.model' );
 
-class ContinuEdModelQuestions extends JModel
+class ContinuEdModelQuestions extends JModelList
 {
-	/**
-	 * Hellos data array
-	 *
-	 * @var array
-	 */
-	var $_data;
-	var $_total = null;
-	var $_pagination = null;
-
-
-	function __construct()
+	
+	public function __construct($config = array())
 	{
-		parent::__construct();
-
-		global $context;
-		$mainframe = JFactory::getApplication();
-
-		$limit			= $mainframe->getUserStateFromRequest( $context.'limit', 'limit', $mainframe->getCfg('list_limit'), 0);
-		$limitstart = $mainframe->getUserStateFromRequest( $context.'limitstart', 'limitstart', 0 );
-
-		$this->setState('limit', $limit);
-		$this->setState('limitstart', $limitstart);
-
+		
+		parent::__construct($config);
 	}
-
-	function _buildQuery()
+	
+	protected function populateState($ordering = null, $direction = null)
 	{
-		$courseid = JRequest::getVar('course');
-		$filter_part = JRequest::getVar('filter_part');
-		$query = ' SELECT q.*,u.username '
-		. ' FROM #__ce_questions as q '
-		. ' RIGHT JOIN #__users as u ON q.q_addedby = u.id '
-		. ' WHERE q.course = '.$courseid.' && q_area = "'.JRequest::getVar('area').'"';
-		if ($filter_part) $query .= ' && q.qsec = '.$filter_part;
-		$query .= ' ORDER BY ordering';
+		// Initialise variables.
+		$app = JFactory::getApplication('administrator');
 
+		// Load the filter state.
+		$courseId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_course', JRequest::getInt('q_course',0));
+		$this->setState('filter.course', $courseId);
+		$area = $this->getUserStateFromRequest($this->context.'.filter.area', 'filter_area', JRequest::getInt('q_area',0));
+		$this->setState('filter.area', $area);
+
+		// Load the parameters.
+		$params = JComponentHelper::getParams('com_continued');
+		$this->setState('params', $params);
+
+		// List state information.
+		parent::populateState('q.ordering', 'asc');
+	}
+	
+	protected function getListQuery() 
+	{
+		// Create a new query object.
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+
+		// Select some fields
+		$query->select('q.*');
+
+		// From the hello table
+		$query->from('#__ce_questions as q');
+		
+		// Filter by course.
+		$courseId = $this->getState('filter.course');
+		if (is_numeric($courseId)) {
+			$query->where('q.q_course = '.(int) $courseId);
+		}
+		// Filter by area.
+		$area = $this->getState('filter.area');
+		if (is_numeric($area)) {
+			$query->where('q.q_area = '.(int) $area);
+		}
+				
+		$orderCol	= $this->state->get('list.ordering');
+		$orderDirn	= $this->state->get('list.direction');
+		
+		$orderCol = ' q.ordering';
+		
+		$query->order($db->getEscaped($orderCol.' '.$orderDirn));
+				
 		return $query;
 	}
-
-	/**
-	 * Retrieves the hello data
-	 * @return array Array of objects containing the data from the database
-	 */
-	function getData()
-	{
-		// Lets load the data if it doesn't already exist
-		if (empty( $this->_data ))
-		{
-			$query = $this->_buildQuery();
-			$this->_data = $this->_getList($query, $this->getState('limitstart'), $this->getState('limit'));;
-		}
-
-		return $this->_data;
-	}
-	/**
-	 * Method to get the total number of helloworld items
-	 *
-	 * @access public
-	 * @return integer
-	 */
-	function getTotal()
-	{
-		//DEVNOTE: Lets load the content if it doesn't already exist
-		if (empty($this->_total))
-		{
-			$query = $this->_buildQuery();
-			$this->_total = $this->_getListCount($query);
-		}
-
-		return $this->_total;
-	}
-
-	/**
-	 * Method to get a pagination object for the helloworld
-	 *
-	 * @access public
-	 * @return integer
-	 */
-	function getPagination()
-	{
-		// Lets load the content if it doesn't already exist
-		if (empty($this->_pagination))
-		{
-			jimport('joomla.html.pagination');
-			$this->_pagination = new JPagination( $this->getTotal(), $this->getState('limitstart'), $this->getState('limit') );
-		}
-
-		return $this->_pagination;
-	}
-	function getParts($course,$area) {
-		if ($area != 'inter') {
-			if ($area == 'post') $q='SELECT evalparts FROM #__ce_courses WHERE id = '.$course;
-			if ($area == 'pre') $q='SELECT course_preparts FROM #__ce_courses WHERE id = '.$course;
-			$db =& JFactory::getDBO();
-			$db->setQuery($q);
-			$nump = $db->loadResult();
-		} else {
-			$nump=1;
-		}
-		$pf[0]=JHTML::_('select.option','','--All--');
-		for ($l=1;$l<=$nump;$l++) {
-			$pf[$l]=JHTML::_('select.option',$l,'Part '.$l);
-		}
-		return $pf;
-	}
-	function getCourseName($course) {
-		$q='SELECT cname FROM #__ce_courses WHERE id = '.$course;
-		$db =& JFactory::getDBO();
-		$db->setQuery($q);
-		return $db->loadResult();
+	
+	public function getCourses() {
+		$query = 'SELECT course_id AS value, course_name AS text' .
+				' FROM #__ce_courses' .
+				' ORDER BY course_name';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
 	}
 }

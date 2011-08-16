@@ -1,60 +1,68 @@
 <?php
-/**
- * Hellos View for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-jimport( 'joomla.application.component.view' );
+// import Joomla view library
+jimport('joomla.application.component.view');
 
-/**
- * Hellos View
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
 class ContinuEdViewQuestions extends JView
 {
-	/**
-	 * Hellos view display method
-	 * @return void
-	 **/
-	function display($tpl = null)
+	function display($tpl = null) 
 	{
-		$model = $this->getModel();
-		$courseid = JRequest::getVar('course');
-		$filter_part = JRequest::getVar('filter_part');
-		$area = JRequest::getVar('area');
-
-		JToolBarHelper::title(   JText::_( 'ContinuEd Question Manager ['.$area.']' ), 'continued' );
-		JToolBarHelper::publishList('publish','Publish');
-		JToolBarHelper::unpublishList('unpublish','Unpublish');
-		JToolBarHelper::custom( 'copy', 'copy.png', 'copy.png', 'Copy', true, true );
-		JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
-		JToolBarHelper::back('Courses','index.php?option=com_continued&view=courses');
-
 		// Get data from the model
-		$items		= & $this->get( 'Data');
-		$pagination = & $this->get( 'Pagination' );
+		$items = $this->get('Items');
+		$pagination = $this->get('Pagination');
+		$this->state		= $this->get('State');
+		$clist = $this->get('Courses');
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) 
+		{
+			JError::raiseError(500, implode('<br />', $errors));
+			return false;
+		}
+		// Assign data to the view
+		$this->items = $items;
+		$this->pagination = $pagination;
+		$this->clist = $clist;
+		// Set the toolbar
+		$this->addToolBar();
 
-		$parts = $model->getParts($courseid,$area);
-
-		$this->assignRef('items',		$items);
-		$this->assignRef('courseid',$courseid);
-		$this->assignRef('pagination',	$pagination);
-		$this->assignRef('parts',$parts);
-		$this->assignRef('area',$area);
-		$this->assignRef('filter_part',$filter_part);
-		$this->assignRef('cname',$model->getCourseName($courseid));
-
+		// Display the template
 		parent::display($tpl);
+
+		// Set the document
+		$this->setDocument();
+	}
+
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		$state	= $this->get('State');
+		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_QUESTIONS'), 'continued');
+		JToolBarHelper::addNew('question.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::editList('question.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::divider();
+		JToolBarHelper::custom('questions.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
+		JToolBarHelper::custom('questions.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);
+		JToolBarHelper::divider();
+		if ($state->get('filter.published') == -2) {
+			JToolBarHelper::deleteList('', 'questions.delete', 'JTOOLBAR_EMPTY_TRASH');
+			JToolBarHelper::divider();
+		} else  {
+			JToolBarHelper::trash('questions.trash');
+		}
+	}
+	/**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_('COM_CONTINUED_MANAGER_QUESTIONS'));
 	}
 }

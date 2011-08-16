@@ -1,96 +1,75 @@
 <?php
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
 
-jimport( 'joomla.application.component.model' );
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-class ContinuEdModelAnswers extends JModel
+// import the Joomla modellist library
+jimport('joomla.application.component.modellist');
+
+
+class ContinuEdModelAnswers extends JModelList
 {
-	var $_data;
-	var $_total = null;
-	var $_pagination = null;
-
-
-	function __construct()
+	
+	public function __construct($config = array())
 	{
-		parent::__construct();
-
-		global $context;
-		$mainframe = JFactory::getApplication();
-
-		//initialize class property
-
-
-		//DEVNOTE: Get the pagination request variables
-		$limit			= $mainframe->getUserStateFromRequest( $context.'limit', 'limit', $mainframe->getCfg('list_limit'), 0);
-		$limitstart = $mainframe->getUserStateFromRequest( $context.'limitstart', 'limitstart', 0 );
-
-		$this->setState('limit', $limit);
-		$this->setState('limitstart', $limitstart);
-
+		
+		parent::__construct($config);
 	}
-
-	function _buildQuery()
+	
+	protected function populateState($ordering = null, $direction = null)
 	{
-		$questionid = JRequest::getVar('question');
-		$query = ' SELECT *,correct as published '
-		. ' FROM #__ce_questions_opts'
-		. ' WHERE question = '.$questionid.' ORDER BY ordering';
+		// Initialise variables.
+		$app = JFactory::getApplication('administrator');
 
+		// Load the filter state.
+		$qId = $this->getUserStateFromRequest($this->context.'.filter.question', 'filter_question', JRequest::getInt('opt_question',0));
+		$this->setState('filter.question', $qId);
+
+		// Load the parameters.
+		$params = JComponentHelper::getParams('com_continued');
+		$this->setState('params', $params);
+
+		// List state information.
+		parent::populateState('o.ordering', 'asc');
+	}
+	
+	protected function getListQuery() 
+	{
+		// Create a new query object.
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+
+		// Select some fields
+		$query->select('o.*');
+
+		// From the hello table
+		$query->from('#__ce_questions_opts as o');
+		
+		// Filter by poll.
+		$qId = $this->getState('filter.question');
+		if (is_numeric($qId)) {
+			$query->where('o.opt_question = '.(int) $qId);
+		}
+				
+		$orderCol	= $this->state->get('list.ordering');
+		$orderDirn	= $this->state->get('list.direction');
+		
+		$orderCol = ' o.ordering';
+		
+		$query->order($db->getEscaped($orderCol.' '.$orderDirn));
+				
 		return $query;
 	}
-
-	function getData()
-	{
-		// Lets load the data if it doesn't already exist
-		if (empty( $this->_data ))
-		{
-			$query = $this->_buildQuery();
-			$this->_data = $this->_getList($query, $this->getState('limitstart'), $this->getState('limit'));
-		}
-
-		return $this->_data;
+	
+	public function getQuestions() {
+		$app = JFactory::getApplication('administrator');
+		$courseId = $app->getUserState('com_continued.questions.filter.course');
+		$area = $app->getUserState('com_continued.questions.filter.area');
+		$query = 'SELECT q_id AS value, q_text AS text' .
+				' FROM #__ce_questions' .
+				' WHERE q_type IN ("mcbox","multi","dropdown") && q_area = "'.$area.'" && q_course = '.$courseId .
+				' ORDER BY ordering';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
 	}
-	function getTotal()
-	{
-		//DEVNOTE: Lets load the content if it doesn't already exist
-		if (empty($this->_total))
-		{
-			$query = $this->_buildQuery();
-			$this->_total = $this->_getListCount($query);
-		}
-
-		return $this->_total;
-	}
-
-	/**
-	 * Method to get a pagination object for the helloworld
-	 *
-	 * @access public
-	 * @return integer
-	 */
-	function getPagination()
-	{
-		// Lets load the content if it doesn't already exist
-		if (empty($this->_pagination))
-		{
-			jimport('joomla.html.pagination');
-			$this->_pagination = new JPagination( $this->getTotal(), $this->getState('limitstart'), $this->getState('limit') );
-		}
-
-		return $this->_pagination;
-	}
-	function getCourseName($course) {
-		$q='SELECT cname FROM #__ce_courses WHERE id = '.$course;
-		$db =& JFactory::getDBO();
-		$db->setQuery($q);
-		return $db->loadResult();
-	}
-	function getQuestion($q) {
-		$q='SELECT qtext FROM #__ce_questions WHERE id = '.$q;
-		$db =& JFactory::getDBO();
-		$db->setQuery($q);
-		return $db->loadResult();
-	}
-
 }
