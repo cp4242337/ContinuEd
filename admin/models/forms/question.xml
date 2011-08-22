@@ -7,6 +7,19 @@
 			type="hidden"
 		/>
 		<field
+			name="q_area"
+			type="list"
+			class="inputbox"
+			default=""
+			label="COM_CONTINUED_QUESTION_FIELD_AREA_LABEL"
+			description="COM_CONTINUED_QUESTION_FIELD_AREA_DESC"
+			required="true">
+			<option value="post">Post-Test</option>
+			<option value="pre">Pre-Test</option>
+			<option value="inter">Intermediate</option>
+			<option value="qanda">Q and A</option>
+		</field>
+		<field
 			name="published"
 			type="list"
 			id="published"
@@ -23,8 +36,8 @@
 			name="q_course" 
 			type="Courses" 
 			class="inputbox"
-			label="COM_CONTINUED_QUESTION_FIELD_POLL_LABEL"
-			description="COM_CONTINUED_QUESTION_FIELD_POLL_DESC" 
+			label="COM_CONTINUED_QUESTION_FIELD_COURSE_LABEL"
+			description="COM_CONTINUED_QUESTION_FIELD_COURSE_DESC" 
 		/>
 		<field 
 			name="ordering" 
@@ -66,10 +79,10 @@
 		</field>
 		<field 
 			name="q_part" 
-			type="QuestionPart" 
+			type="QuestionParts" 
 			class="inputbox"
-			label="COM_CONTINUED_QUESTION_FIELD_POLL_LABEL"
-			description="COM_CONTINUED_QUESTION_FIELD_POLL_DESC" 
+			label="COM_CONTINUED_QUESTION_FIELD_PART_LABEL"
+			description="COM_CONTINUED_QUESTION_FIELD_PART_DESC" 
 		/>
 		<field
 			name="q_req"
@@ -100,9 +113,11 @@
 	<fieldset name="content">
 		<field
 			name="q_text"
-			type="editor"
-			label="COM_CONTINUED_ANSWER_FIELD_NAME_LABEL"
-			description="COM_CONTINUED_ANSWER_FIELD_NAME_DESC"
+			type="textarea"
+			label="COM_CONTINUED_QUESTION_FIELD_NAME_LABEL"
+			description="COM_CONTINUED_QUESTION_FIELD_NAME_DESC"
+			rows="4"
+			cols="70"
 			class="inputbox"
 			required="true"
 			filter="safehtml"
@@ -111,8 +126,8 @@
 		<field
 			name="q_expl"
 			type="editor"
-			label="COM_CONTINUED_OPTION_FIELD_EXPL_LABEL"
-			description="COM_CONTINUED_OPTION_FIELD_EXPL_DESC"
+			label="COM_CONTINUED_QUESTION_FIELD_EXPL_LABEL"
+			description="COM_CONTINUED_QUESTION_FIELD_EXPL_DESC"
 			class="inputbox"
 			filter="safehtml"
 			buttons="false"

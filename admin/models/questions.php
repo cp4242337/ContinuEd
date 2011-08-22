@@ -22,11 +22,11 @@ class ContinuEdModelQuestions extends JModelList
 		$app = JFactory::getApplication('administrator');
 
 		// Load the filter state.
-		$courseId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_course', JRequest::getInt('q_course',0));
+		$courseId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_course','');
 		$this->setState('filter.course', $courseId);
-		$area = $this->getUserStateFromRequest($this->context.'.filter.area', 'filter_area', JRequest::getInt('q_area',0));
-		$this->setState('filter.area', $area);
-
+		$area = $this->getUserStateFromRequest($this->context.'.filter.area', 'filter_area', '');
+		$this->setState('filter.area', $area);	
+		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
 		$this->setState('params', $params);
@@ -46,6 +46,9 @@ class ContinuEdModelQuestions extends JModelList
 
 		// From the hello table
 		$query->from('#__ce_questions as q');
+		// Join over the users.
+		$query->select('u.username AS username');
+		$query->join('LEFT', '#__users AS u ON u.id = q.q_addedby');
 		
 		// Filter by course.
 		$courseId = $this->getState('filter.course');
@@ -54,8 +57,8 @@ class ContinuEdModelQuestions extends JModelList
 		}
 		// Filter by area.
 		$area = $this->getState('filter.area');
-		if (is_numeric($area)) {
-			$query->where('q.q_area = '.(int) $area);
+		if ($area) {
+			$query->where('q.q_area = "'.$area.'" ');
 		}
 				
 		$orderCol	= $this->state->get('list.ordering');

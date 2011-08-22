@@ -49,13 +49,15 @@ class JFormFieldCourses extends JFormField
 		// Initialize JavaScript field attributes.
 		$attr .= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
 
-
+		$html[] = '<select name="'.$this->name.'" class="inputbox" '.$attr.'>';
+		$html[] = '<option value="">'.JText::_('COM_CONTINUED_COURSE_SELECT_COURSE').'</option>';
 		// Build the query for the ordering list.
 		$query = 'SELECT course_id AS value, course_name AS text' .
 				' FROM #__ce_courses' .
 				' ORDER BY course_name';
 		$db->setQuery($query);
-		$html[] = JHtml::_('select.genericlist',$db->loadObjectList(),$this->name,$attr, "value","text",$this->value);
+		$html[] = JHtml::_('select.options',$db->loadObjectList(),"value","text",$this->value);
+		$html[] = '</select>';
 		
 
 		return implode($html);

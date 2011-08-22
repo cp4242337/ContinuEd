@@ -100,7 +100,7 @@ class ContinuEdModelAnswer extends JModelAdmin
 			// Set ordering to the last item if not set
 			if (empty($table->ordering)) {
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__continued_questions_opts WHERE opt_question = '.$table->opt_qid);
+				$db->setQuery('SELECT MAX(ordering) FROM #__ce_questions_opts WHERE opt_question = '.$table->opt_question);
 				$max = $db->loadResult();
 
 				$table->ordering = $max+1;

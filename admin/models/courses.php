@@ -1,101 +1,82 @@
 <?php
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
 
-jimport( 'joomla.application.component.model' );
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-class ContinuEdModelCourses extends JModel
+// import the Joomla modellist library
+jimport('joomla.application.component.modellist');
+
+
+class ContinuEdModelCourses extends JModelList
 {
-	var $_data;
-	var $_total = null;
-	var $_pagination = null;
-
-
-	function __construct()
+	
+	public function __construct($config = array())
 	{
-		parent::__construct();
-
-		$mainframe = JFactory::getApplication();
-
-		$limit				= $mainframe->getUserStateFromRequest( 'global.list.limit',							'limit',			$mainframe->getCfg( 'list_limit' ),	'int' );
-		$limitstart			= $mainframe->getUserStateFromRequest( 'com_continued.courses.limitstart',		'limitstart',		0,				'int' );
-
-		$filter_cat		= $mainframe->getUserStateFromRequest( 'com_continued.courses.filter_cat','filter_cat','' );
-		$filter_prov = $mainframe->getUserStateFromRequest( 'com_continued.courses.filter_prov','filter_prov','' );
-
-		$this->setState('limit', $limit);
-		$this->setState('limitstart', $limitstart);
-		$this->setState('filter_cat',$filter_cat);
-		$this->setState('filter_prov',$filter_prov);
-
+		
+		parent::__construct($config);
 	}
-	function _buildQuery()
+	
+	protected function populateState($ordering = null, $direction = null)
 	{
-		//$cat = JRequest::getVar('filter_cat');
-		$cat		= $this->getState('filter_cat');
-		$prov = $this->getState('filter_prov');
-		$query  = ' SELECT c.*,s.*,p.*,ag.title AS access_level ';
-		$query .= ' FROM #__ce_courses as c ';
-		$query .= ' LEFT JOIN #__ce_providers as p ON p.pid=c.provider ';
-		$query .= ' LEFT JOIN #__ce_cats as s ON s.cid=c.ccat ';
-		$query .= ' LEFT JOIN #__viewlevels AS ag ON ag.id = c.access';
-		if ($cat || $prov) $query .= ' WHERE ';
-		if ($cat) { if ($tand) { $query .= ' && '; $tand = 0; } $query .= ' c.ccat = "'.$cat.'"'; $tand = 1; }
-		if ($prov) { if ($tand) { $query .= ' && '; $tand = 0; } $query .= ' c.provider = "'.$prov.'"'; }
-		$query .= ' ORDER BY s.catname ASC, c.ordering ASC';
+		// Initialise variables.
+		$app = JFactory::getApplication('administrator');
+
+		// Load the filter state.
+		$courseId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_cat',"");
+		$this->setState('filter.cat', $courseId);
+
+		// Load the parameters.
+		$params = JComponentHelper::getParams('com_continued');
+		$this->setState('params', $params);
+
+		// List state information.
+		parent::populateState('c.course', 'asc');
+	}
+	
+	protected function getListQuery() 
+	{
+		// Create a new query object.
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+
+		// Select some fields
+		$query->select('c.*');
+
+		// From the hello table
+		$query->from('#__ce_courses as c');
+		// Join over the categories.
+		$query->select('cat.cat_name AS category_name');
+		$query->join('RIGHT', '#__ce_cats AS cat ON cat.cat_id = c.course_cat');
+		// Join over the asset groups.
+		$query->select('ag.title AS access_level');
+		$query->join('LEFT', '#__viewlevels AS ag ON ag.id = c.access');
+		// Join over the providers.
+		$query->select('p.prov_name AS provider_name');
+		$query->join('RIGHT', '#__ce_providers AS p ON p.prov_id = c.course_provider');
+		
+		
+		// Filter by course.
+		$catId = $this->getState('filter.cat');
+		if (is_numeric($catId)) {
+			$query->where('c.course_cat = '.(int) $catId);
+		}
+				
+		$orderCol	= $this->state->get('list.ordering');
+		$orderDirn	= $this->state->get('list.direction');
+		
+		$orderCol = ' c.ordering';
+		
+		$query->order($db->getEscaped($orderCol.' '.$orderDirn));
+				
 		return $query;
 	}
-	function getData()
-	{
-		// Lets load the data if it doesn't already exist
-		if (empty( $this->_data ))
-		{
-			$query = $this->_buildQuery();
-			$this->_data = $this->_getList($query, $this->getState('limitstart'), $this->getState('limit'));;
-		}
-
-		return $this->_data;
+	
+	public function getCats() {
+		$query = 'SELECT cat_id AS value, cat_name AS text' .
+				' FROM #__ce_cats' .
+				' ORDER BY cat_name';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
 	}
-
-	function getTotal()
-	{
-		//DEVNOTE: Lets load the content if it doesn't already exist
-		if (empty($this->_total))
-		{
-			$query = $this->_buildQuery();
-			$this->_total = $this->_getListCount($query);
-		}
-
-		return $this->_total;
-	}
-
-	function getPagination()
-	{
-		// Lets load the content if it doesn't already exist
-		if (empty($this->_pagination))
-		{
-			jimport('joomla.html.pagination');
-			$this->_pagination = new JPagination( $this->getTotal(), $this->getState('limitstart'), $this->getState('limit') );
-		}
-
-		return $this->_pagination;
-	}
-	function getCatList() {
-		$q='SELECT * FROM #__ce_cats ORDER BY catname ASC';
-		$db =& JFactory::getDBO();
-		$db->setQuery($q);
-		$data = $db->loadAssocList();
-		$data[]->catname='--Show All Categories--';
-		return $data;
-	}
-	function getProvList() {
-		$q='SELECT * FROM #__ce_providers ORDER BY pname ASC';
-		$db =& JFactory::getDBO();
-		$db->setQuery($q);
-		$data = $db->loadAssocList();
-		$data[]->pname='--Show All Providers--';
-		return $data;
-	}
-
-
+	
 }

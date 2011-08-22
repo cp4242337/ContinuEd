@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted Access');
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
-$saveOrder	= $listOrder == 'o.ordering';
+$saveOrder	= $listOrder == 'q.ordering';
 ?>
 <tr>
 	<th width="5">
@@ -19,8 +19,8 @@ $saveOrder	= $listOrder == 'o.ordering';
 		<?php echo JText::_('JPUBLISHED'); ?>
 	</th>	
 	<th width="100">
-		<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'o.ordering', $listDirn, $listOrder); ?>
-		<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'options.saveorder'); ?>
+		<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'q.ordering', $listDirn, $listOrder); ?>
+		<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'questions.saveorder'); ?>
 	</th>
 	<th width="75">
 		<?php echo JText::_( 'COM_CONTINUED_QUESTION_HEADING_PART' ); ?>

@@ -10,7 +10,7 @@ jimport('joomla.application.component.controlleradmin');
 class ContinuEdControllerQuestions extends JControllerAdmin
 {
 
-	protected $text_prefix = "COM_CONTINUEDL_QUESTION";
+	protected $text_prefix = "COM_CONTINUED_QUESTION";
 	
 	public function getModel($name = 'Question', $prefix = 'ContinuEdModel') 
 	{

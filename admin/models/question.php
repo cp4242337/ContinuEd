@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
 
-class ConeinuEdModelQuestion extends JModelAdmin
+class ContinuEdModelQuestion extends JModelAdmin
 {
 	/**
 	 * Method override to check if you can edit an existing record.
@@ -77,8 +77,8 @@ class ConeinuEdModelQuestion extends JModelAdmin
 			$data = $this->getItem();
 			if ($this->getState('question.q_id') == 0) {
 				$app = JFactory::getApplication();
-				$data->set('q_poll', JRequest::getInt('q_poll', $app->getUserState('com_continued.questions.filter.course')));
-				$data->set('q_area', JRequest::getInt('q_area', $app->getUserState('com_continued.questions.filter.area')));
+				$data->set('q_course', JRequest::getInt('q_course', $app->getUserState('com_continued.questions.filter.course')));
+				$data->set('q_area', JRequest::getString('q_area', $app->getUserState('com_continued.questions.filter.area')));
 			}
 		}
 		return $data;
@@ -101,7 +101,7 @@ class ConeinuEdModelQuestion extends JModelAdmin
 			// Set ordering to the last item if not set
 			if (empty($table->ordering)) {
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__questions_questions WHERE q_area = "'.$table->q_area.'" && q_poll = '.$table->q_course);
+				$db->setQuery('SELECT MAX(ordering) FROM #__ce_questions WHERE q_area = "'.$table->q_area.'" && q_course = '.$table->q_course);
 				$max = $db->loadResult();
 
 				$table->ordering = $max+1;
@@ -122,7 +122,7 @@ class ConeinuEdModelQuestion extends JModelAdmin
 	protected function getReorderConditions($table)
 	{
 		$condition = array();
-		$condition[] = 'q_area = "'.$table->q_area.'" && q_poll = '.(int) $table->q_poll;
+		$condition[] = 'q_area = "'.$table->q_area.'" && q_course = '.(int) $table->q_course;
 		return $condition;
 	}
 }

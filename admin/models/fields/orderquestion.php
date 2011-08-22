@@ -52,7 +52,7 @@ class JFormFieldOrderQuestion extends JFormField
 		// Get some field values from the form.
 		$questionId	= (int) $this->form->getValue('q_id');
 		$courseId	= (int) $this->form->getValue('q_course');
-		$area	= (int) $this->form->getValue('q_area');
+		$area	= $this->form->getValue('q_area');
 
 		// Build the query for the ordering list.
 		$query = 'SELECT ordering AS value, q_text AS text' .

@@ -19,7 +19,7 @@ jimport('joomla.form.formfield');
  * @subpackage	com_mpoll
  * @since		1.6
  */
-class JFormFieldQuestionsDependable extends JFormField
+class JFormFieldCats extends JFormField
 {
 	/**
 	 * The form field type.
@@ -27,7 +27,7 @@ class JFormFieldQuestionsDependable extends JFormField
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $type = 'QuestionsDependable';
+	protected $type = 'Cats';
 
 	/**
 	 * Method to get the field input markup.
@@ -49,20 +49,14 @@ class JFormFieldQuestionsDependable extends JFormField
 		// Initialize JavaScript field attributes.
 		$attr .= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
 
-		$area	=  $this->form->getValue('q_area');
-		$courseId	= (int) $this->form->getValue('q_course');
-		
-		$html[] = '<select name="'.$this->name.'" class="inputbox" '.$attr.'>';
-		$html[] = '<option value="">'.JText::_('COM_CONTINUED_ANSWER_SELECT_QUESTION').'</option>';
-				
+
 		// Build the query for the ordering list.
-		$query = 'SELECT q_id AS value, q_text AS text' .
-				' FROM #__ce_questions' .
-				' WHERE q_area = "'.$area.'" && q_course = '.$courseId. ' ' .
-				' ORDER BY ordering';
+		$query = 'SELECT cat_id AS value, cat_name AS text' .
+				' FROM #__ce_cats' .
+				' ORDER BY cat_name';
 		$db->setQuery($query);
-		$html[] = JHtml::_('select.options',$db->loadObjectList(),"value","text",$this->value);
-		$html[] = '</select>';
+		$html[] = JHtml::_('select.genericlist',$db->loadObjectList(),$this->name,$attr, "value","text",$this->value);
+		
 
 		return implode($html);
 	}

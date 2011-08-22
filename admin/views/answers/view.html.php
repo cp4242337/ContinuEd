@@ -54,6 +54,8 @@ class ContinuedViewAnswers extends JView
 		} else  {
 			JToolBarHelper::trash('answers.trash');
 		}
+		JToolBarHelper::divider();
+		JToolBarHelper::back('COM_CONTINUED_TOOLBAR_QUESTIONS','index.php?option=com_continued&view=questions');
 	}
 	/**
 	 * Method to set up the document properties

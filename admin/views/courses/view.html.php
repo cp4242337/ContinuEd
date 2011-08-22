@@ -1,38 +1,68 @@
 <?php
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
 
-jimport( 'joomla.application.component.view' );
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-class ContinuEdViewCourses extends JView
+// import Joomla view library
+jimport('joomla.application.component.view');
+
+class ContinuedViewCourses extends JView
 {
-	function display($tpl = null)
+	function display($tpl = null) 
 	{
-		global $mainframe;
-		JToolBarHelper::title(   JText::_( 'ContinuEd Courses Manager' ), 'continued' );
-		JToolBarHelper::publishList();
-		JToolBarHelper::unpublishList();
-		JToolBarHelper::custom( 'copy', 'copy.png', 'copy.png', 'Copy', true, false );
-		JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
-		$model = $this->getModel('courses');
-		$filter_cat = $model->getState('filter_cat');
-		$filter_prov = $model->getState('filter_prov');
-		$cats =  $model->getCatList();
-		$provs = $model->getProvList();
 		// Get data from the model
+		$items = $this->get('Items');
+		$pagination = $this->get('Pagination');
+		$this->state		= $this->get('State');
+		$catlist = $this->get('Cats');
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) 
+		{
+			JError::raiseError(500, implode('<br />', $errors));
+			return false;
+		}
+		// Assign data to the view
+		$this->items = $items;
+		$this->pagination = $pagination;
+		$this->catlist = $catlist;
+		// Set the toolbar
+		$this->addToolBar();
 
-		$items		= & $this->get( 'Data');
-		$pagination = & $this->get( 'Pagination' );
-
-		$this->assignRef('filter_prov',$filter_prov);
-		$this->assignRef('filter_cat',$filter_cat);
-		$this->assignRef('cats',		$cats);
-		$this->assignRef('provs',		$provs);
-		$this->assignRef('items',		$items);
-		$this->assignRef('pagination',	$pagination);
-
+		// Display the template
 		parent::display($tpl);
+
+		// Set the document
+		$this->setDocument();
+	}
+
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		$state	= $this->get('State');
+		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_COURSES'), 'continued');
+		JToolBarHelper::addNew('course.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::editList('course.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::divider();
+		JToolBarHelper::custom('courses.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
+		JToolBarHelper::custom('courses.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);
+		JToolBarHelper::divider();
+		if ($state->get('filter.published') == -2) {
+			JToolBarHelper::deleteList('', 'courses.delete', 'JTOOLBAR_EMPTY_TRASH');
+			JToolBarHelper::divider();
+		} else  {
+			JToolBarHelper::trash('courses.trash');
+		}
+	}
+	/**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_('COM_CONTINUED_MANAGER_COURSES'));
 	}
 }

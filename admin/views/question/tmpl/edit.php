@@ -7,7 +7,7 @@ JHtml::_('behavior.formvalidation');
 $params = $this->form->getFieldsets('params');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_continued&layout=edit&q_id='.(int) $this->item->q_id); ?>" method="post" name="adminForm" id="continued-form" class="form-validate">
-	<div class="width-100 fltlft">
+	<div class="width-30 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'COM_CONTINUED_QUESTION_DETAILS' ); ?></legend>
 			<ul class="adminformlist">
@@ -16,6 +16,8 @@ $params = $this->form->getFieldsets('params');
 <?php endforeach; ?>
 			</ul>
 		</fieldset>
+	</div>
+	<div class="width-70 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'COM_CONTINUED_QUESTION_CONTENT' ); ?></legend>
 <?php foreach($this->form->getFieldset('content') as $field): ?>

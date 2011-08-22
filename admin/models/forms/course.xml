@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: question.xml 62 2010-11-28 16:08:16Z chdemko $ -->
+<form>
+	<fieldset name="details">
+		<field
+			name="course_id"
+			type="hidden"
+		/>
+		<field
+			name="published"
+			type="list"
+			id="published"
+			class="inputbox"
+			label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC"
+			size="1"
+			default="1"
+			filter="integer">
+			<option	value="1">JPUBLISHED</option>
+			<option	value="0">JUNPUBLISHED</option>
+		</field>
+		<field
+			name="access"
+			type="accesslevel"
+			id="access"
+			class="inputbox"
+			label="JFIELD_ACCESS_LABEL"
+			description="JFIELD_ACCESS_DESC"
+			default="1"
+			filter="integer"/>
+		<field 
+			name="ordering" 
+			type="OrderQuestion" 
+			class="inputbox"
+			label="JFIELD_ORDERING_LABEL"
+			description="JFIELD_ORDERING_DESC" 
+		/>
+		<field
+			name="course_name"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_NAME_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_NAME_DESC"
+			size="70"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_subtitle"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_SUBNAME_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_SUBNAME_DESC"
+			size="70"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_cat"
+			type="Cats"
+			class="inputbox"
+			label="COM_CONTINUED_COURSE_FIELD_CAT_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CAT_DESC"
+			required="false"
+		/>
+		<field
+			name="course_cataloglink"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_RETURN_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_RETURN_DESC"
+			size="70"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_desc"
+			type="textarea"
+			label="COM_CONTINUED_COURSE_FIELD_DESC_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_DESC_DESC"
+			rows="4"
+			cols="70"
+			class="inputbox"
+			required="false"
+			filter="safehtml"
+			default=""
+		/>
+		<field
+			name="course_keywords"
+			type="textarea"
+			label="COM_CONTINUED_COURSE_FIELD_KEYWORDS_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_KEYWORDS_DESC"
+			rows="4"
+			cols="70"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_searchable"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_SEARCHABLE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_SEARCHABLE_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_provider"
+			type="Providers"
+			class="inputbox"
+			label="COM_CONTINUED_COURSE_FIELD_PROVIDER_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PROVIDER_DESC"
+			required="false"
+		/>
+		<field
+			name="course_faculty"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_FACULTY_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_FACULTY_DESC"
+			size="70"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_previmg"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_THUMB_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_THUMB_DESC"
+			size="70"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field 
+			name="course_startdate" type="calendar"
+			label="COM_CONTINUED_COURSE_FIELD_STARTDATE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_STARTDATE_DESC"
+			filter="user_utc"
+			format="%Y-%m-%d %H:%M:%S"
+			size="22"
+		/>
+		<field 
+			name="course_enddate" type="calendar"
+			label="COM_CONTINUED_COURSE_FIELD_ENDDATE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_ENDDATE_DESC"
+			filter="user_utc"
+			format="%Y-%m-%d %H:%M:%S"
+			size="22"
+		/>
+		<field 
+			name="course_actdate" type="calendar"
+			label="COM_CONTINUED_COURSE_FIELD_ACTDATE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_ACTDATE_DESC"
+			filter="user_utc"
+			format="%Y-%m-%d"
+			size="22"
+		/>
+		<field
+			name="course_prereq"
+			type="Courses"
+			class="inputbox"
+			label="COM_CONTINUED_COURSE_FIELD_PREREQ_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PREREQ_DESC"
+			required="false"
+		/>
+		
+	</fieldset>
+	<fieldset name="fmsettings">
+		<field
+			name="course_hasfm"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_HASFM_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_HASFM_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>	
+	</fieldset>
+	<fieldset name="fmcontent">
+		<field
+			name="course_frontmatter"
+			type="editor"
+			label="COM_CONTINUED_COURSE_FIELD_FMTEXT_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_FMTEXT_DESC"
+			class="inputbox"
+			required="false"
+			filter="safehtml"
+			buttons="false"
+		/>
+	</fieldset>
+	<fieldset name="matsettings">
+		<field
+			name="course_hasmat"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_HASMAT_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_HASMAT_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_hasinter"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_HASINTERQ_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_HASINTERQ_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>	
+		<field
+			name="course_qanda"
+			type="list"
+			label="COM_CONTINUED_COURSE_FIELD_QANDA_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_QANDA_DESC"
+			class="inputbox"
+			required="false"
+			default="none">
+			<option	value="none">None</option>
+			<option	value="submit">Submit Questions</option>
+			<option	value="panda">QA Results</option>
+			<option	value="all">Submit with QA Results</option>
+		</field>		
+	</fieldset>
+	<fieldset name="matcontent">
+		<field
+			name="course_material"
+			type="editor"
+			label="COM_CONTINUED_COURSE_FIELD_MATTEXT_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_MATTEXT_DESC"
+			class="inputbox"
+			required="false"
+			filter="safehtml"
+			buttons="false"
+		/>
+	</fieldset>
+	<fieldset name="certsettings">
+		<field
+			name="course_hascertif"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_HASCERT_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_HASCERT_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_certifname"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_CERTNAME_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CERTNAME_DESC"
+			size="70"
+			class="inputbox"
+			required="false"
+		/>
+		<field
+			name="course_credits"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_CREDITS_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CREDITS_DESC"
+			size="7"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_cneprognum"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_CNENUM_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CENNUM_DESC"
+			size="20"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_cpeprognum"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_CPENUM_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CPENUM_DESC"
+			size="30"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="course_defaultcertif"
+			type="CertTypes"
+			class="inputbox"
+			label="COM_CONTINUED_COURSE_FIELD_DEFAULTCERT_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_DEFAULTCERT_DESC"
+			required="false"
+		/>
+		<field
+			name="course_learntype"
+			type="list"
+			label="COM_CONTINUED_COURSE_FIELD_LEARNFORMAT_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_LEARNFORMAT_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="">
+			<option value="online enduring material" selected="selected">online enduring material</option>
+			<option value="enduring material">enduring material</option>
+			<option value="live activity">live activity</option>
+			<option value="journal based CME activity">journal based CME activity</option>
+		</field>
+	</fieldset>
+	<fieldset name="presettings">
+		<field
+			name="course_haspre"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_HASPRE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_HASPRE_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_changepre"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_CHANGEPRE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CHANGEPRE_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_preparts"
+			type="list"
+			label="COM_CONTINUED_COURSE_FIELD_PREPARTS_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PREPARTS_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">1</option>
+			<option	value="2">2</option>
+			<option	value="3">3</option>
+			<option	value="4">4</option>
+		</field>
+	</fieldset>
+	<fieldset name="evalsettings">
+		<field
+			name="course_haseval"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_HASEVAL_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_HASEVAL_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_evaltype"
+			type="list"
+			label="COM_CONTINUED_COURSE_FIELD_EVALTYPE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_EVALTYPE_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="assess">
+			<option	value="assess">Assessment</option>
+			<option	value="unassess">UnAssessment</option>
+		</field>
+		<field
+			name="course_postparts"
+			type="list"
+			label="COM_CONTINUED_COURSE_FIELD_EVALPARTS_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_EVALPARTS_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="1">
+			<option	value="1">1</option>
+			<option	value="2">2</option>
+			<option	value="3">3</option>
+			<option	value="4">4</option>
+			<option	value="5">5</option>
+			<option	value="6">6</option>
+			<option	value="7">7</option>
+			<option	value="8">8</option>
+			<option	value="9">9</option>
+			<option	value="10">10</option>
+		</field>
+		<field
+			name="course_viewans"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_VIEWANS_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_VIEWANS_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_passmsg"
+			type="textarea"
+			label="COM_CONTINUED_COURSE_FIELD_PASSMSG_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PASSMSG_DESC"
+			rows="4"
+			cols="70"
+			class="inputbox"
+			required="false"
+			filter="safehtml"
+			default=""
+		/>
+		<field
+			name="course_failmsg"
+			type="textarea"
+			label="COM_CONTINUED_COURSE_FIELD_FAILMSG_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_FAILMSG_DESC"
+			rows="4"
+			cols="70"
+			class="inputbox"
+			required="false"
+			filter="safehtml"
+			default=""
+		/>
+		<field
+			name="course_allowrate"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_ALLOWRATE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_ALLOWRATE_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_rating"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_RATING_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_RATING_DESC"
+			size="10"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+	</fieldset>
+	<fieldset name="catlinksettings">
+		<field
+			name="course_catlink"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_CATLINK_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CATLINK_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_catmenu"
+			type="Cats"
+			class="inputbox"
+			label="COM_CONTINUED_COURSE_FIELD_CATMENU_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CATMENU_DESC"
+			required="false"
+		/>
+		<field
+			name="course_catexp"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_CATEXP_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CATEXP_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_catrate"
+			type="Courses"
+			class="inputbox"
+			label="COM_CONTINUED_COURSE_FIELD_CATRATE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_CATRATE_DESC"
+			required="false"
+		/>	
+	</fieldset>
+	<fieldset name="extlinksettings">
+		<field
+			name="course_extlink"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_EXTLINK_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_EXTLINK_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_exturl"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_EXTURL_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_EXTURL_DESC"
+			size="60"
+			class="inputbox"
+			required="false"
+			default=""
+		/>	
+	</fieldset>
+	<fieldset name="purchasesettings">
+		<field
+			name="course_purchse"
+			type="radio"
+			label="COM_CONTINUED_COURSE_FIELD_PURCHASE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PURCHASE_DESC"
+			size="1"
+			class="inputbox"
+			required="false"
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="course_purchselink"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_PURCHASELINK_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PURCHASELINK_DESC"
+			size="60"
+			class="inputbox"
+			required="false"
+			default=""
+		/>	
+		<field
+			name="course_purchsesku"
+			type="text"
+			label="COM_CONTINUED_COURSE_FIELD_PURCHASESKU_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PURCHASESKU_DESC"
+			size="60"
+			class="inputbox"
+			required="false"
+			default=""
+		/>	
+	</fieldset>
+</form>
+

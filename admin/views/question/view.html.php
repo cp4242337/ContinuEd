@@ -49,7 +49,7 @@ class ContinuEdViewQuestion extends JView
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->q_id == 0;
-		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_QUESTION_NEW') : JText::_('COM_CONTINUE_MANAGER_QUESTION_EDIT'), 'question');
+		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_QUESTION_NEW') : JText::_('COM_CONTINUED_MANAGER_QUESTION_EDIT'), 'question');
 		// Built the actions for new and existing records.
 		if ($isNew) 
 		{

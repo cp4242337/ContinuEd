@@ -49,18 +49,18 @@ class JFormFieldQuestionParts extends JFormField
 		// Initialize JavaScript field attributes.
 		$attr .= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
 	
-		$area	= (int) $this->form->getValue('q_area');
+		$area = $this->form->getValue('q_area');
 		$courseId	= (int) $this->form->getValue('q_course');
 		// Build the query for the ordering list.
-		if ($area == "eval" || $area == "pre") {
+		if ($area == "post" || $area == "pre") {
 			$query = 'SELECT course_'.$area.'parts ' .
 					' FROM #__ce_courses' .
 					' WHERE course_id = '.$courseId;
 			$db->setQuery($query);
-			$nump = $db->loadResult();
-			$html[] = JHtml::_('select.integerlist',0,$nump,1,$this->name,$attr,$this->value);
+			$nump = $db->loadResult(); 
+			$html[] = JHtml::_('select.integerlist',1,$nump,1,$this->name,$attr,$this->value);
 		} else {
-			$html[] = '<input type="hidden" value="1" name="'.$this->name.'">1';
+			$html[] = '<input type="hidden" value="1" name="'.$this->name.'">';
 			
 		}
 

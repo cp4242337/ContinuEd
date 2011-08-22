@@ -7,7 +7,7 @@ JHtml::_('behavior.tooltip');
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
-$saveOrder	= $listOrder == 'o.ordering';
+$saveOrder	= $listOrder == 'q.ordering';
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_continued&view=questions'); ?>" method="post" name="adminForm">
 	<fieldset id="filter-bar">
@@ -15,7 +15,7 @@ $saveOrder	= $listOrder == 'o.ordering';
 			
 		</div>
 		<div class="filter-select fltrt">
-			<select name="filter_question" class="inputbox" onchange="this.form.submit()">
+			<select name="filter_course" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('COM_CONTINUED_QUESTION_SELECT_COURSE');?></option>
 				<?php echo $html[] = JHtml::_('select.options',$this->clist,"value","text",$this->state->get('filter.course')); ?>
 			</select>
@@ -29,9 +29,11 @@ $saveOrder	= $listOrder == 'o.ordering';
 		<tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
 		<tbody><?php echo $this->loadTemplate('body');?></tbody>
 	</table>
+	
 	<div>
 		<input type="hidden" name="task" value="" />
 		<input type="hidden" name="boxchecked" value="0" />
+		<input type="hidden" name="filter_area" value="<?php echo $this->state->get('filter.area'); ?>" />
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
