@@ -44,6 +44,7 @@ class ContinuedViewAnswers extends JView
 		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_ANSWERS'), 'continued');
 		JToolBarHelper::addNew('answer.add', 'JTOOLBAR_NEW');
 		JToolBarHelper::editList('answer.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::custom('answers.copy', 'copy.png', 'copy_f2.png','JTOOLBAR_COPY', true);
 		JToolBarHelper::divider();
 		JToolBarHelper::custom('answers.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
 		JToolBarHelper::custom('answers.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);

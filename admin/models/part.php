@@ -1,89 +1,108 @@
 <?php
-defined('_JEXEC') or die();
 
-jimport('joomla.application.component.model');
-class ContinuEdModelPart extends JModel
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
+
+// import Joomla modelform library
+jimport('joomla.application.component.modeladmin');
+
+class ContinuEdModelPart extends JModelAdmin
 {
-	function __construct()
+	/**
+	 * Method override to check if you can edit an existing record.
+	 *
+	 * @param	array	$data	An array of input data.
+	 * @param	string	$key	The name of the key for the primary key.
+	 *
+	 * @return	boolean
+	 * @since	1.6
+	 */
+	protected function allowEdit($data = array(), $key = 'part_id')
 	{
-		parent::__construct();
-
-		$array = JRequest::getVar('cid',  0, '', 'array');
-		$this->setId((int)$array[0]);
+		// Check specific edit permission then general edit permission.
+		return JFactory::getUser()->authorise('core.edit', 'com_continued.part.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
 	}
-	function setId($id)
+	/**
+	 * Returns a reference to the a Table object, always creating it.
+	 *
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
+	 */
+	public function getTable($type = 'Part', $prefix = 'ContinuEdTable', $config = array()) 
 	{
-		$this->_id		= $id;
-		$this->_data	= null;
+		return JTable::getInstance($type, $prefix, $config);
 	}
-
-	function &getData()
+	/**
+	 * Method to get the record form.
+	 *
+	 * @param	array	$data		Data for the form.
+	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+	 * @return	mixed	A JForm object on success, false on failure
+	 * @since	1.6
+	 */
+	public function getForm($data = array(), $loadData = true) 
 	{
-		if (empty( $this->_data )) {
-			$query = ' SELECT * FROM #__ce_parts '.
-					'  WHERE part_id = '.$this->_id;
-			$this->_db->setQuery( $query );
-			$this->_data = $this->_db->loadObject();
-		}
-		if (!$this->_data) {
-			$this->_data = new stdClass();
-			$this->_data->part_id = 0;
-		}
-		return $this->_data;
-	}
-	function getNumParts($courseid,$area) {
-		if ($area == 'post') $q='SELECT evalparts FROM #__ce_courses WHERE id = '.$courseid;
-		if ($area == 'pre') $q='SELECT course_preparts FROM #__ce_courses WHERE id = '.$courseid;
-		$this->_db->setQuery($q);
-		return $this->_db->loadResult();
-	}
-
-	function store()
-	{
-		$row =& $this->getTable();
-		$data->part_id = JRequest::getVar('part_id');
-		$data->part_name = JRequest::getVar('part_name');
-		$data->part_desc = JRequest::getVar('part_desc');
-		$data->part_course = JRequest::getVar('part_course');
-		$data->part_part = JRequest::getVar('part_part');
-		$data->part_area = JRequest::getVar('part_area');
-
-		if (!$row->bind($data)) {
-			$this->setError($this->_db->getErrorMsg());
-			return false;
-		}
-
-		if (!$row->check()) {
-			$this->setError($this->_db->getErrorMsg());
-			return false;
-		}
-
-		if (!$row->store()) {
-			$this->setError( $row->getErrorMsg() );
-			return false;
-		}
-
-		return true;
-	}
-
-	function delete()
-	{
-		$cids = JRequest::getVar( 'cid', array(0), 'post', 'array' );
-
-		$row =& $this->getTable();
-
-		if (count( $cids ))
+		// Get the form.
+		$form = $this->loadForm('com_continued.part', 'part', array('control' => 'jform', 'load_data' => $loadData));
+		if (empty($form)) 
 		{
-			foreach($cids as $cid) {
-				if (!$row->delete( $cid )) {
-					$this->setError( $row->getErrorMsg() );
-					return false;
-				}
+			return false;
+		}
+		return $form;
+	}
+	/**
+	 * Method to get the script that have to be included on the form
+	 *
+	 * @return string	Script files
+	 */
+	public function getScript() 
+	{
+		return 'administrator/components/com_continued/models/forms/part.js';
+	}
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return	mixed	The data for the form.
+	 * @since	1.6
+	 */
+	protected function loadFormData() 
+	{
+		// Check the session for previously entered form data.
+		$data = JFactory::getApplication()->getUserState('com_continued.edit.part.data', array());
+		if (empty($data)) 
+		{
+			$data = $this->getItem();
+			if ($this->getState('part.part_id') == 0) {
+				$app = JFactory::getApplication();
+				$data->set('part_course', JRequest::getInt('part_course', $app->getUserState('com_continued.parts.filter.course')));
+				$data->set('part_area', JRequest::getString('part_area', $app->getUserState('com_continued.parts.filter.area')));
 			}
 		}
-		return true;
+		return $data;
+	}
+	
+	/**
+	 * Prepare and sanitise the table prior to saving.
+	 *
+	 * @since	1.6
+	 */
+	protected function prepareTable(&$table)
+	{
+		jimport('joomla.filter.output');
+		$date = JFactory::getDate();
+		$user = JFactory::getUser();
+
+		if (empty($table->part_id)) {
+			// Set the values
+
+			
+		}
+		else {
+			// Set the values
+		}
 	}
 
-
 }
-?>

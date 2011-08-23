@@ -25,6 +25,9 @@ class ContinuEdModelCourses extends JModelList
 		$courseId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_cat',"");
 		$this->setState('filter.cat', $courseId);
 
+		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '', 'string');
+		$this->setState('filter.published', $published);
+		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
 		$this->setState('params', $params);
@@ -54,7 +57,15 @@ class ContinuEdModelCourses extends JModelList
 		$query->select('p.prov_name AS provider_name');
 		$query->join('RIGHT', '#__ce_providers AS p ON p.prov_id = c.course_provider');
 		
-		
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (is_numeric($published)) {
+			$query->where('c.published = '.(int) $published);
+		} else if ($published === '') {
+			$query->where('(c.published IN (0, 1))');
+		}
+
+				
 		// Filter by course.
 		$catId = $this->getState('filter.cat');
 		if (is_numeric($catId)) {

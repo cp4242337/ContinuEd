@@ -125,4 +125,55 @@ class ContinuEdModelQuestion extends JModelAdmin
 		$condition[] = 'q_area = "'.$table->q_area.'" && q_course = '.(int) $table->q_course;
 		return $condition;
 	}
+	
+	public function copy(&$pks)
+	{
+		// Initialise variables.
+		$user = JFactory::getUser();
+		$pks = (array) $pks;
+		$table = $this->getTable();
+		
+		// Include the content plugins for the on delete events.
+		JPluginHelper::importPlugin('content');
+		
+		// Iterate the items to delete each one.
+		foreach ($pks as $i => $pk)
+		{
+		
+			if ($table->load($pk))
+			{
+				$table->q_id=0;
+				$table->ordering=$table->getNextOrder('q_area = "'.$table->q_area.'" && q_course= '.$table->q_course);
+				if (!$table->store()) {
+					$this->setError($table->getError());
+					return false;
+				} else {
+					if ($table->q_type == 'multi' || $table->q_type == 'mcbox') {
+						$newid = $table->q_id;
+						$qoq='SELECT * FROM #__ce_questions_opts WHERE opt_question = '.$pk;
+						$this->_db->setQuery($qoq);
+						$qos = $this->_db->loadObjectList();
+						foreach($qos as $qo) {
+							$q  = 'INSERT INTO #__ce_questions_opts (opt_question,opt_text,opt_correct,opt_expl,ordering,published) ';
+							$q .= 'VALUES ("'.$newid.'","'.$qo->opt_text.'","'.$qo->opt_correct.'","'.$qo->opt_expl.'","'.$qo->ordering.'","'.$qo->published.'")';
+							$this->_db->setQuery($q);
+							if (!$this->_db->query($q)) {
+								return false;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+		
+		// Clear the component's cache
+		$this->cleanCache();
+		
+		return true;
+	}
 }

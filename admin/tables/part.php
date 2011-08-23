@@ -1,16 +1,22 @@
 <?php
-defined('_JEXEC') or die('Restricted access');
-class TablePart extends JTable
-{
-	var $part_id = null;
-	var $part_course = null;
-	var $part_part = null;
-	var $part_name = null;
-	var $part_desc = null;
-	var $part_area = null;
 
-	function TablePart(& $db) {
+
+// No direct access
+defined('_JEXEC') or die('Restricted access');
+
+// import Joomla table library
+jimport('joomla.database.table');
+
+class ContinuEdTablePart extends JTable
+{
+	/**
+	 * Constructor
+	 *
+	 * @param object Database connector object
+	 */
+	function __construct(&$db) 
+	{
 		parent::__construct('#__ce_parts', 'part_id', $db);
 	}
+
 }
-?>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: part.xml 62 2010-11-28 16:08:16Z chdemko $ -->
+<form>
+	<fieldset name="details">
+		<field
+			name="part_id"
+			type="hidden"
+		/>
+		<field
+			name="part_area"
+			type="hidden"
+		/>
+		<field
+			name="part_course"
+			type="hidden"
+		/>
+		<field 
+			name="part_part" 
+			type="PartParts" 
+			class="inputbox"
+			label="COM_CONTINUED_PART_FIELD_PART_LABEL"
+			description="COM_CONTINUED_PART_FIELD_PART_DESC" 
+		/>
+		<field
+			name="part_name"
+			type="text"
+			label="COM_CONTINUED_PART_FIELD_NAME_LABEL"
+			description="COM_CONTINUED_PART_FIELD_NAME_DESC"
+			size="60"
+			class="inputbox"
+			required="true"
+			default=""
+		/>
+	</fieldset>	
+	<fieldset name="content">	
+		<field
+			name="part_desc"
+			type="editor"
+			label="COM_CONTINUED_PART_FIELD_EXPL_LABEL"
+			description="COM_CONTINUED_PART_FIELD_EXPL_DESC"
+			class="inputbox"
+			filter="safehtml"
+			buttons="false"
+		/>
+	</fieldset>
+	
+
+</form>
+

@@ -44,6 +44,7 @@ class ContinuEdViewQuestions extends JView
 		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_QUESTIONS'), 'continued');
 		JToolBarHelper::addNew('question.add', 'JTOOLBAR_NEW');
 		JToolBarHelper::editList('question.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::custom('questions.copy', 'copy.png', 'copy_f2.png','JTOOLBAR_COPY', true);
 		JToolBarHelper::divider();
 		JToolBarHelper::custom('questions.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
 		JToolBarHelper::custom('questions.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);

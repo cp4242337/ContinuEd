@@ -44,6 +44,7 @@ class ContinuedViewCourses extends JView
 		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_COURSES'), 'continued');
 		JToolBarHelper::addNew('course.add', 'JTOOLBAR_NEW');
 		JToolBarHelper::editList('course.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::custom('courses.copy', 'copy.png', 'copy_f2.png','JTOOLBAR_COPY', true);
 		JToolBarHelper::divider();
 		JToolBarHelper::custom('courses.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
 		JToolBarHelper::custom('courses.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);

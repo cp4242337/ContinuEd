@@ -27,6 +27,9 @@ class ContinuEdModelQuestions extends JModelList
 		$area = $this->getUserStateFromRequest($this->context.'.filter.area', 'filter_area', '');
 		$this->setState('filter.area', $area);	
 		
+		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '', 'string');
+		$this->setState('filter.published', $published);
+		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
 		$this->setState('params', $params);
@@ -59,6 +62,13 @@ class ContinuEdModelQuestions extends JModelList
 		$area = $this->getState('filter.area');
 		if ($area) {
 			$query->where('q.q_area = "'.$area.'" ');
+		}
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (is_numeric($published)) {
+			$query->where('q.published = '.(int) $published);
+		} else if ($published === '') {
+			$query->where('(q.published IN (0, 1))');
 		}
 				
 		$orderCol	= $this->state->get('list.ordering');

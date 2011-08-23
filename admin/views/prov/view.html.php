@@ -48,7 +48,7 @@ class ContinuEdViewProv extends JView
 		JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();
 		$userId = $user->id;
-		$isNew = $this->item->porv_id == 0;
+		$isNew = $this->item->prov_id == 0;
 		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_PROV_NEW') : JText::_('COM_CONTINUE_MANAGER_PROV_EDIT'), 'prov');
 		// Built the actions for new and existing records.
 		if ($isNew) 

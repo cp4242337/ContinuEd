@@ -124,4 +124,41 @@ class ContinuEdModelAnswer extends JModelAdmin
 		$condition[] = 'opt_question = '.(int) $table->opt_question;
 		return $condition;
 	}
+	
+	public function copy(&$pks)
+	{
+		// Initialise variables.
+		$user = JFactory::getUser();
+		$pks = (array) $pks;
+		$table = $this->getTable();
+		
+		// Include the content plugins for the on delete events.
+		JPluginHelper::importPlugin('content');
+		
+		// Iterate the items to delete each one.
+		foreach ($pks as $i => $pk)
+		{
+		
+			if ($table->load($pk))
+			{
+			
+				$table->opt_id=0;
+				$table->ordering=$table->getNextOrder('opt_question= '.$table->opt_question);
+				if (!$table->store()) {
+					$this->setError($table->getError());
+					return false;
+				} 
+			}
+			else
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+		
+		// Clear the component's cache
+		$this->cleanCache();
+		
+		return true;
+	}
 }

@@ -124,4 +124,105 @@ class ContinuEdModelCourse extends JModelAdmin
 		$condition[] = 'course_cat = "'.$table->course_cat.'" ';
 		return $condition;
 	}
+	
+	public function copy(&$pks)
+	{
+		// Initialise variables.
+		$user = JFactory::getUser();
+		$pks = (array) $pks;
+		$table = $this->getTable();
+		
+		// Include the content plugins for the on delete events.
+		JPluginHelper::importPlugin('content');
+		
+		// Iterate the items to delete each one.
+		foreach ($pks as $i => $pk)
+		{
+		
+			if ($table->load($pk))
+			{
+				$table->course_id=0;
+				$table->ordering=$table->getNextOrder('course_cat = '.$table->course_cat);
+				if (!$table->store()) {
+					$this->setError($table->getError());
+					return false;
+				} else {
+					
+					$newcourse = $table->course_id;
+					$oldcourse = $pk;
+					
+					//PArts
+					$q='SELECT * FROM #__ce_parts WHERE part_course = '.$oldcourse;
+					$this->_db->setQuery($q);
+					$qps = $this->_db->loadObjectList();
+					foreach($qps as $qp) {
+						$q  = 'INSERT INTO #__ce_parts (part_course,part_part,part_name,part_desc,part_area) ';
+						$q .= 'VALUES ("'.$newcourse.'","'.$qp->part_part.'","'.addslashes($qp->part_name).'","'.addslashes($qp->part_desc).'","'.$qp->part_area.'")';
+						$this->_db->setQuery($q);
+						if (!$this->_db->query($q)) {
+							return false;
+						}
+					}
+		
+					//Course Certificates
+					$q='SELECT * FROM #__ce_coursecerts WHERE course_id = '.$oldcourse;
+					$this->_db->setQuery($q);
+					$qcs = $this->_db->loadObjectList();
+					foreach($qcs as $qc) {
+						$q  = 'INSERT INTO #__ce_coursecerts (qd_course,qd_cert) ';
+						$q .= 'VALUES ("'.$newcourse.'","'.$qc->qd_cert.'")';
+						$this->_db->setQuery($q);
+						if (!$this->_db->query($q)) {
+							return false;
+						}
+					}
+		
+		
+					//Questions and Answers
+					$q='SELECT * FROM #__ce_questions WHERE q_course = '.$oldcourse;
+					$this->_db->setQuery($q);
+					$qus = $this->_db->loadObjectList();
+					if ($qus)
+					{
+						foreach($qus as $qu) {
+							$q  = 'INSERT INTO #__ce_questions (q_course,ordering,q_text,q_type,q_cat,q_part,q_req,q_depq,q_area,published) ';
+							$q .= 'VALUES ("'.$newcourse.'","'.$qu->ordering.'","'.addslashes($qu->q_text).'","'.$qu->q_type.'","'.$qu->q_cat.'","'.$qu->q_part.'","'.$qu->q_req.'","'.$qu->q_depq.'","'.$qu->q_area.'","'.$qu->published.'")';
+							$this->_db->setQuery($q);
+							if (!$this->_db->query($q)) {
+								return false;
+							}
+							if ($qu->q_type == 'multi' || $qu->q_type == 'mcbox' || $qu->q_type == 'dropdown') {
+								$newid = $this->_db->insertid();
+								$qoq='SELECT * FROM #__ce_questions_opts WHERE opt_question = '.$qu->q_id;
+								$this->_db->setQuery($qoq);
+								$qos = $this->_db->loadObjectList();
+								foreach($qos as $qo) {
+									$q  = 'INSERT INTO #__ce_questions_opts (opt_question,opt_text,opt_correct,opt_expl,ordering,published) ';
+									$q .= 'VALUES ("'.$newid.'","'.addslashes($qo->opt_text).'","'.$qo->opt_correct.'","'.addslashes($qo->opt_expl).'","'.$qo->ordering.'","'.$qo->published.'")';
+									$this->_db->setQuery($q);
+									if (!$this->_db->query($q)) {
+										return false;
+									}
+								}
+							}
+						}
+					} else return false;
+					
+					
+					
+					
+				}
+			}
+			else
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+		
+		// Clear the component's cache
+		$this->cleanCache();
+		
+		return true;
+	}
 }

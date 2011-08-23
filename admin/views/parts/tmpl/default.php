@@ -1,45 +1,40 @@
-<?php defined('_JEXEC') or die('Restricted access');
-$order = JHTML::_('grid.order', $this->items);
+<?php
+
+// No direct access to this file
+defined('_JEXEC') or die('Restricted Access');
+// load tooltip behavior
+JHtml::_('behavior.tooltip');
+
+$listOrder	= $this->escape($this->state->get('list.ordering'));
+$listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
-<form action="index.php" method="post" name="adminForm"><input
-	type="hidden" name="course" value="<?php echo $this->courseid; ?>">
-<div id="editcell">Only 1 part label for each part will appear in
-evaluation.
-<table class="adminlist">
-	<thead>
-		<tr>
-			<th width="5"><?php echo JText::_( 'Part' ); ?></th>
-			<th width="20"><input type="checkbox" name="toggle" value=""
-				onclick="checkAll(<?php echo count( $this->items ); ?>);" /></th>
-			<th><?php echo JText::_( 'Part Name' ); ?></th>
-			<th><?php echo JText::_( 'Part Description' ); ?></th>
-		</tr>
-	</thead>
-	<?php
-	$k = 0;
-	for ($i=0, $n=count( $this->items ); $i < $n; $i++)
-	{
-		$row = &$this->items[$i];
-		$checked 	= JHTML::_('grid.id',   $i, $row->part_id );
-		$link 		= JRoute::_( 'index.php?option=com_continued&controller=part&task=edit&course='.$this->courseid.'&cid[]='. $row->part_id );
+<form action="<?php echo JRoute::_('index.php?option=com_continued&view=parts'); ?>" method="post" name="adminForm">
+	<fieldset id="filter-bar">
+		<div class="filter-search fltlft">
+			
+		</div>
+		<div class="filter-select fltrt">
 
-		?>
-	<tr class="<?php echo "row$k"; ?>">
-		<td><?php echo $row->part_part; ?></td>
-		<td><?php echo $checked; ?></td>
-		<td><a href="<?php echo $link; ?>"><?php echo $row->part_name; ?></a>
-		</td>
-		<td><?php echo $row->part_desc; ?></td>
-	</tr>
-	<?php
-	$k = 1 - $k;
-	}
-	?>
-</table>
-</div>
 
-<input type="hidden" name="option" value="com_continued" /> <input
-	type="hidden" name="area" value="<?php echo $this->area; ?>" /> <input
-	type="hidden" name="task" value="" /> <input type="hidden"
-	name="boxchecked" value="0" /> <input type="hidden" name="controller"
-	value="part" /></form>
+		</div>
+	</fieldset>
+	
+	<div class="clr"> </div>
+	
+	<table class="adminlist">
+		<thead><?php echo $this->loadTemplate('head');?></thead>
+		<tfoot><?php echo $this->loadTemplate('foot');?></tfoot>
+		<tbody><?php echo $this->loadTemplate('body');?></tbody>
+	</table>
+	<div>
+		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="boxchecked" value="0" />
+		<input type="hidden" name="filter_course" value="<?php echo $this->state->get('filter.course'); ?>" />
+		<input type="hidden" name="filter_area" value="<?php echo $this->state->get('filter.area'); ?>" />
+		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+		<?php echo JHtml::_('form.token'); ?>
+	</div>
+</form>
+
+

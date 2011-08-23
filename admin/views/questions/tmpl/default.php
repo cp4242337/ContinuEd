@@ -15,6 +15,10 @@ $saveOrder	= $listOrder == 'q.ordering';
 			
 		</div>
 		<div class="filter-select fltrt">
+			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
+				<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true);?>
+			</select>
 			<select name="filter_course" class="inputbox" onchange="this.form.submit()">
 				<option value=""><?php echo JText::_('COM_CONTINUED_QUESTION_SELECT_COURSE');?></option>
 				<?php echo $html[] = JHtml::_('select.options',$this->clist,"value","text",$this->state->get('filter.course')); ?>

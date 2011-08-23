@@ -25,6 +25,9 @@ class ContinuEdModelAnswers extends JModelList
 		$qId = $this->getUserStateFromRequest($this->context.'.filter.question', 'filter_question', '');
 		$this->setState('filter.question', $qId);
 
+		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '', 'string');
+		$this->setState('filter.published', $published);
+		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
 		$this->setState('params', $params);
@@ -45,6 +48,14 @@ class ContinuEdModelAnswers extends JModelList
 		// From the hello table
 		$query->from('#__ce_questions_opts as o');
 		
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (is_numeric($published)) {
+			$query->where('o.published = '.(int) $published);
+		} else if ($published === '') {
+			$query->where('(o.published IN (0, 1))');
+		}
+
 		// Filter by poll.
 		$qId = $this->getState('filter.question');
 		if (is_numeric($qId)) {
