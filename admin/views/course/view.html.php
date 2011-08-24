@@ -18,6 +18,7 @@ class ContinuEdViewCourse extends JView
 		$form = $this->get('Form');
 		$item = $this->get('Item');
 		$script = $this->get('Script');
+		$ctypes = $this->get('CertTypes');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
@@ -29,6 +30,7 @@ class ContinuEdViewCourse extends JView
 		$this->form = $form;
 		$this->item = $item;
 		$this->script = $script;
+		$this->ctypes = $ctypes;
 
 		// Set the toolbar
 		$this->addToolBar();

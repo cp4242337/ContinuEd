@@ -566,5 +566,8 @@
 			default=""
 		/>	
 	</fieldset>
+	<fieldset>
+		<field name="coursecerts" type="hidden" />
+	</fieldset>
 </form>
 

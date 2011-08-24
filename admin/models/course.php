@@ -125,6 +125,140 @@ class ContinuEdModelCourse extends JModelAdmin
 		return $condition;
 	}
 	
+	public function getItem($pk = null)
+	{
+		// Initialise variables.
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+		$table = $this->getTable();
+		
+		if ($pk > 0)
+		{
+			// Attempt to load the row.
+			$return = $table->load($pk);
+			
+			// Check for a table object error.
+			if ($return === false && $table->getError())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+		
+		// Convert to the JObject before adding other data.
+		$properties = $table->getProperties(1);
+		$item = JArrayHelper::toObject($properties, 'JObject');
+		
+		if (property_exists($item, 'params'))
+		{
+			$registry = new JRegistry();
+			$registry->loadString($item->params);
+			$item->params = $registry->toArray();
+		}
+		
+		$q = 'SELECT cd_cert FROM #__ce_coursecerts WHERE cd_course = '.$item->course_id;
+		$this->_db->setQuery($q);
+		$item->coursecerts=$this->_db->loadResultArray();
+		
+		return $item;
+	}
+	
+	public function save($data)
+	{
+		// Initialise variables;
+		$dispatcher = JDispatcher::getInstance();
+		$table = $this->getTable();
+		$key = $table->getKeyName();
+		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+		$isNew = true;
+		
+		// Include the content plugins for the on save events.
+		JPluginHelper::importPlugin('content');
+		
+		// Allow an exception to be thrown.
+		try
+		{
+			// Load the row if saving an existing record.
+			if ($pk > 0)
+			{
+				$table->load($pk);
+				$isNew = false;
+			}
+			
+			// Bind the data.
+			if (!$table->bind($data))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+			
+			// Prepare the row for saving
+			$this->prepareTable($table);
+			
+			// Check the data.
+			if (!$table->check())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+			
+			// Trigger the onContentBeforeSave event.
+			$result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, &$table, $isNew));
+			if (in_array(false, $result, true))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+			
+			// Store the data.
+			if (!$table->store())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+			
+			// Clean the cache.
+			$this->cleanCache();
+			
+			// Trigger the onContentAfterSave event.
+			$dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, &$table, $isNew));
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e->getMessage());
+			
+			return false;
+		}
+		
+		$pkName = $table->getKeyName();
+		
+		if (isset($table->$pkName))
+		{
+			$this->setState($this->getName() . '.id', $table->$pkName);
+		}
+		$this->setState($this->getName() . '.new', $isNew);
+		
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
+		$query->delete();
+		$query->from('#__ce_coursecerts');
+		$query->where('cd_course = '.(int)$table->course_id);
+		$db->setQuery((string)$query);
+		$db->query();
+		
+		if (!empty($data['coursecerts'])) {
+			foreach ($data['coursecerts'] as $cc) {
+				$qc = 'INSERT INTO #__ce_coursecerts (cd_course,cd_cert) VALUES ('.(int)$table->course_id.','.(int)$cc.')';
+				$db->setQuery($qc);
+				if (!$db->query()) {
+					$this->setError($db->getErrorMsg());
+					return false;
+				}
+			} 
+		}
+		
+		return true;
+	}
+	
 	public function copy(&$pks)
 	{
 		// Initialise variables.
@@ -224,5 +358,13 @@ class ContinuEdModelCourse extends JModelAdmin
 		$this->cleanCache();
 		
 		return true;
+	}
+	
+	public function getCertTypes() {
+		$query = 'SELECT crt_id, crt_name' .
+				' FROM #__ce_certifs' .
+				' ORDER BY crt_name';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
 	}
 }

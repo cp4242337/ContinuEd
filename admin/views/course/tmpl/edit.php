@@ -46,6 +46,19 @@ $params = $this->form->getFieldsets('params');
 <?php foreach($this->form->getFieldset('certsettings') as $field): ?>
 				<li><?php echo $field->label;echo $field->input;?></li>
 <?php endforeach; ?>
+			<li><label id="jform_coursecerts-lbl" for="jform_coursecerts" class="hasTip" title="">Course Certificates</label>
+			<fieldset id="jform_coursecerts" class="radio inputbox">
+			<?php 
+			foreach ($this->ctypes as $ct) {
+				if (!empty($this->item->coursecerts)) $checked = in_array($ct->crt_id,$this->item->coursecerts) ? ' checked="checked"' : '';
+				else $checked = '';
+				?>
+				<input type="checkbox" name="jform[coursecerts][]" value="<?php echo (int) $ct->crt_id;?>" id="jform_coursecert<?php echo (int) $ct->crt_id;?>"<?php echo $checked;?>/>
+				<label for="jform_coursecert<?php echo $ct->crt_id; ?>">
+				<?php echo ' '.$ct->crt_name; ?></label><br />
+				<?php 
+			}
+			?></fieldset></li>
 			</ul>
 		</fieldset>
 		<fieldset class="adminform">

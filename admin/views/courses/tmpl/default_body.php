@@ -33,11 +33,11 @@ defined('_JEXEC') or die('Restricted Access');
 		<td><?php echo date("m.d.y",strtotime($item->course_dateadded)); ?></td>
 		<td><?php 
 		if ($item->course_haseval && $item->course_hascertif) {
-			echo '<a href="index.php?option=com_continued&view=coursecerts&course='.$item->course_id.'">';
+			
 			echo 'Certs ';
-			$query = 'SELECT count(*) FROM #__ce_coursecerts WHERE course_id="'.$item->course_id.'"';
+			$query = 'SELECT count(*) FROM #__ce_coursecerts WHERE cd_course="'.$item->course_id.'"';
 			$db->setQuery( $query );
-			echo ' ['.$db->loadResult().']</a>';
+			echo ' ['.$db->loadResult().']';
 		}
 		?></td>
 		<td><?php 
