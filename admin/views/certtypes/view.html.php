@@ -1,42 +1,57 @@
 <?php
-/**
- * Hellos View for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-jimport( 'joomla.application.component.view' );
+// import Joomla view library
+jimport('joomla.application.component.view');
 
-/**
- * Hellos View
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
-class ContinuEdViewCertTypes extends JView
+class ContinuedViewCertTypes extends JView
 {
-	/**
-	 * Hellos view display method
-	 * @return void
-	 **/
-	function display($tpl = null)
+	function display($tpl = null) 
 	{
-		JToolBarHelper::title(   JText::_( 'ContinuEd Certificate Types Manager' ), 'continued' );
-		JToolBarHelper::deleteList();
-		JToolBarHelper::editListX();
-		JToolBarHelper::addNewX();
-
 		// Get data from the model
-		$items		= & $this->get( 'Data');
+		$items = $this->get('Items');
+		$pagination = $this->get('Pagination');
+		$this->state		= $this->get('State');
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) 
+		{
+			JError::raiseError(500, implode('<br />', $errors));
+			return false;
+		}
+		// Assign data to the view
+		$this->items = $items;
+		$this->pagination = $pagination;
+		// Set the toolbar
+		$this->addToolBar();
 
-		$this->assignRef('items',		$items);
-
+		// Display the template
 		parent::display($tpl);
+
+		// Set the document
+		$this->setDocument();
+	}
+
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		$state	= $this->get('State');
+		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_CERTTYPES'), 'continued');
+		JToolBarHelper::addNew('certtype.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::editList('certtype.edit', 'JTOOLBAR_EDIT');
+
+	}
+	/**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_('COM_CONTINUED_MANAGER_CERTTYPES'));
 	}
 }

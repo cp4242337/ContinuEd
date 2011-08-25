@@ -1,49 +1,85 @@
 <?php
-/**
- * Hello View for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
 
-// Check to ensure this file is included in Joomla!
-defined('_JEXEC') or die();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
 
-jimport( 'joomla.application.component.view' );
+// import Joomla view library
+jimport('joomla.application.component.view');
 
-/**
- * Hello View
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
 class ContinuEdViewCertType extends JView
 {
 	/**
-	 * display method of Hello view
+	 * display method of view
 	 * @return void
-	 **/
-	function display($tpl = null)
+	 */
+	public function display($tpl = null) 
 	{
-		//get the hello
-		$answer		=& $this->get('Data');
-		$isNew		= ($answer->crt_id < 1);
+		// get the Data
+		$form = $this->get('Form');
+		$item = $this->get('Item');
+		$script = $this->get('Script');
 
-		$text = $isNew ? JText::_( 'New' ) : JText::_( 'Edit' );
-		JToolBarHelper::title(   JText::_( 'ContinuEd Certificate Type' ).': <small><small>[ ' . $text.' ]</small></small>' );
-		JToolBarHelper::save();
-		if ($isNew)  {
-			JToolBarHelper::cancel();
-		} else {
-			// for existing items the button is renamed `close`
-			JToolBarHelper::cancel( 'cancel', 'Close' );
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) 
+		{
+			JError::raiseError(500, implode('<br />', $errors));
+			return false;
 		}
+		// Assign the Data
+		$this->form = $form;
+		$this->item = $item;
+		$this->script = $script;
 
-		$this->assignRef('answer',		$answer);
-		$editor =& JFactory::getEditor();
-		$this->assignref('editor',$editor);
+		// Set the toolbar
+		$this->addToolBar();
+
+		// Display the template
 		parent::display($tpl);
+
+		// Set the document
+		$this->setDocument();
+	}
+
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		JRequest::setVar('hidemainmenu', true);
+		$user = JFactory::getUser();
+		$userId = $user->id;
+		$isNew = $this->item->crt_id == 0;
+		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_CERTTYPE_NEW') : JText::_('COM_CONTINUED_MANAGER_CERTTYPE_EDIT'), 'certtype');
+		// Built the actions for new and existing records.
+		if ($isNew) 
+		{
+			// For new records, check the create permission.
+			JToolBarHelper::apply('certtype.apply', 'JTOOLBAR_APPLY');
+			JToolBarHelper::save('certtype.save', 'JTOOLBAR_SAVE');
+			JToolBarHelper::custom('certtype.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			JToolBarHelper::cancel('certtype.cancel', 'JTOOLBAR_CANCEL');
+		}
+		else
+		{
+			JToolBarHelper::apply('certtype.apply', 'JTOOLBAR_APPLY');
+			JToolBarHelper::save('certtype.save', 'JTOOLBAR_SAVE');
+			JToolBarHelper::custom('certtype.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			JToolBarHelper::custom('certtype.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+			JToolBarHelper::cancel('certtype.cancel', 'JTOOLBAR_CLOSE');
+		}
+	}
+	/**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$isNew = $this->item->crt_id == 0;
+		$document = JFactory::getDocument();
+		$document->setTitle($isNew ? JText::_('COM_CONTINUED_CERTTYPE_CREATING') : JText::_('COM_CONTINUED_CERTTYPE_EDITING'));
+		$document->addScript(JURI::root() . $this->script);
+		$document->addScript(JURI::root() . "/administrator/components/com_continued/views/certtype/submitbutton.js");
+		JText::script('COM_CONTINUED_CERTTYPE_ERROR_UNACCEPTABLE');
 	}
 }

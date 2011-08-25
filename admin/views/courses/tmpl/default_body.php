@@ -6,8 +6,8 @@ defined('_JEXEC') or die('Restricted Access');
 <?php foreach($this->items as $i => $item): 
 	$listOrder	= $this->escape($this->state->get('list.ordering'));
 	$listDirn	= $this->escape($this->state->get('list.direction'));
-	$saveOrder	= $listOrder == 'o.ordering';
-	$ordering	= ($listOrder == 'o.ordering');
+	$saveOrder	= $listOrder == 'c.ordering';
+	$ordering	= ($listOrder == 'c.ordering');
 	$db =& JFactory::getDBO();
 	?>
 	
@@ -19,11 +19,11 @@ defined('_JEXEC') or die('Restricted Access');
         <td class="order">
 				<?php if ($saveOrder) :?>
 					<?php if ($listDirn == 'asc') : ?>
-						<span><?php echo $this->pagination->orderUpIcon($i, ($item->course_cat == @$this->items[$i-1]->course_cat), 'options.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->course_cat == @$this->items[$i+1]->course_cat), 'options.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderUpIcon($i, ($item->course_cat == @$this->items[$i-1]->course_cat), 'courses.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->course_cat == @$this->items[$i+1]->course_cat), 'courses.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 					<?php elseif ($listDirn == 'desc') : ?>
-						<span><?php echo $this->pagination->orderUpIcon($i, ($item->course_cat == @$this->items[$i-1]->course_cat), 'options.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->course_cat == @$this->items[$i+1]->course_cat), 'options.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderUpIcon($i, ($item->course_cat == @$this->items[$i-1]->course_cat), 'courses.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->course_cat == @$this->items[$i+1]->course_cat), 'courses.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>

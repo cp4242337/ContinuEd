@@ -12,7 +12,12 @@ class ContinuEdModelCourses extends JModelList
 	
 	public function __construct($config = array())
 	{
-		
+	if (empty($config['filter_fields'])) {
+			$config['filter_fields'] = array(
+				'course_name', 'c.course_name',
+				'ordering', 'c.ordering',
+			);
+		}
 		parent::__construct($config);
 	}
 	
@@ -33,7 +38,7 @@ class ContinuEdModelCourses extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('c.course', 'asc');
+		parent::populateState('c.ordering', 'asc');
 	}
 	
 	protected function getListQuery() 
@@ -75,7 +80,9 @@ class ContinuEdModelCourses extends JModelList
 		$orderCol	= $this->state->get('list.ordering');
 		$orderDirn	= $this->state->get('list.direction');
 		
-		$orderCol = ' c.ordering';
+		if ($orderCol == 'c.ordering') {
+			$orderCol = 'category_name '.$orderDirn.', c.ordering';
+		}
 		
 		$query->order($db->getEscaped($orderCol.' '.$orderDirn));
 				
