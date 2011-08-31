@@ -7,7 +7,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.modellist');
 
 
-class ContinuEdModelQuestions extends JModelList
+class ContinuEdModelUOpts extends JModelList
 {
 	
 	public function __construct($config = array())
@@ -15,7 +15,7 @@ class ContinuEdModelQuestions extends JModelList
 		
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
-				'ordering', 'q.ordering',
+				'ordering', 'o.ordering',
 			);
 		}
 		parent::__construct($config);
@@ -27,11 +27,9 @@ class ContinuEdModelQuestions extends JModelList
 		$app = JFactory::getApplication('administrator');
 
 		// Load the filter state.
-		$courseId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_course','');
-		$this->setState('filter.course', $courseId);
-		$area = $this->getUserStateFromRequest($this->context.'.filter.area', 'filter_area', '');
-		$this->setState('filter.area', $area);	
-		
+		$qId = $this->getUserStateFromRequest($this->context.'.filter.field', 'filter_field', '');
+		$this->setState('filter.field', $qId);
+
 		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '', 'string');
 		$this->setState('filter.published', $published);
 		
@@ -40,7 +38,7 @@ class ContinuEdModelQuestions extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('q.ordering', 'asc');
+		parent::populateState('o.ordering', 'asc');
 	}
 	
 	protected function getListQuery() 
@@ -50,30 +48,23 @@ class ContinuEdModelQuestions extends JModelList
 		$query = $db->getQuery(true);
 
 		// Select some fields
-		$query->select('q.*');
+		$query->select('o.*');
 
 		// From the hello table
-		$query->from('#__ce_questions as q');
-		// Join over the users.
-		$query->select('u.username AS username');
-		$query->join('LEFT', '#__users AS u ON u.id = q.q_addedby');
+		$query->from('#__ce_ufields_opts as o');
 		
-		// Filter by course.
-		$courseId = $this->getState('filter.course');
-		if (is_numeric($courseId)) {
-			$query->where('q.q_course = '.(int) $courseId);
-		}
-		// Filter by area.
-		$area = $this->getState('filter.area');
-		if ($area) {
-			$query->where('q.q_area = "'.$area.'" ');
-		}
 		// Filter by published state
 		$published = $this->getState('filter.published');
 		if (is_numeric($published)) {
-			$query->where('q.published = '.(int) $published);
+			$query->where('o.published = '.(int) $published);
 		} else if ($published === '') {
-			$query->where('(q.published IN (0, 1))');
+			$query->where('(o.published IN (0, 1))');
+		}
+
+		// Filter by poll.
+		$qId = $this->getState('filter.field');
+		if (is_numeric($qId)) {
+			$query->where('o.opt_field = '.(int) $qId);
 		}
 				
 		$orderCol	= $this->state->get('list.ordering');
@@ -86,10 +77,12 @@ class ContinuEdModelQuestions extends JModelList
 		return $query;
 	}
 	
-	public function getCourses() {
-		$query = 'SELECT course_id AS value, course_name AS text' .
-				' FROM #__ce_courses' .
-				' ORDER BY course_name';
+	public function getFields() {
+		$app = JFactory::getApplication('administrator');
+		$query = 'SELECT uf_id AS value, uf_sname AS text' .
+				' FROM #__ce_ufields' .
+				' WHERE uf_type IN ("mcbox","multi","dropdown") ' .
+				' ORDER BY ordering';
 		$this->_db->setQuery($query);
 		return $this->_db->loadObjectList();
 	}

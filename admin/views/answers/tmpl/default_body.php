@@ -21,7 +21,7 @@ defined('_JEXEC') or die('Restricted Access');
 				<?php echo $this->escape($item->opt_text); ?></a>
 		</td>
 		<td class="center">
-			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'options.', true);?>
+			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'answers.', true);?>
 		</td>
 		<td>
 			<?php echo $item->opt_correct; ?>
@@ -29,11 +29,11 @@ defined('_JEXEC') or die('Restricted Access');
         <td class="order">
 				<?php if ($saveOrder) :?>
 					<?php if ($listDirn == 'asc') : ?>
-						<span><?php echo $this->pagination->orderUpIcon($i, ($item->opt_qid == @$this->items[$i-1]->opt_qid), 'options.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->opt_qid == @$this->items[$i+1]->opt_qid), 'options.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderUpIcon($i, ($item->opt_question == @$this->items[$i-1]->opt_question), 'answers.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->opt_question == @$this->items[$i+1]->opt_question), 'answers.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 					<?php elseif ($listDirn == 'desc') : ?>
-						<span><?php echo $this->pagination->orderUpIcon($i, ($item->opt_qid == @$this->items[$i-1]->opt_qid), 'options.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->opt_qid == @$this->items[$i+1]->opt_qid), 'options.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderUpIcon($i, ($item->opt_question == @$this->items[$i-1]->opt_question), 'answers.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->opt_question == @$this->items[$i+1]->opt_question), 'answers.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>

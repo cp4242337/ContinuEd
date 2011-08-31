@@ -235,6 +235,15 @@ CREATE TABLE IF NOT EXISTS `jos_ce_ufields` (
   PRIMARY KEY (`uf_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+CREATE TABLE IF NOT EXISTS `jos_ce_ufields_opts` (
+  `opt_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `opt_field` bigint(20) NOT NULL,
+  `opt_text` text NOT NULL,
+  `ordering` int(11) NOT NULL,
+  `published` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`opt_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 CREATE TABLE IF NOT EXISTS `jos_ce_ugroups` (
   `ug_id` int(11) NOT NULL AUTO_INCREMENT,
   `ug_name` varchar(255) NOT NULL,
@@ -242,3 +251,15 @@ CREATE TABLE IF NOT EXISTS `jos_ce_ugroups` (
   `published` tinyint(4) NOT NULL,
   PRIMARY KEY (`ug_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `jos_ce_uguf` (
+  `uguf_field` int(11) NOT NULL,
+  `uguf_group` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `jos_ce_users` (
+  `usr_id` bigint(20) NOT NULL,
+  `usr_user` int(11) NOT NULL,
+  `usr_field` int(11) NOT NULL,
+  `usr_data` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

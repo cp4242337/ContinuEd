@@ -14,6 +14,19 @@ $params = $this->form->getFieldsets('params');
 <?php foreach($this->form->getFieldset('details') as $field): ?>
 				<li><?php echo $field->label;echo $field->input;?></li>
 <?php endforeach; ?>
+			<li><label id="jform_fieldgroups-lbl" for="jform_fieldgroups" class="hasTip" title="">Field Groups</label>
+			<fieldset id="jform_fieldgroups" class="radio inputbox">
+			<?php 
+			foreach ($this->gtypes as $ct) {
+				if (!empty($this->item->fieldgroups)) $checked = in_array($ct->ug_id,$this->item->fieldgroups) ? ' checked="checked"' : '';
+				else $checked = '';
+				?>
+				<input type="checkbox" name="jform[fieldgroups][]" value="<?php echo (int) $ct->ug_id;?>" id="jform_fieldgroup<?php echo (int) $ct->ug_id;?>"<?php echo $checked;?>/>
+				<label for="jform_fieldgroup<?php echo $ct->ug_id; ?>">
+				<?php echo ' '.$ct->ug_name; ?></label><br />
+				<?php 
+			}
+			?></fieldset></li>
 			</ul>
 		</fieldset>
 	</div>

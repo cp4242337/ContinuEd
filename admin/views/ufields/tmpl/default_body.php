@@ -26,11 +26,11 @@ defined('_JEXEC') or die('Restricted Access');
         <td class="order">
 				<?php if ($saveOrder) :?>
 					<?php if ($listDirn == 'asc') : ?>
-						<span><?php echo $this->pagination->orderUpIcon($i, ($item->uf_id == @$this->items[$i-1]->uf_id), 'ufields.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->uf_id == @$this->items[$i+1]->uf_id), 'ufields.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderUpIcon($i, true, 'ufields.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'ufields.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 					<?php elseif ($listDirn == 'desc') : ?>
-						<span><?php echo $this->pagination->orderUpIcon($i, ($item->uf_id == @$this->items[$i-1]->uf_id), 'ufields.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, ($item->uf_id == @$this->items[$i+1]->uf_id), 'ufields.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderUpIcon($i, true, 'ufields.orderdown', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+						<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, true, 'ufields.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 					<?php endif; ?>
 				<?php endif; ?>
 				<?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>
@@ -59,8 +59,8 @@ defined('_JEXEC') or die('Restricted Access');
 		</td>
 		<td>
 		<?php 
-			if ($item->q_type=='multi' || $item->q_type=='mcbox' || $item->q_type=='dropdown') {
-				echo '<a href="'.JRoute::_('index.php?option=com_continued&view=options&filter_ufield='.$item->uf_id).'">Options'; 
+			if ($item->uf_type=='multi' || $item->uf_type=='mcbox' || $item->uf_type=='dropdown') {
+				echo '<a href="'.JRoute::_('index.php?option=com_continued&view=uopts&filter_field='.$item->uf_id).'">Options'; 
 				$db =& JFactory::getDBO();
 				$query = 'SELECT count(*) FROM #__ce_ufields_opts WHERE opt_field="'.$item->uf_id.'"';
 				$db->setQuery( $query );

@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla view library
 jimport('joomla.application.component.view');
 
-class ContinuEdViewUFields extends JView
+class ContinuedViewUOpts extends JView
 {
 	function display($tpl = null) 
 	{
@@ -14,6 +14,7 @@ class ContinuEdViewUFields extends JView
 		$items = $this->get('Items');
 		$pagination = $this->get('Pagination');
 		$this->state		= $this->get('State');
+		$flist = $this->get('Fields');
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -23,6 +24,7 @@ class ContinuEdViewUFields extends JView
 		// Assign data to the view
 		$this->items = $items;
 		$this->pagination = $pagination;
+		$this->flist = $flist;
 		// Set the toolbar
 		$this->addToolBar();
 
@@ -39,20 +41,22 @@ class ContinuEdViewUFields extends JView
 	protected function addToolBar() 
 	{
 		$state	= $this->get('State');
-		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_UFIELDS'), 'continued');
-		JToolBarHelper::addNew('ufield.add', 'JTOOLBAR_NEW');
-		JToolBarHelper::editList('ufield.edit', 'JTOOLBAR_EDIT');
-		JToolBarHelper::custom('ufields.copy', 'copy.png', 'copy_f2.png','JTOOLBAR_COPY', true);
+		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_UOPTS'), 'continued');
+		JToolBarHelper::addNew('uopt.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::editList('uopt.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::custom('uopts.copy', 'copy.png', 'copy_f2.png','JTOOLBAR_COPY', true);
 		JToolBarHelper::divider();
-		JToolBarHelper::custom('ufields.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
-		JToolBarHelper::custom('ufields.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);
+		JToolBarHelper::custom('uopts.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
+		JToolBarHelper::custom('uopts.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);
 		JToolBarHelper::divider();
 		if ($state->get('filter.published') == -2) {
-			JToolBarHelper::deleteList('', 'ufields.delete', 'JTOOLBAR_EMPTY_TRASH');
+			JToolBarHelper::deleteList('', 'uopts.delete', 'JTOOLBAR_EMPTY_TRASH');
 			JToolBarHelper::divider();
 		} else  {
-			JToolBarHelper::trash('ufields.trash');
-		}		
+			JToolBarHelper::trash('uopts.trash');
+		}
+		JToolBarHelper::divider();
+		JToolBarHelper::back('COM_CONTINUED_TOOLBAR_FIELDS','index.php?option=com_continued&view=ufields');
 	}
 	/**
 	 * Method to set up the document properties
@@ -62,6 +66,6 @@ class ContinuEdViewUFields extends JView
 	protected function setDocument() 
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_CONTINUED_MANAGER_UFIELDS'));
+		$document->setTitle(JText::_('COM_CONTINUED_MANAGER_UOPTS'));
 	}
 }

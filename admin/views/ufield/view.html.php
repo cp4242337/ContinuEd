@@ -18,6 +18,7 @@ class ContinuEdViewUField extends JView
 		$form = $this->get('Form');
 		$item = $this->get('Item');
 		$script = $this->get('Script');
+		$gtypes = $this->get('UserGroups');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
@@ -29,6 +30,7 @@ class ContinuEdViewUField extends JView
 		$this->form = $form;
 		$this->item = $item;
 		$this->script = $script;
+		$this->gtypes = $gtypes;
 
 		// Set the toolbar
 		$this->addToolBar();

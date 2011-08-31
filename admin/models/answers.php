@@ -13,6 +13,11 @@ class ContinuEdModelAnswers extends JModelList
 	public function __construct($config = array())
 	{
 		
+		if (empty($config['filter_fields'])) {
+			$config['filter_fields'] = array(
+				'ordering', 'o.ordering',
+			);
+		}
 		parent::__construct($config);
 	}
 	
@@ -65,7 +70,7 @@ class ContinuEdModelAnswers extends JModelList
 		$orderCol	= $this->state->get('list.ordering');
 		$orderDirn	= $this->state->get('list.direction');
 		
-		$orderCol = ' o.ordering';
+		
 		
 		$query->order($db->getEscaped($orderCol.' '.$orderDirn));
 				

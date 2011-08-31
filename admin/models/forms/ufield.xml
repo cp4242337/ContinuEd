@@ -21,7 +21,7 @@
 		</field>
 		<field 
 			name="ordering" 
-			type="OrderQuestion" 
+			type="OrderUField" 
 			class="inputbox"
 			label="JFIELD_ORDERING_LABEL"
 			description="JFIELD_ORDERING_DESC" 
@@ -85,6 +85,9 @@
 			filter="safehtml"
 			buttons="false"
 		/>
+	</fieldset>
+	<fieldset>
+		<field name="fieldgroups" type="hidden" />
 	</fieldset>
 	
 

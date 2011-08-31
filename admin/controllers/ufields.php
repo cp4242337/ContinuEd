@@ -12,7 +12,7 @@ class ContinuEdControllerUFields extends JControllerAdmin
 
 	protected $text_prefix = "COM_CONTINUED_UFIELD";
 	
-	public function getModel($name = 'Question', $prefix = 'ContinuEdModel') 
+	public function getModel($name = 'UField', $prefix = 'ContinuEdModel') 
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

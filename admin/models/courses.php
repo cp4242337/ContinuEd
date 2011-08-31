@@ -12,7 +12,7 @@ class ContinuEdModelCourses extends JModelList
 	
 	public function __construct($config = array())
 	{
-	if (empty($config['filter_fields'])) {
+		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
 				'course_name', 'c.course_name',
 				'ordering', 'c.ordering',
