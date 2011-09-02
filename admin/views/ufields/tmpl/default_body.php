@@ -21,7 +21,7 @@ defined('_JEXEC') or die('Restricted Access');
 				<?php echo $item->uf_name; ?></a> ( <?php echo $item->uf_sname; ?> )
 		</td>
 		<td class="center">
-			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'ufields.', true);?>
+			<?php if ($item->uf_id > 9) echo JHtml::_('jgrid.published', $item->published, $i, 'ufields.', true);?>
 		</td>
         <td class="order">
 				<?php if ($saveOrder) :?>
@@ -42,12 +42,15 @@ defined('_JEXEC') or die('Restricted Access');
 			switch ($item->uf_type) {
 				case "textar": echo "Text Box"; break;
 				case "textbox": echo "Text Field"; break;
+				case "email": echo "Email"; break;
+				case "username": echo "Username"; break;
 				case "multi": echo "Radio Select"; break;
 				case "cbox": echo "Check Box"; break;
 				case "mcbox": echo "Multi Checkbox"; break;
 				case "yesno": echo "Yes / No"; break;
 				case "dropdown": echo "Drop Down"; break;
 				case "message": echo "Message"; break;
+				case "phone": echo "Phone"; break;
 			}
 			?>
 		</td>

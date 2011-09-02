@@ -61,6 +61,9 @@
 			<option value="yesno">Yes / No</option>
 			<option value="dropdown">Drop Down</option>
 			<option value="message">Message</option>
+			<option value="email">EMail</option>
+			<option value="username">UserName</option>
+			<option value="phone">Phone</option>
 		</field>
 		<field
 			name="uf_req"
@@ -74,6 +77,13 @@
 			<option	value="1">Yes</option>
 			<option	value="0">No</option>
 		</field>
+		<field 
+			name="uf_match" 
+			type="FieldMatch" 
+			class="inputbox"
+			label="COM_CONTINUED_UFIELD_FIELD_MATCH_LABEL"
+			description="COM_CONTINUED_UFIELD_FIELD_MATCH_DESC" 
+		/>
 	</fieldset>
 	<fieldset name="content">
 		<field
