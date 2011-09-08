@@ -64,6 +64,7 @@
 			<option value="email">EMail</option>
 			<option value="username">UserName</option>
 			<option value="phone">Phone</option>
+			<option value="password">Password</option>
 		</field>
 		<field
 			name="uf_req"

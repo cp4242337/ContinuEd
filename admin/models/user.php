@@ -162,6 +162,7 @@ class ContinuEdModelUser extends JModelAdmin
 		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
 		$isNew = true;
 		$userId=(int)$data['usr_user'];
+		$db		= $this->getDbo();
 		
 		// Include the content plugins for the on save events.
 		JPluginHelper::importPlugin('content');
@@ -179,7 +180,20 @@ class ContinuEdModelUser extends JModelAdmin
 			$user->save();
 			
 			//Save ContinuEd Userinfo
+			$query	= $db->getQuery(true);
+			$query->delete();
+			$query->from('#__ce_users');
+			$query->where('usr_user = '.$userId);
+			$db->setQuery((string)$query);
+			$db->query();
 			
+			$q = 'SELECT * FROM #__ce_ufields WHERE uf_type != "password"';
+			$db->setQuery($q);
+			$flist = $db->loadObjectList();
+			foreach ($flist as $fl) {
+				$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$userId.'","'.$fl->uf_id.'","'.$data[$fl->uf_sname].'")';
+				$db->setQuery(); $db->query(); 
+			}
 			
 		}
 		catch (Exception $e)
@@ -198,7 +212,6 @@ class ContinuEdModelUser extends JModelAdmin
 		$this->setState($this->getName() . '.new', $isNew);
 		
 		//Update Users Group
-		$db		= $this->getDbo();
 		$query	= $db->getQuery(true);
 		$query->delete();
 		$query->from('#__ce_usergroup');

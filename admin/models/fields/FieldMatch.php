@@ -54,7 +54,7 @@ class JFormFieldFieldMatch extends JFormField
 		// Build the query for the ordering list.
 		$query = 'SELECT uf_id AS value, uf_sname AS text' .
 				' FROM #__ce_ufields' .
-				' WHERE uf_type IN("textbox","email","username","phone") ' .
+				' WHERE uf_type IN("textbox","email","username","phone","password") ' .
 				' ORDER BY ordering';
 		$db->setQuery($query);
 		$html[] = JHtml::_('select.options',$db->loadObjectList(),"value","text",$this->value);

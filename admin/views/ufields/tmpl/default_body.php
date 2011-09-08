@@ -51,6 +51,7 @@ defined('_JEXEC') or die('Restricted Access');
 				case "dropdown": echo "Drop Down"; break;
 				case "message": echo "Message"; break;
 				case "phone": echo "Phone"; break;
+				case "password": echo "Password"; break;
 			}
 			?>
 		</td>
