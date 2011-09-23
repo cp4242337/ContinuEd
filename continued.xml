@@ -56,6 +56,7 @@
 			<menu view="catstat">COM_CONTINUED_SUBMENU_CATSTATS</menu>
 			<menu view="ugroups">COM_CONTINUED_SUBMENU_UGROUPS</menu>
 			<menu view="ufields">COM_CONTINUED_SUBMENU_UFIELDS</menu>
+			<menu view="users">COM_CONTINUED_SUBMENU_USERS</menu>
 		</submenu>
 		<files folder="admin">
 			<filename>index.html</filename>

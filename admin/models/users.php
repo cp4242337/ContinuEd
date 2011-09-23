@@ -7,17 +7,12 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.modellist');
 
 
-class ContinuEdModelUFields extends JModelList
+class ContinuEdModelUsers extends JModelList
 {
 	
 	public function __construct($config = array())
 	{
 		
-		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = array(
-				'ordering', 'f.ordering',
-			);
-		}
 		parent::__construct($config);
 	}
 	
@@ -26,15 +21,12 @@ class ContinuEdModelUFields extends JModelList
 		// Initialise variables.
 		$app = JFactory::getApplication('administrator');
 
-		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '', 'string');
-		$this->setState('filter.published', $published);
-		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('f.ordering', 'asc');
+		parent::populateState('u.name', 'asc');
 	}
 	
 	protected function getListQuery() 
@@ -44,19 +36,12 @@ class ContinuEdModelUFields extends JModelList
 		$query = $db->getQuery(true);
 
 		// Select some fields
-		$query->select('f.*');
+		$query->select('u.*');
 
 		// From the hello table
-		$query->from('#__ce_ufields as f');
+		$query->from('#__users as u');
 		
-		// Filter by published state
-		$published = $this->getState('filter.published');
-		if (is_numeric($published)) {
-			$query->where('f.published = '.(int) $published);
-		} else if ($published === '') {
-			$query->where('(f.published IN (0, 1))');
-		}
-				
+		
 		$orderCol	= $this->state->get('list.ordering');
 		$orderDirn	= $this->state->get('list.direction');
 		
