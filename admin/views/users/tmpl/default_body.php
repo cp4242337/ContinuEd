@@ -24,6 +24,18 @@ defined('_JEXEC') or die('Restricted Access');
 		<td class="center">
 			<?php echo $item->email; ?>
 		</td>
+		<td class="center">
+			<?php echo $item->ug_name; ?>
+		</td>
+		<td class="center">
+			<?php echo $item->lastvisitDate; ?>
+		</td>
+		<td class="center">
+			<?php echo $item->lastUpdate; ?>
+		</td>
+		<td class="center">
+			<?php echo $item->registerDate; ?>
+		</td>
         
 	</tr>
 <?php endforeach; ?>

@@ -21,6 +21,11 @@ class ContinuEdModelUsers extends JModelList
 		// Initialise variables.
 		$app = JFactory::getApplication('administrator');
 
+		
+		// Load the filter state.
+		$groupId = $this->getUserStateFromRequest($this->context.'.filter.group', 'filter_group','');
+		$this->setState('filter.group', $groupId);
+		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
 		$this->setState('params', $params);
@@ -40,6 +45,17 @@ class ContinuEdModelUsers extends JModelList
 
 		// From the hello table
 		$query->from('#__users as u');
+		// Join over the users.
+		$query->select('ug.userg_update as lastUpdate');
+		$query->join('LEFT', '#__ce_usergroup AS ug ON u.id = ug.userg_user');
+		$query->select('g.ug_name');
+		$query->join('LEFT', '#__ce_ugroups AS g ON ug.userg_group = g.ug_id');
+		
+		// Filter by group.
+		$groupId = $this->getState('filter.course');
+		if (is_numeric($groupId)) {
+			$query->where('g.ug_id = '.(int) $groupId);
+		}
 		
 		
 		$orderCol	= $this->state->get('list.ordering');
