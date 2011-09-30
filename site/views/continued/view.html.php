@@ -31,7 +31,7 @@ class ContinuEdViewContinuEd extends JView
 		if ($cat != 0) $catinfo = $model->getCatInfo($cat);
 		if (!$guest) {
 			$uinfo=$model->getUserInfo();
-			$cert=$model->getCertifAssoc($uinfo['cb_degree']);
+			//$cert=$model->getCertifAssoc($uinfo['cb_degree']);
 			$clist = $model->getCompletedList();
 		}
 		$this->assignRef('catalog',$catalog);
@@ -43,7 +43,7 @@ class ContinuEdViewContinuEd extends JView
 		$this->assignRef('cat',$cat);
 		$this->assignRef('catinfo',$catinfo);
 		$this->assignRef('user',$user);
-		if ($catinfo['cathasfm']) {
+		if ($catinfo['cat_hasfm']) {
 			if ((strtotime($catinfo['cat_end']."+ 1 day") <= strtotime("now")) && ($catinfo['cat_end'] != '0000-00-00')) $expired=true; else $expired = false;
 			if (!$model->hasViewedFM($userid,$cat) || $showfm) {
 				$this->assignRef('expired',$expired);
@@ -56,14 +56,14 @@ class ContinuEdViewContinuEd extends JView
 			$model->viewedMenu($userid,$cat);
 			$dispfm=false;
 		}
-		if ($catinfo['catfree'] == 0) {
-			$bought=ContinuEdHelperCourse::SKUCheck($userid,$catinfo['catsku']);
+		if ($catinfo['cat_free'] == 0) {
+			$bought=ContinuEdHelperCourse::SKUCheck($userid,$catinfo['cat_sku']);
 			if (!$bought) $dispfm=true;
 		} else { $bought=true; }
 		if ($dispfm) $model->viewedDetails($userid,$cat);
 		$this->assignRef('bought',$bought);
 		$this->assignRef('dispfm',$dispfm);
-		if (!($guest && !$cecfg['CAT_GUEST'])) parent::display($tpl);
+		parent::display($tpl);
 	}
 }
 ?>

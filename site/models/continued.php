@@ -24,12 +24,12 @@ class ContinuEdModelContinuEd extends JModel
 		if (!$guest) $query .= ',f.cpass';
 		$query .= ',r.course_rating as catrating ';
 		$query .= 'FROM #__ce_courses as c ';
-		$query .= 'LEFT JOIN #__ce_providers as p ON c.provider = p.pid ';
-		if (!$guest) $query .= 'LEFT JOIN #__ce_completed AS f ON c.id = f.course && f.user = '.$userid.' && crecent=1 ';
-		$query .= 'LEFT JOIN #__ce_courses as r ON c.course_catrate = r.id ';
-		$query .= 'WHERE c.published = 1 && c.access <= "'.$aid.'" ';
-		if ($cat != 0) $query .= ' && c.ccat = '.$cat;
-		$query .= ' GROUP BY c.id ORDER BY c.ordering ASC';
+		$query .= 'LEFT JOIN #__ce_providers as p ON c.course_provider = p.prov_id ';
+		if (!$guest) $query .= 'LEFT JOIN #__ce_completed AS f ON c.course_id = f.course && f.user = '.$userid.' && crecent=1 ';
+		$query .= 'LEFT JOIN #__ce_courses as r ON c.course_catrate = r.course_id ';
+		$query .= 'WHERE c.published = 1 && c.access IN ('.implode(",",$user->getAuthorisedViewLevels()).') ';
+		if ($cat != 0) $query .= ' && c.course_cat = '.$cat;
+		$query .= ' GROUP BY c.course_id ORDER BY c.ordering ASC';
 		if (!$guest) $query .= ', f.ctime DESC';
 		$db->setQuery( $query );
 		$postlist = $db->loadAssocList();
@@ -50,7 +50,7 @@ class ContinuEdModelContinuEd extends JModel
 	function getCourseDegrees($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$q='SELECT cert_id FROM #__ce_coursecerts WHERE course_id = "'.$courseid.'"';
+		$q='SELECT cd_id FROM #__ce_coursecerts WHERE cd_course = "'.$courseid.'"';
 		$db->setQuery($q);
 		$cn = $db->loadResultArray();
 		return $cn;
@@ -58,7 +58,7 @@ class ContinuEdModelContinuEd extends JModel
 	function getCatInfo($cat)
 	{
 		$db =& JFactory::getDBO();
-		$q='SELECT * FROM #__ce_cats WHERE cid = "'.$cat.'"';
+		$q='SELECT * FROM #__ce_cats WHERE cat_id = "'.$cat.'"';
 		$db->setQuery($q);
 		$cn = $db->loadAssoc();
 		return $cn;
@@ -76,10 +76,21 @@ class ContinuEdModelContinuEd extends JModel
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		$db =& JFactory::getDBO();
-		$query = 'SELECT * FROM #__comprofiler WHERE user_id="'.$userid.'"';
-		$db->setQuery( $query );
-		$futext = $db->loadAssoc();
-		return $futext;
+		$query = 'SELECT userg_group FROM #__ce_usergroup WHERE userg_user="'.$userid.'"';
+		$db->setQuery($query); $groupid=$db->loadResult();
+		$user->group = $groupid;
+		$qd = 'SELECT f.uf_sname,u.usr_data FROM #__ce_uguf as g';
+		$qd.= ' RIGHT JOIN #__ce_ufields as f ON g.uguf_field = f.uf_id';
+		$qd.= ' RIGHT JOIN #__ce_users as u ON u.usr_field = f.uf_id && usr_user = '.$userid;
+		$qd.= ' WHERE g.uguf_group='.$groupid;
+		$db->setQuery( $qd ); echo $db->getQuery();
+		$udata = $db->loadObjectList();
+		foreach ($udata as $u) {
+			$fn=$u->uf_sname;
+			$user->$fn=$u->usr_data;
+		}
+		
+		return $user;
 	}
 	function viewedFM($userid,$catid) {
 		$sewn = JFactory::getSession();

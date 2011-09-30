@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: question.xml 62 2010-11-28 16:08:16Z chdemko $ -->
+<form>
+	<fieldset name="details">
+		<field
+			name="gc_id"
+			type="hidden"
+		/>
+		<field 
+			name="gc_cert" 
+			type="CertTypes" 
+			class="inputbox"
+			label="COM_CONTINUED_GROUPCERT_FIELD_CERTTYPE_LABEL"
+			description="COM_CONTINUED_GROUPCERT_FIELD_CERTTYPE_DESC" 
+		/>
+		<field 
+			name="gc_group" 
+			type="UserGroups" 
+			class="inputbox"
+			label="COM_CONTINUED_GROUPCERT_FIELD_GROUP_LABEL"
+			description="COM_CONTINUED_GROUPCERT_FIELD_GROUP_DESC" 
+		/>
+	</fieldset>
+</form>
+

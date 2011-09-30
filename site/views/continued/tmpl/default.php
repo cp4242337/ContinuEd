@@ -4,18 +4,21 @@ global $cecfg;
 ?>
 <?php
 if ($this->cat != 0) {
-	echo '<div class="componentheading">'.$this->catinfo['catname'].'</div>';
+	echo '<div class="componentheading">'.$this->catinfo['cat_name'].'</div>';
 }
 
 //****************
 // Catalog layout
 //****************
 if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
-	$catdesc = $mainframe->triggerEvent('onInsertVid',array(& $this->catinfo['catdesc']));
-	echo '<p>'.$catdesc[0].'<br><br></p><p align="right">';
-	if ($this->catinfo['cathasfm'] && $this->catinfo['catfmlink']) echo '<a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'&showfm=1"><img src="images/continued/btn_details.png" border="0" alt="Details"></a>';
-	if ($this->catinfo['catprev']) {
-		$clink  = '<a href="'.JURI::current().'?option=com_continued&cat='.$this->catinfo['catmenu'].'&Itemid='.JRequest::getVar( 'Itemid' ).'">';
+	//$catdesc = $mainframe->triggerEvent('onInsertVid',array(& $this->catinfo['cat_desc']));
+	echo '<p>'.$this->catinfo['cat_desc'].'<br><br></p><p align="right">';
+	if ($this->catinfo['cat_hasfm'] && $this->catinfo['cat_fmlink']) {
+		echo '<a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'&showfm=1">';
+		echo '<img src="images/continued/btn_details.png" border="0" alt="Details"></a>';
+	}
+	if ($this->catinfo['cat_prev']) {
+		$clink  = '<a href="'.JURI::current().'?option=com_continued&cat='.$this->catinfo['cat_menu'].'&Itemid='.JRequest::getVar( 'Itemid' ).'">';
 		$clink  .= '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_prev.png" border="0" alt="Previous Menu">';
 		$clink  .= '</a>';
 		echo $clink;
@@ -24,27 +27,27 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 	foreach ($this->catalog as $course) {
 		//$coursecerts=$this->model->getCourseDegrees($course['id']);
 		//if (!$this->guest) $hascert=in_array($this->cert,$coursecerts); else $hascert=false;
-		if (!$this->guest && in_array($course['prereq'],$this->clist)) $cantake=true;
+		if (!$this->guest && in_array($course['course_prereq'],$this->clist)) $cantake=true;
 		else $cantake=false;
-		if ($course['prereq']==0) $cantake = true;
-		if ($course['cpass'] == 'pass' && !$course['hasfm'] && !$course['hasmat']) $cantake = false;
+		if ($course['course_prereq']==0) $cantake = true;
+		if ($course['cpass'] == 'pass' && !$course['course_hasfm'] && !$course['course_hasmat']) $cantake = false;
 		echo '<table width="100%" cellspacing="0" cellpadding="4" border="0"><tr>';
-		if ($course['previmg'] != '' || $course['course_allowrate'] || $course['course_catrate']) {
+		if ($course['course_previmg'] != '' || $course['course_allowrate'] || $course['course_catrate']) {
 			echo '<td rowspan="4" valign="top" align="center">';
-			if ($course['previmg'] != '') echo '<img src="images/continued/preview/'.$course['previmg'].'" alt="'.$course['cname'].'" border="0"><br>';
+			if ($course['course_previmg'] != '') echo '<img src="images/continued/preview/'.$course['course_previmg'].'" alt="'.$course['course_name'].'" border="0"><br>';
 			if ($course['course_allowrate'] && $course['course_rating'] != 0)
 			echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/rating'.(int)$course['course_rating'].'.png" alt="'.(int)$course['course_rating'].'">';
-			if ($course['course_catlink'] && $course['catrating'] != 0)
-			echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/rating'.(int)$course['catrating'].'.png" alt="'.(int)$course['catrating'].' Stars">';
+			if ($course['course_catlink'] && $course['course_catrating'] != 0)
+			echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/rating'.(int)$course['course_catrating'].'.png" alt="'.(int)$course['course_catrating'].' Stars">';
 			echo '</td>';
 		}
 		echo '<td width="90%">';
-		echo '<b>'.$course['cname'].'</b>';
+		echo '<b>'.$course['course_name'].'</b>';
 		if ($course['course_subtitle']) echo '<br>'.$course['course_subtitle'];
-		if ($cecfg['SHOW_FAC'] == '1') echo '<br><em>'.$course['faculty'].'</em>';
-		if ((strtotime($course['enddate']."+ 1 day") <= strtotime("now")) && ($course['enddate'] != '0000-00-00 00:00:00')) $expired=true; else $expired = false;
-		$courseurl = JURI::current().'?option=com_continued&view=course&course='.$course['id'].'&Itemid='.JRequest::getVar( 'Itemid' );
-		if ($expired && !$course['hasmat']) $cantake = false;
+		if ($cecfg['SHOW_FAC'] == '1') echo '<br><em>'.$course['course_faculty'].'</em>';
+		if ((strtotime($course['course_enddate']."+ 1 day") <= strtotime("now")) && ($course['course_enddate'] != '0000-00-00 00:00:00')) $expired=true; else $expired = false;
+		$courseurl = JURI::current().'?option=com_continued&view=course&course='.$course['course_id'].'&Itemid='.JRequest::getVar( 'Itemid' );
+		if ($expired && !$course['course_hasmat']) $cantake = false;
 		if ($course['course_purchase']) {
 			if ($course['course_purchasesku']) $paid = ContinuEdHelperCourse::SKUCheck($user->id,$catinfo['course_purchasesku']);
 			else $paid = ContinuEdHelperCourse::PurchaseCheck($user->id,$course['id']);
@@ -105,7 +108,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				// Any Status, Cannot Take, Expired
 				$clink  = '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_expired.png" border="0" alt="Expired">';
 			}
-			if (!empty($course['cpass']) && $course['haseval'] && $course['course_viewans']) {
+			if (!empty($course['cpass']) && $course['course_haseval'] && $course['course_viewans']) {
 				$clink  .= '<a href="'.JURI::current().'?option=com_continued&view=answers&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course['id'].'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_answers.png" border="0" alt="View Answers">';
 				$clink  .= '</a>';
@@ -113,22 +116,22 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		}
 		echo '</td><td rowspan="3">';
 		if ($cecfg['CAT_PROV']) {
-			if ($course['plogo'] != '') echo '<img src="images/continued/provider/'.$course['plogo'].'" alt="Provided by: '.$course['pname'].'">';
-			else echo 'Provided By: '.$course['pname'];
+			if ($course['prov_logo'] != '') echo '<img src="images/continued/provider/'.$course['prov_logo'].'" alt="Provided by: '.$course['prov_name'].'">';
+			else echo 'Provided By: '.$course['prov_name'];
 		}
 		echo '</td></tr>';
 		echo '<tr><td>';
-		if ($course['startdate'] != '0000-00-00 00:00:00') {
-			echo '<b>Release Date:</b> '.date("F d, Y", strtotime($course['startdate'])).'<br />';
-			echo '<b>Expiration Date:</b> '.date("F d, Y", strtotime($course['enddate']));
+		if ($course['course_startdate'] != '0000-00-00 00:00:00') {
+			echo '<b>Release Date:</b> '.date("F d, Y", strtotime($course['course_startdate'])).'<br />';
+			echo '<b>Expiration Date:</b> '.date("F d, Y", strtotime($course['course_enddate']));
 		}
 		echo '</td></tr><tr><td>';
-		if (!empty($course['cdesc'])) echo $course['cdesc'];
+		if (!empty($course['course_desc'])) echo $course['course_desc'];
 		echo '</td></tr><tr><td colspan="2">'.$clink;
-		if (!$this->guest && $course['cpass'] == 'pass' && $course['hascertif']) {
-			echo '<a href="index2.php?option=com_continued&view=certif&course='.$course['id'].'" target="_blank">';
+		if (!$this->guest && $course['cpass'] == 'pass' && $course['course_hascertif']) {
+			echo '<a href="index2.php?option=com_continued&view=certif&course='.$course['course_id'].'" target="_blank">';
 			echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_certif.png" border="0" alt="Get Certificate"></a>';
-		} else if (!$this->guest && $course['hascertif'] && !$expired) {
+		} else if (!$this->guest && $course['course_hascertif'] && !$expired) {
 			echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_nocertif.png" border="0" alt="Certificate Not Yet Awarded">';
 		}
 
@@ -148,7 +151,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '<p><b>Release Date:</b> '.date("F d, Y", strtotime($this->catinfo['cat_start'])).'<br />';
 		echo '<b>Expiration Date:</b> '.date("F d, Y", strtotime($this->catinfo['cat_end'])).'</p>';
 	}
-	echo $this->catinfo['catfm'];
+	echo $this->catinfo['cat_fm'];
 	if (!$this->guest) {
 		if ($this->bought) {
 			echo '<form name="form1" method="post" action=""';
@@ -191,13 +194,13 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		} else {
 			//not bought
 			echo '<p align="center"><span style="color:#800000;font-weight:bolder;">You need to purchase this program to continue.<br>';
-			if ($this->catinfo['catskulink']) echo 'Please <a href="'.$this->catinfo['catskulink'].'" target="_blank">Click Here</a> to purchase this program.</span></p>';
+			if ($this->catinfo['cat_skulink']) echo 'Please <a href="'.$this->catinfo['cat_skulink'].'" target="_blank">Click Here</a> to purchase this program.</span></p>';
 		}
 	} else {
 		//not logged in
 		echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$cecfg['LOGIN_MSG'].'</span></p>'; }
 } else if ($this->showfm && $this->cat != 0) {
-	echo $this->catinfo['catfm'];
+	echo $this->catinfo['cat_fm'];
 	echo '<p align="center"><a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'">';
 	echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_return.png" border="0" alt="Return"></a></p>';
 }

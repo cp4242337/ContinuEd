@@ -50,8 +50,8 @@
 			<menu view="cats">COM_CONTINUED_SUBMENU_CATEGORIES</menu>
 			<menu view="provs">COM_CONTINUED_SUBMENU_PROVIDERS</menu>
 			<menu view="certifs">COM_CONTINUED_SUBMENU_CERTIFICATES</menu>
-			<menu view="degrees">COM_CONTINUED_SUBMENU_DEGREES</menu>
 			<menu view="certtypes">COM_CONTINUED_SUBMENU_CERTTYPES</menu>
+			<menu view="groupcerts">COM_CONTINUED_SUBMENU_GROUPCERTS</menu>
 			<menu view="coursestat">COM_CONTINUED_SUBMENU_COURSESTATS</menu>
 			<menu view="catstat">COM_CONTINUED_SUBMENU_CATSTATS</menu>
 			<menu view="ugroups">COM_CONTINUED_SUBMENU_UGROUPS</menu>
