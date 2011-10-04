@@ -4,21 +4,20 @@ global $cecfg;
 ?>
 <?php
 if ($this->cat != 0) {
-	echo '<div class="componentheading">'.$this->catinfo['cat_name'].'</div>';
+	echo '<div class="componentheading">'.$this->catinfo->cat_name.'</div>';
 }
 
 //****************
 // Catalog layout
 //****************
 if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
-	//$catdesc = $mainframe->triggerEvent('onInsertVid',array(& $this->catinfo['cat_desc']));
-	echo '<p>'.$this->catinfo['cat_desc'].'<br><br></p><p align="right">';
-	if ($this->catinfo['cat_hasfm'] && $this->catinfo['cat_fmlink']) {
+	echo '<p>'.$this->catinfo->cat_desc.'<br><br></p><p align="right">';
+	if ($this->catinfo->cat_hasfm && $this->catinfo->cat_fmlink) {
 		echo '<a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'&showfm=1">';
 		echo '<img src="images/continued/btn_details.png" border="0" alt="Details"></a>';
 	}
-	if ($this->catinfo['cat_prev']) {
-		$clink  = '<a href="'.JURI::current().'?option=com_continued&cat='.$this->catinfo['cat_menu'].'&Itemid='.JRequest::getVar( 'Itemid' ).'">';
+	if ($this->catinfo->cat_prev) {
+		$clink  = '<a href="'.JURI::current().'?option=com_continued&cat='.$this->catinfo->cat_menu.'&Itemid='.JRequest::getVar( 'Itemid' ).'">';
 		$clink  .= '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_prev.png" border="0" alt="Previous Menu">';
 		$clink  .= '</a>';
 		echo $clink;
@@ -49,7 +48,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		$courseurl = JURI::current().'?option=com_continued&view=course&course='.$course['course_id'].'&Itemid='.JRequest::getVar( 'Itemid' );
 		if ($expired && !$course['course_hasmat']) $cantake = false;
 		if ($course['course_purchase']) {
-			if ($course['course_purchasesku']) $paid = ContinuEdHelperCourse::SKUCheck($user->id,$catinfo['course_purchasesku']);
+			if ($course['course_purchasesku']) $paid = ContinuEdHelperCourse::SKUCheck($user->id,$catinfo->course_purchasesku);
 			else $paid = ContinuEdHelperCourse::PurchaseCheck($user->id,$course['id']);
 		}
 		else $paid = true;
@@ -147,11 +146,11 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$cecfg['LOGIN_MSG'].'</span></p>';
 	}
 
-	if ($this->catinfo['cat_start'] != '0000-00-00') {
-		echo '<p><b>Release Date:</b> '.date("F d, Y", strtotime($this->catinfo['cat_start'])).'<br />';
-		echo '<b>Expiration Date:</b> '.date("F d, Y", strtotime($this->catinfo['cat_end'])).'</p>';
+	if ($this->catinfo->cat_start != '0000-00-00') {
+		echo '<p><b>Release Date:</b> '.date("F d, Y", strtotime($this->catinfo->cat_start)).'<br />';
+		echo '<b>Expiration Date:</b> '.date("F d, Y", strtotime($this->catinfo->cat_end)).'</p>';
 	}
-	echo $this->catinfo['cat_fm'];
+	echo $this->catinfo->cat_fm;
 	if (!$this->guest) {
 		if ($this->bought) {
 			echo '<form name="form1" method="post" action=""';
@@ -194,13 +193,13 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		} else {
 			//not bought
 			echo '<p align="center"><span style="color:#800000;font-weight:bolder;">You need to purchase this program to continue.<br>';
-			if ($this->catinfo['cat_skulink']) echo 'Please <a href="'.$this->catinfo['cat_skulink'].'" target="_blank">Click Here</a> to purchase this program.</span></p>';
+			if ($this->catinfo->cat_skulink) echo 'Please <a href="'.$this->catinfo->cat_skulink.'" target="_blank">Click Here</a> to purchase this program.</span></p>';
 		}
 	} else {
 		//not logged in
 		echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$cecfg['LOGIN_MSG'].'</span></p>'; }
 } else if ($this->showfm && $this->cat != 0) {
-	echo $this->catinfo['cat_fm'];
+	echo $this->catinfo->cat_fm;
 	echo '<p align="center"><a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'">';
 	echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_return.png" border="0" alt="Return"></a></p>';
 }

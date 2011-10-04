@@ -10,8 +10,10 @@ class ContinuEdViewContinuEd extends JView
 {
 	function display($tpl = null)
 	{
-		global $cecfg, $mainframe;
-		//$params = $mainframe->getPageParameters();
+		global $cecfg;
+		$app		= JFactory::getApplication();
+		$dispatcher	= JDispatcher::getInstance();
+		//$params = $app->getPageParameters();
 		$cat = JRequest::getVar('cat');
 		//if (empty($cat))$cat=$params->get('cat');
 		$fmv = JRequest::getVar('fmv');
@@ -25,28 +27,32 @@ class ContinuEdViewContinuEd extends JView
 		if ($fmv == 'true') {
 			$model->viewedFM($userid,$cat);
 			//prevent resubmit of form of refresh
-			$mainframe->redirect('index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$cat);
+			$app->redirect('index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$cat);
 		}
 		$catalog=$model->getCatalog($guest,$cat);
-		if ($cat != 0) $catinfo = $model->getCatInfo($cat);
+		if ($cat != 0) {
+			$catinfo = $model->getCatInfo($cat);
+			JPluginHelper::importPlugin('contined');
+			$results = $dispatcher->trigger('onContentPrepare', array(&$catinfo->cat_desc));
+		}
 		if (!$guest) {
 			$uinfo=$model->getUserInfo();
-			//$cert=$model->getCertifAssoc($uinfo['cb_degree']);
+			$cert=$model->getCertifAssoc($uinfo->group);
 			$clist = $model->getCompletedList();
 		}
-		$this->assignRef('catalog',$catalog);
-		$this->assignRef('clist',$clist);
-		$this->assignRef('guest',$guest);
-		$this->assignRef('cert',$cert);
-		$this->assignRef('model',$model);
-		$this->assignRef('showfm',$showfm);
-		$this->assignRef('cat',$cat);
-		$this->assignRef('catinfo',$catinfo);
-		$this->assignRef('user',$user);
-		if ($catinfo['cat_hasfm']) {
-			if ((strtotime($catinfo['cat_end']."+ 1 day") <= strtotime("now")) && ($catinfo['cat_end'] != '0000-00-00')) $expired=true; else $expired = false;
+		$this->catalog=$catalog;
+		$this->clist=$clist;
+		$this->guest=$guest;
+		$this->cert=$cert;
+		$this->model=$model;
+		$this->showfm=$showfm;
+		$this->cat=$cat;
+		$this->catinfo=$catinfo;
+		$this->user=$user;
+		if ($catinfo->cat_hasfm) {
+			if ((strtotime($catinfo->cat_end."+ 1 day") <= strtotime("now")) && ($catinfo->cat_end != '0000-00-00')) $expired=true; else $expired = false;
 			if (!$model->hasViewedFM($userid,$cat) || $showfm) {
-				$this->assignRef('expired',$expired);
+				$this->expired=$expired;
 				$dispfm=true;
 			} else {
 				$dispfm=false;
@@ -56,13 +62,13 @@ class ContinuEdViewContinuEd extends JView
 			$model->viewedMenu($userid,$cat);
 			$dispfm=false;
 		}
-		if ($catinfo['cat_free'] == 0) {
-			$bought=ContinuEdHelperCourse::SKUCheck($userid,$catinfo['cat_sku']);
+		if ($catinfo->cat_free == 0) {
+			$bought=ContinuEdHelperCourse::SKUCheck($userid,$catinfo->cat_sku);
 			if (!$bought) $dispfm=true;
 		} else { $bought=true; }
 		if ($dispfm) $model->viewedDetails($userid,$cat);
-		$this->assignRef('bought',$bought);
-		$this->assignRef('dispfm',$dispfm);
+		$this->bought=$bought;
+		$this->dispfm=$dispfm;
 		parent::display($tpl);
 	}
 }

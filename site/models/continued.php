@@ -8,9 +8,7 @@ defined('_JEXEC') or die();
 
 jimport( 'joomla.application.component.model' );
 
-/**
- *
- */
+
 class ContinuEdModelContinuEd extends JModel
 {
 
@@ -60,14 +58,14 @@ class ContinuEdModelContinuEd extends JModel
 		$db =& JFactory::getDBO();
 		$q='SELECT * FROM #__ce_cats WHERE cat_id = "'.$cat.'"';
 		$db->setQuery($q);
-		$cn = $db->loadAssoc();
+		$cn = $db->loadObject();
 		return $cn;
 	}
-	function getCertifAssoc($degree)
+	function getCertifAssoc($group)
 	{
 		$db =& JFactory::getDBO();
 		//determine which certif
-		$q='SELECT cert FROM #__ce_degreecert WHERE degree = "'.$degree.'"';
+		$q='SELECT cert FROM #__ce_groupcerts WHERE gc_group = "'.$group.'"';
 		$db->setQuery($q);
 		$cn = $db->loadResult();
 		return $cn;
@@ -79,15 +77,22 @@ class ContinuEdModelContinuEd extends JModel
 		$query = 'SELECT userg_group FROM #__ce_usergroup WHERE userg_user="'.$userid.'"';
 		$db->setQuery($query); $groupid=$db->loadResult();
 		$user->group = $groupid;
-		$qd = 'SELECT f.uf_sname,u.usr_data FROM #__ce_uguf as g';
+		$qd = 'SELECT f.uf_sname,f.uf_type,u.usr_data FROM #__ce_uguf as g';
 		$qd.= ' RIGHT JOIN #__ce_ufields as f ON g.uguf_field = f.uf_id';
 		$qd.= ' RIGHT JOIN #__ce_users as u ON u.usr_field = f.uf_id && usr_user = '.$userid;
 		$qd.= ' WHERE g.uguf_group='.$groupid;
-		$db->setQuery( $qd ); echo $db->getQuery();
+		$db->setQuery( $qd ); 
 		$udata = $db->loadObjectList();
 		foreach ($udata as $u) {
 			$fn=$u->uf_sname;
-			$user->$fn=$u->usr_data;
+			if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox') {
+				$ansarr=explode(" ",$u->usr_data);
+				$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
+				$db->setQuery($q);
+				$user->$fn = implode(", ",$db->loadResultArray());
+			} else {
+				$user->$fn=$u->usr_data;
+			}
 		}
 		
 		return $user;
