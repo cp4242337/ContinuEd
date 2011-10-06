@@ -30,9 +30,10 @@ class ContinuEdModelContinuEd extends JModel
 		$query .= ' GROUP BY c.course_id ORDER BY c.ordering ASC';
 		if (!$guest) $query .= ', f.ctime DESC';
 		$db->setQuery( $query );
-		$postlist = $db->loadAssocList();
-		return $postlist;
+		$clist = $db->loadObjectList();
+		return $clist;
 	}
+	
 	function getCompletedList() {
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
@@ -45,6 +46,7 @@ class ContinuEdModelContinuEd extends JModel
 		$clist = $db->loadResultArray();
 		return $clist;
 	}
+	
 	function getCourseDegrees($courseid)
 	{
 		$db =& JFactory::getDBO();
@@ -53,6 +55,7 @@ class ContinuEdModelContinuEd extends JModel
 		$cn = $db->loadResultArray();
 		return $cn;
 	}
+	
 	function getCatInfo($cat)
 	{
 		$db =& JFactory::getDBO();
@@ -61,6 +64,7 @@ class ContinuEdModelContinuEd extends JModel
 		$cn = $db->loadObject();
 		return $cn;
 	}
+	
 	function getCertifAssoc($group)
 	{
 		$db =& JFactory::getDBO();
@@ -70,6 +74,7 @@ class ContinuEdModelContinuEd extends JModel
 		$cn = $db->loadResult();
 		return $cn;
 	}
+	
 	function getUserInfo() {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
@@ -97,6 +102,7 @@ class ContinuEdModelContinuEd extends JModel
 		
 		return $user;
 	}
+	
 	function viewedFM($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
@@ -104,6 +110,7 @@ class ContinuEdModelContinuEd extends JModel
 		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid) VALUES ("'.$userid.'","'.$catid.'","fm","'.$sessionid.'")';
 		$db->setQuery( $query ); $db->query();
 	}
+	
 	function viewedMenu($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
@@ -111,6 +118,7 @@ class ContinuEdModelContinuEd extends JModel
 		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid) VALUES ("'.$userid.'","'.$catid.'","menu","'.$sessionid.'")';
 		$db->setQuery( $query ); $db->query();
 	}
+	
 	function viewedDetails($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
@@ -118,6 +126,7 @@ class ContinuEdModelContinuEd extends JModel
 		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid) VALUES ("'.$userid.'","'.$catid.'","det","'.$sessionid.'")';
 		$db->setQuery( $query ); $db->query();
 	}
+	
 	function hasViewedFM($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();

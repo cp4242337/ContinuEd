@@ -17,9 +17,9 @@ class ContinuEdModelPreTest extends JModel
 	function getPreTest($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT id,cname,course_preparts FROM #__ce_courses WHERE id = '.$courseid;
+		$query = 'SELECT course_id,course_name,course_preparts FROM #__ce_courses WHERE course_id = '.$courseid;
 		$db->setQuery( $query );
-		$mtext = $db->loadAssoc();
+		$mtext = $db->loadObject();
 		return $mtext;
 	}
 	function getPart($courseid,$part)
@@ -27,16 +27,16 @@ class ContinuEdModelPreTest extends JModel
 		$db =& JFactory::getDBO();
 		$query = 'SELECT * FROM #__ce_parts WHERE part_course = '.$courseid.' && part_area = "pre" && part_part = '.$part;
 		$db->setQuery( $query );
-		$mtext = $db->loadAssoc();
+		$mtext = $db->loadObject();
 		return $mtext;
 	}
 	function getQuestions($courseid,$part)
 	{
 		$db =& JFactory::getDBO();
 		$query = 'SELECT * FROM #__ce_questions ';
-		$query .= 'WHERE course = '.$courseid.' && qsec = '.$part.' && q_area = "pre"ORDER BY ordering ASC';
+		$query .= 'WHERE q_course = '.$courseid.' && q_part = '.$part.' && q_area = "pre" ORDER BY ordering ASC';
 		$db->setQuery( $query );
-		$qdata = $db->loadAssocList();
+		$qdata = $db->loadObjectList();
 		return $qdata;
 	}
 	function getAnswered($courseid,$part,$token) {
@@ -47,9 +47,9 @@ class ContinuEdModelPreTest extends JModel
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		$query = 'SELECT * FROM #__ce_evalans WHERE ans_area = "pre" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
-		if (!$cecfg['EVAL_ANSRPT']) $query .= ' && tokenid="'.$token.'"';
+		if (!$cecfg->EVAL_ANSRPT) $query .= ' && tokenid="'.$token.'"';
 		$db->setQuery($query);
-		$data = $db->loadAssocList();
+		$data = $db->loadObjectList();
 		return $data;
 
 	}
@@ -62,19 +62,19 @@ class ContinuEdModelPreTest extends JModel
 		if ($hasans) $queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "pre" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
 		$db->setQuery($queryd);
 		$db->query();
-		$query = 'SELECT id,course,qsec,qtype FROM #__ce_questions WHERE course = '.$courseid.' && q_area = "pre" && qsec = '.$part;
+		$query = 'SELECT q_id,q_course,q_part,q_type FROM #__ce_questions WHERE q_course = '.$courseid.' && q_area = "pre" && qs_part = '.$part;
 		$db->setQuery( $query );
-		$qdata = $db->loadAssocList();
+		$qdata = $db->loadObjectList();
 		foreach ($qdata as $ques) {
-		 if ($ques['qtype'] == 'textar' || $ques['qtype'] == 'textbox') {
-		 	$ans = $db->getEscaped(JRequest::getVar('p'.$part.'q'.$ques['id'])); $ansarr = "megan";
-		 	$q = 'INSERT INTO #__ce_evalans	(userid,course,question,part,answer,sessionid,tokenid,ans_area) VALUES ("'.$userid.'","'.$courseid.'","'.$ques['id'].'","'.$part.'","'.$ans.'","'.$sessionid.'","'.$tokenid.'","pre")';
-		 } else if ($ques['qtype'] != 'mcbox') {
-		 	$q = 'INSERT INTO #__ce_evalans	(userid,course,question,part,answer,sessionid,tokenid,ans_area) VALUES ("'.$userid.'","'.$courseid.'","'.$ques['id'].'","'.$part.'","'.JRequest::getVar('p'.$part.'q'.$ques['id']).'","'.$sessionid.'","'.$tokenid.'","pre")';
+		 if ($ques->q_type == 'textar' || $ques->q_type == 'textbox') {
+		 	$ans = $db->getEscaped(JRequest::getVar('p'.$part.'q'.$ques->q_id)); $ansarr = "mgn";
+		 	$q = 'INSERT INTO #__ce_evalans	(userid,course,question,part,answer,sessionid,tokenid,ans_area) VALUES ("'.$userid.'","'.$courseid.'","'.$ques->q_id.'","'.$part.'","'.$ans.'","'.$sessionid.'","'.$tokenid.'","pre")';
+		 } else if ($ques->q_type != 'mcbox') {
+		 	$q = 'INSERT INTO #__ce_evalans	(userid,course,question,part,answer,sessionid,tokenid,ans_area) VALUES ("'.$userid.'","'.$courseid.'","'.$ques->q_id.'","'.$part.'","'.JRequest::getVar('p'.$part.'q'.$ques->q_id).'","'.$sessionid.'","'.$tokenid.'","pre")';
 		 }else {
-		 	$ansarr = JRequest::getVar('p'.$part.'q'.$ques['id']);
+		 	$ansarr = JRequest::getVar('p'.$part.'q'.$ques->q_id);
 		 	$ans = implode(' ',$ansarr);
-		 	$q = 'INSERT INTO #__ce_evalans	(userid,course,question,part,answer,sessionid,tokenid,ans_area) VALUES ("'.$userid.'","'.$courseid.'","'.$ques['id'].'","'.$part.'","'.$ans.'","'.$sessionid.'","'.$tokenid.'","pre")';
+		 	$q = 'INSERT INTO #__ce_evalans	(userid,course,question,part,answer,sessionid,tokenid,ans_area) VALUES ("'.$userid.'","'.$courseid.'","'.$ques->q_id.'","'.$part.'","'.$ans.'","'.$sessionid.'","'.$tokenid.'","pre")';
 		 }
 		 $db->setQuery( $q );
 		 $db->query();
@@ -82,39 +82,6 @@ class ContinuEdModelPreTest extends JModel
 		}
 		return 0;
 	}
-	function PreTestDone($courseid,$token) {
-		$db =& JFactory::getDBO();
-		$sewn = JFactory::getSession();
-		$sessionid = $sewn->getId();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$q = 'INSERT INTO #__ce_track (user,course,step,sessionid,token,track_ipaddr) VALUES ("'.$userid.'","'.$courseid.'","pre","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'")';
-		$db->setQuery( $q );
-		if ($db->query()) return 1;
-		else return 0;
-	}
 
-	function checkSteped($courseid,$token) {
-		$db =& JFactory::getDBO();
-		$sewn = JFactory::getSession();
-		$sessionid = $sewn->getId();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_track WHERE step="fm" && user="'.$userid.'" && sessionid="'.$sessionid.'" && token="'.$token.'" && course="'.$courseid.'"';
-		$db->setQuery($query);
-		$data = $db->loadAssoc();
-		return count($data);
-	}
-	function checkStepedN($courseid,$token) {
-		$db =& JFactory::getDBO();
-		$sewn = JFactory::getSession();
-		$sessionid = $sewn->getId();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_track WHERE step="pre" && user="'.$userid.'" && sessionid="'.$sessionid.'" && token="'.$token.'" && course="'.$courseid.'"';
-		$db->setQuery($query);
-		$data = $db->loadAssoc();
-		return count($data);
-	}
 
 }

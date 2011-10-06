@@ -17,22 +17,12 @@ class ContinuEdModelFrontMatter extends JModel
 	function getFrontMatter($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT id,frontmatter,cname,hasfm,prereq,cataloglink,ccat,published,access,startdate,enddate,course_haspre,course_purchase,course_purchaselink,course_purchasesku FROM #__ce_courses WHERE id = '.$courseid;
+		$query = 'SELECT course_id,course_frontmatter,course_name,course_hasfm,course_prereq,course_cataloglink,course_cat,published,access,course_startdate,course_enddate,course_haspre,course_purchase,course_purchaselink,course_purchasesku FROM #__ce_courses WHERE course_id = '.$courseid;
 		$db->setQuery( $query );
-		$fmtext = $db->loadAssoc();
+		$fmtext = $db->loadObject();
 		return $fmtext;
 	}
-	function AgreedFM($courseid,$token) {
-		$db =& JFactory::getDBO();
-		$sewn = JFactory::getSession();
-		$sessionid = $sewn->getId();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$q = 'INSERT INTO #__ce_track	(user,course,step,sessionid,token,track_ipaddr) VALUES ("'.$userid.'","'.$courseid.'","fm","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'")';
-		$db->setQuery( $q );
-		if ($db->query()) return 1;
-		else return 0;
-	}
+	
 	function checkPreReq($prereq) {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
@@ -56,9 +46,9 @@ class ContinuEdModelFrontMatter extends JModel
 	function getCatInfo($cat)
 	{
 		$db =& JFactory::getDBO();
-		$q='SELECT catfree,catsku FROM #__ce_cats WHERE cid = "'.$cat.'"';
+		$q='SELECT cat_free,cat_sku FROM #__ce_cats WHERE cat_id = "'.$cat.'"';
 		$db->setQuery($q);
-		$cn = $db->loadAssoc();
+		$cn = $db->loadObject();
 		return $cn;
 	}
 

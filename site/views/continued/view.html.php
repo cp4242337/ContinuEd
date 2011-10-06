@@ -63,7 +63,7 @@ class ContinuEdViewContinuEd extends JView
 			$dispfm=false;
 		}
 		if ($catinfo->cat_free == 0) {
-			$bought=ContinuEdHelperCourse::SKUCheck($userid,$catinfo->cat_sku);
+			$bought=ContinuEdHelper::SKUCheck($userid,$catinfo->cat_sku);
 			if (!$bought) $dispfm=true;
 		} else { $bought=true; }
 		if ($dispfm) $model->viewedDetails($userid,$cat);

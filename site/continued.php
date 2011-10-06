@@ -17,17 +17,14 @@ if($controller = JRequest::getVar('controller')) {
 }
 
 
-require_once(JPATH_COMPONENT.DS.'helpers'.DS.'course.php');
+require_once(JPATH_COMPONENT.DS.'helpers'.DS.'continued.php');
 
 // Create the controller
-$db =& JFactory::getDBO();
-$q = 'SELECT * FROM #__ce_config';
-$db->setQuery($q);
 global $cecfg;
-$cecfg = $db->loadAssoc();
+$cecfg = ContinuEdHelper::getConfig();
 
 $doc = &JFactory::getDocument();
-$doc->addStyleSheet('media/com_continued/template/'.$cecfg['TEMPLATE'].'/template.css');
+$doc->addStyleSheet('media/com_continued/template/'.$cecfg->TEMPLATE.'/template.css');
 
 $classname	= 'ContinuEdController'.$controller;
 $controller = new $classname( );

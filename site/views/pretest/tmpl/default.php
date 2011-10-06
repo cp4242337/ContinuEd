@@ -2,126 +2,126 @@
 defined('_JEXEC') or die('Restricted access');
 global $cecfg;
 $db =& JFactory::getDBO();
-echo '<div class="componentheading">'.$this->mtext['cname'].'</div>';
-echo '<h3>Pretest Part '.$this->part.' of '.$this->mtext['course_preparts'];
-if ($this->parti) echo ' - '.$this->parti['part_name'];
+echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
+echo '<h3>Pretest Part '.$this->part.' of '.$this->mtext->course_preparts;
+if ($this->parti) echo ' - '.$this->parti->part_name;
 echo '</h3>';
-if ($this->parti) echo '<p>'.$this->parti['part_desc'].'</p>';
+if ($this->parti) echo '<p>'.$this->parti->part_desc.'</p>';
 echo '<form name="evalf" method="post" action="" onSubmit="return checkRq();"><input type="hidden" name="stepnext" value="">';
-//echo $this->mtext['material'];
+//echo $this->mtext->material;
 $assess=0;
 if ($this->adata) echo '<input type="hidden" name="hasans" value="1">';
 else echo '<input type="hidden" name="hasans" value="0">';
 foreach ($this->qdata as $qdata) {
-	if ($qdata['qcat'] == 'assess') {
-		if ($cecfg['EVAL_ASSD']) echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/'.$cecfg['EVAL_ASSI'].'" alt="required">';
+	if ($qdata->q_cat == 'assess') {
+		if ($cecfg->EVAL_ASSD) echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_ASSI.'" alt="required">';
 		$assess=1;
 	}
-	if ($qdata['qreq']) {
-		if ($cecfg['EVAL_REQD']) echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/'.$cecfg['EVAL_REQI'].'" alt="required"> ';
-		$req_q[] = 'p'.$this->part.'q'.$qdata['id'];
-		$req_t[] = $qdata['qtype'];
+	if ($qdata->q_req) {
+		if ($cecfg->EVAL_REQD) echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_REQI.'" alt="required"> ';
+		$req_q[] = 'p'.$this->part.'q'.$qdata->q_id;
+		$req_t[] = $qdata->q_type;
 	}
 
 	//get prev answer
 	$curans = null;
-	if ($this->adata) {	foreach ($this->adata as $adata) { if ($adata['question'] == $qdata['id']) { $curans = $adata['answer'];} } }
+	if ($this->adata) {	foreach ($this->adata as $adata) { if ($adata->question== $qdata->q_id) { $curans = $adata->answer;} } }
 
 	//Question #
-	echo $qdata['ordering'].'. ';
+	echo $qdata->ordering.'. ';
 
 	//Question text if not a single checkbox
-	if ($qdata['qtype'] != 'cbox') {
+	if ($qdata->q_type != 'cbox') {
 		echo '<strong>';
-		echo $qdata['qtext'];
+		echo $qdata->qtext;
 		echo '</strong>';
 	}
 
 	//output checkbox
-	if ($qdata['qtype'] == 'cbox') {
-		echo '<label><input type="checkbox" size="40" name="p'.$this->part.'q'.$qdata['id'].'"';
+	if ($qdata->q_type == 'cbox') {
+		echo '<label><input type="checkbox" size="40" name="p'.$this->part.'q'.$qdata->q_id.'"';
 		if ($curans == 'on') echo ' checked="checked"';
-		echo '>'.$qdata['qtext'].'</label><br>';
+		echo '>'.$qdata->q_text.'</label><br>';
 	}
 
 	//verification msg area
-	echo '<div id="'.'p'.$this->part.'q'.$qdata['id'].'_msg" class="error_msg"></div>';
+	echo '<div id="'.'p'.$this->part.'q'.$qdata->q_id.'_msg" class="error_msg"></div>';
 
 	//output radio select
-	if ($qdata['qtype'] == 'multi') {
-		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata['id'].' ORDER BY ordering ASC';
+	if ($qdata->q_type == 'multi') {
+		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata->q_id.' ORDER BY ordering ASC';
 		$db->setQuery( $query );
 		$qopts = $db->loadAssocList();
 		$numopts=0;
 		foreach ($qopts as $opts) {
-			echo '<label><input type="radio" name="p'.$this->part.'q'.$qdata['id'].'" value="'.$opts['id'].'"';
-			if ($curans == $opts['id']) { echo ' checked="checked"'; }
-			echo '>'.$opts['opttxt'].'</label><br>';
+			echo '<label><input type="radio" name="p'.$this->part.'q'.$qdata->q_id.'" value="'.$opts->opt_id.'"';
+			if ($curans == $opts->opt_id) { echo ' checked="checked"'; }
+			echo '>'.$opts->opt_text.'</label><br>';
 			$numopts++;
 		}
 	}
 
 	//output dropdown select
-	if ($qdata['qtype'] == 'dropdown') {
-		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata['id'].' ORDER BY ordering ASC';
+	if ($qdata->q_type == 'dropdown') {
+		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata->q_id.' ORDER BY ordering ASC';
 		$db->setQuery( $query );
 		$qopts = $db->loadAssocList();
 		$numopts=0;
-		echo '<select name="p'.$this->part.'q'.$qdata['id'].'">';
+		echo '<select name="p'.$this->part.'q'.$qdata->q_id.'">';
 		foreach ($qopts as $opts) {
-			echo '<option value="'.$opts['id'].'"';
-			if ($curans == $opts['id']) { echo ' SELECTED'; }
-			echo '>'.$opts['opttxt'].'</option>';
+			echo '<option value="'.$opts->opt_id.'"';
+			if ($curans == $opts->opt_id) { echo ' SELECTED'; }
+			echo '>'.$opts->opt_text.'</option>';
 			$numopts++;
 		}
 		echo '</select>';
 	}
 
 	//output multi checkbox
-	if ($qdata['qtype'] == 'mcbox') {
+	if ($qdata->q_type == 'mcbox') {
 		echo '<em>(check all that apply)</em><br />';
-		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata['id'].' ORDER BY ordering ASC';
+		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata->q_id.' ORDER BY ordering ASC';
 		$db->setQuery( $query );
 		$qopts = $db->loadAssocList();
 		$selected = explode(' ',$curans);
 		foreach ($qopts as $opts) {
-			echo '<label><input type="checkbox" name="p'.$this->part.'q'.$qdata['id'].'[]" value="'.$opts['id'].'"';
-			if (in_array($opts['id'],$selected)) { echo ' CHECKED'; }
-			echo '>'.$opts['opttxt'].'</label><br>';
+			echo '<label><input type="checkbox" name="p'.$this->part.'q'.$qdata->q_id.'[]" value="'.$opts->opt_id.'"';
+			if (in_array($opts->opt_id,$selected)) { echo ' CHECKED'; }
+			echo '>'.$opts->opt_text.'</label><br>';
 			$numopts++;
 		}
 	}
 
 	//output text field
-	if ($qdata['qtype'] == 'textbox') { echo '<input type="text" size="40" name="p'.$this->part.'q'.$qdata['id'].'" value="'.$curans.'"><br>'; }
+	if ($qdata->q_type == 'textbox') { echo '<input type="text" size="40" name="p'.$this->part.'q'.$qdata->q_id.'" value="'.$curans.'"><br>'; }
 
 	//output text box
-	if ($qdata['qtype'] == 'textar') { echo '<textarea cols="60" rows="3" name="p'.$this->part.'q'.$qdata['id'].'">'.$curans.'</textarea><br>'; }
+	if ($qdata->q_type == 'textar') { echo '<textarea cols="60" rows="3" name="p'.$this->part.'q'.$qdata->q_id.'">'.$curans.'</textarea><br>'; }
 
 	//output radio select
-	if ($qdata['qtype'] == 'yesno') {
+	if ($qdata->q_type == 'yesno') {
 		$numopts=2;
-		echo '<label><input type="radio" name="p'.$this->part.'q'.$qdata['id'].'" value="Yes"';
+		echo '<label><input type="radio" name="p'.$this->part.'q'.$qdata->q_id.'" value="Yes"';
 		if ($curans == 'Yes') { echo ' checked="checked"'; }
 		echo '>Yes</label> ';
-		echo '<label><input type="radio" name="p'.$this->part.'q'.$qdata['id'].'" value="No"';
+		echo '<label><input type="radio" name="p'.$this->part.'q'.$qdata->q_id.'" value="No"';
 		if ($curans == 'No') { echo ' checked="checked"'; }
 		echo '>No</label><br />';
 	}
 
 	//add in verification if nedded
-	if ($qdata['qreq']) { $req_o[] = $numopts;}
-	if ($qdata['q_depq'] != 0 && ($qdata['qtype'] == 'textar' || $qdata['qtype'] == 'textbox')) {
-		$reqd_q[] = 'p'.$this->part.'q'.$qdata['id'];
-		$reqd_d[] = 'p'.$this->part.'q'.$qdata['q_depq'];
+	if ($qdata->q_req) { $req_o[] = $numopts;}
+	if ($qdata->q_depq != 0 && ($qdata->q_type == 'textar' || $qdata->q_type == 'textbox')) {
+		$reqd_q[] = 'p'.$this->part.'q'.$qdata->q_id;
+		$reqd_d[] = 'p'.$this->part.'q'.$qdata->q_depq;
 	}
 	echo '<br>';
 }
 
-if (count($req_q) != 0) if ($cecfg['EVAL_REQD']) echo '<br><img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/'.$cecfg['EVAL_REQI'].'" alt="required"> - Required';
-if ($assess == 1) if ($cecfg['EVAL_ASSD']) echo '<br><img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/'.$cecfg['EVAL_ASSI'].'" alt="Assess"> - Assessment Question';
+if (count($req_q) != 0) if ($cecfg->EVAL_REQD) echo '<br><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_REQI.'" alt="required"> - Required';
+if ($assess == 1) if ($cecfg->EVAL_ASSD) echo '<br><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_ASSI.'" alt="Assess"> - Assessment Question';
 echo '<p align="center">';
-if ($this->part != $this->mtext['course_preparts']) {
+if ($this->part != $this->mtext->course_preparts) {
 	?>
 <input
 	type="hidden" name="part" value="<?php echo $this->part; ?>">
@@ -130,12 +130,12 @@ if ($this->part != $this->mtext['course_preparts']) {
 	<?php if ($this->part !=1) { ?>
 <input name="evalstep"
 	id="evalstep" value="prev" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg['TEMPLATE'].'/'; ?>btn_prev.png"
+	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_prev.png"
 	onclick="document.evalf.stepnext.value='prev'">
 	<?php } ?>
 <input name="evalstep"
 	id="evalstep" value="next" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg['TEMPLATE'].'/'; ?>btn_next.png"
+	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_next.png"
 	onclick="document.evalf.stepnext.value='next'">
 	<?php } else { ?>
 <input
@@ -145,12 +145,12 @@ if ($this->part != $this->mtext['course_preparts']) {
 	<?php if ($this->part !=1) { ?>
 <input name="evalstep"
 	id="evalstep" value="prev" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg['TEMPLATE'].'/'; ?>btn_prev.png"
+	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_prev.png"
 	onclick="document.evalf.stepnext.value='prev'">
 	<?php } ?>
 <input name="evalstep"
 	id="evalstep" value="eval" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg['TEMPLATE'].'/'; ?>btn_eval.png"
+	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_eval.png"
 	onclick="document.evalf.stepnext.value='eval'">
 
 	<?php } ?>
