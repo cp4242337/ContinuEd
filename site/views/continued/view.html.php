@@ -20,7 +20,6 @@ class ContinuEdViewContinuEd extends JView
 		$showfm = JRequest::getVar('showfm');
 		$model =& $this->getModel();
 		$user =& JFactory::getUser();
-		$cert=NULL;
 		$username = $user->guest ? 'Guest' : $user->name;
 		$userid = $user->id;
 		if ($username == 'Guest') $guest = true; else $guest=false;
@@ -37,13 +36,12 @@ class ContinuEdViewContinuEd extends JView
 		}
 		if (!$guest) {
 			$uinfo=$model->getUserInfo();
-			$cert=$model->getCertifAssoc($uinfo->group);
+			
 			$clist = $model->getCompletedList();
 		}
 		$this->catalog=$catalog;
 		$this->clist=$clist;
 		$this->guest=$guest;
-		$this->cert=$cert;
 		$this->model=$model;
 		$this->showfm=$showfm;
 		$this->cat=$cat;

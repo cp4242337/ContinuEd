@@ -1,11 +1,10 @@
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
-echo '<div class="componentheading">'.$this->mtext['cname'].'</div>';
-$res = $mainframe->triggerEvent('onInsertVid',array(& $this->mtext['material']));
-$res = $mainframe->triggerEvent('onInsertQuestion',array(& $res[0]));
-echo $res[0];
+echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
+
+echo $this->mtext->course_material;
 global $cecfg;
-if ($this->mtext['course_qanda'] == "submit") {
+if ($this->mtext->course_qanda == "submit") {
 	?>
 	<script type="text/javascript" src="media/com_continued/scripts/jquery.js"></script>
 	<script type="text/javascript">jQuery.noConflict();</script>
@@ -37,7 +36,7 @@ if ($this->mtext['course_qanda'] == "submit") {
 			<div id="qabox-question">
 				<form id="qandaform" name="qandaform" action="components/com_continued/qanda.php" method="post">
 					<textarea  name="qtext" id="qatext" rows="3" cols="70" class="required"></textarea><br />
-					<input type="hidden" name="courseid" value="<?php echo $this->mtext['id']; ?>" />
+					<input type="hidden" name="courseid" value="<?php echo $this->mtext->course_id; ?>" />
 					<input type="submit" name="button" id="submitter" class="qabox-btn" />
 					<span style="clear:both"><!-- spanner --></span>
 				</form>
@@ -53,7 +52,7 @@ if ($this->mtext['course_qanda'] == "submit") {
 ?>
 <form name="continued_material" id="continued_material" method="post" action="" onsubmit="return isDone();">
 <?php 
-if ($this->mtext['course_hasinter']) {
+if ($this->mtext->course_hasinter) {
 	foreach ($this->reqids as $r) {
 		echo '<input type="hidden" name="req'.$r.'d" value="';
 		if (in_array($r,$this->reqans)) echo '1'; 
@@ -82,12 +81,12 @@ if ($this->mtext['course_hasinter']) {
 			<td colspan="2" align="center"><br>
 
 			<?php
-			if ($this->mtext['haseval']) {
-				echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="image" src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_continueeval.png">';
-			} else if ($this->mtext['course_haspre']) {
-				echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="image" src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_continue.png">';
+			if ($this->mtext->haseval) {
+				echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continueeval.png">';
+			} else if ($this->mtext->course_haspre) {
+				echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continue.png">';
 			} else {
-				echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_return.png">';
+				echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
 			}
 			?></td>
 		</tr>

@@ -26,7 +26,7 @@ class ContinuEdModelFrontMatter extends JModel
 	function checkPreReq($prereq) {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_completed WHERE user = '.$userid.' && cpass = "pass" && course = '.$prereq;
+		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass = "pass" && rec_course = '.$prereq;
 		$db =& JFactory::getDBO();
 		$db->setQuery( $query );
 		$fmtext = $db->loadAssoc();
@@ -36,7 +36,7 @@ class ContinuEdModelFrontMatter extends JModel
 	function hasPassed($courseid) {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_completed WHERE user = '.$userid.' && cpass = "pass" && course = '.$courseid;
+		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass = "pass" && rec_course = '.$courseid;
 		$db =& JFactory::getDBO();
 		$db->setQuery( $query );
 		$fmtext = $db->loadAssoc();

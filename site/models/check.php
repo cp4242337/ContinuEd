@@ -10,9 +10,9 @@ class ContinuEdModelCheck extends JModel
 	function getCourse($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT id,cname,course_compcourse,haseval,course_haspre,course_changepre,course_hasinter FROM #__ce_courses WHERE id = '.$courseid;
+		$query = 'SELECT course_id,course_name,course_haseval,course_haspre,course_changepre,course_hasinter FROM #__ce_courses WHERE course_id = '.$courseid;
 		$db->setQuery( $query );
-		$mtext = $db->loadAssoc();
+		$mtext = $db->loadObject();
 		return $mtext;
 	}
 	function loadAnswers($courseid,$area)
@@ -22,39 +22,17 @@ class ContinuEdModelCheck extends JModel
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query  = 'SELECT q.*,q.id as ques_id,a.*,o.opttxt,o.optexpl,o.correct ';
+		$query  = 'SELECT q.*,q.q_id as ques_id,a.*,o.opt_text,o.opt_expl,o.opt_correct ';
 		$query .= 'FROM #__ce_questions as q ';
-		$query .= 'LEFT JOIN #__ce_evalans as a ON q.id = a.question ';
-		$query .= 'LEFT JOIN #__ce_questions_opts AS o ON a.answer = o.id ';
-		$query .= 'LEFT JOIN #__ce_parts AS p ON p.part_part = q.qsec AND p.part_course = '.$courseid.' ';
-		$query .= 'WHERE q.q_area="'.$area.'" && q.course = '.$courseid.' && a.userid="'.$userid.'" && a.sessionid = "'.$sessionid.'" ';
-		$query .= 'GROUP BY q.id ';
-		$query .= 'ORDER BY q.qsec ASC , q.ordering ASC ';
-		$db->setQuery( $query );
-		$qdata = $db->loadAssocList();
+		$query .= 'LEFT JOIN #__ce_evalans as a ON q.q_id = a.question ';
+		$query .= 'LEFT JOIN #__ce_questions_opts AS o ON a.answer = o.opt_id ';
+		$query .= 'LEFT JOIN #__ce_parts AS p ON p.part_part = q.q_part AND p.part_course = '.$courseid.' ';
+		$query .= 'WHERE q.q_type != "message" && q.q_area="'.$area.'" && q.q_course = '.$courseid.' && a.userid="'.$userid.'" && a.sessionid = "'.$sessionid.'" ';
+		$query .= 'GROUP BY q.q_id ';
+		$query .= 'ORDER BY q.q_part ASC , q.ordering ASC ';
+		$db->setQuery( $query ); 
+		$qdata = $db->loadObjectList();
 		return $qdata;
-	}
-	function checkSteped($courseid,$token) {
-		$db =& JFactory::getDBO();
-		$sewn = JFactory::getSession();
-		$sessionid = $sewn->getId();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_track WHERE step="qz" && user="'.$userid.'" && sessionid="'.$sessionid.'" && token="'.$token.'" && course="'.$courseid.'"';
-		$db->setQuery($query);
-		$data = $db->loadAssoc();
-		return count($data);
-	}
-	function checkDone($courseid,$token) {
-		$db =& JFactory::getDBO();
-		$sewn = JFactory::getSession();
-		$sessionid = $sewn->getId();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_track WHERE step="asm" && user="'.$userid.'" && sessionid="'.$sessionid.'" && token="'.$token.'" && course="'.$courseid.'"';
-		$db->setQuery($query);
-		$data = $db->loadAssoc();
-		return count($data);
 	}
 	function editPart($courseid,$token,$area) {
 		$db =& JFactory::getDBO();
@@ -74,6 +52,13 @@ class ContinuEdModelCheck extends JModel
 		}
 		return count($data);
 	}
+	function getNumReq($courseid) {
+		$db =& JFactory::getDBO();
+		$q='SELECT * FROM #__ce_questions WHERE q_type != "message" && q_course = "'.$courseid.'" && q_req = 1 && q_area != "qanda"';
+		$db->setQuery($q);
+		$data = $db->query();
+		return $db->getNumRows();
+	}
 	function assessMe($courseid,$token) {
 		$db =& JFactory::getDBO();
 		$sewn = JFactory::getSession();
@@ -85,13 +70,7 @@ class ContinuEdModelCheck extends JModel
 		if ($db->query()) return 1;
 		else return 0;
 	}
-	function getNumReq($courseid) {
-		$db =& JFactory::getDBO();
-		$q='SELECT * FROM #__ce_questions WHERE course = "'.$courseid.'" AND qreq = 1 AND q_area != "qanda"';
-		$db->setQuery($q);
-		$data = $db->query();
-		return $db->getNumRows();
-	}
+
 
 
 }

@@ -19,16 +19,16 @@ class ContinuEdModelContinuEd extends JModel
 		$userid = $user->id;
 		$aid = $user->aid;
 		$query  = 'SELECT c.*,p.*';
-		if (!$guest) $query .= ',f.cpass';
+		if (!$guest) $query .= ',f.rec_pass';
 		$query .= ',r.course_rating as catrating ';
 		$query .= 'FROM #__ce_courses as c ';
 		$query .= 'LEFT JOIN #__ce_providers as p ON c.course_provider = p.prov_id ';
-		if (!$guest) $query .= 'LEFT JOIN #__ce_completed AS f ON c.course_id = f.course && f.user = '.$userid.' && crecent=1 ';
+		if (!$guest) $query .= 'LEFT JOIN #__ce_records AS f ON c.course_id = f.rec_course && f.rec_user = '.$userid.' && rec_recent=1 ';
 		$query .= 'LEFT JOIN #__ce_courses as r ON c.course_catrate = r.course_id ';
 		$query .= 'WHERE c.published = 1 && c.access IN ('.implode(",",$user->getAuthorisedViewLevels()).') ';
 		if ($cat != 0) $query .= ' && c.course_cat = '.$cat;
 		$query .= ' GROUP BY c.course_id ORDER BY c.ordering ASC';
-		if (!$guest) $query .= ', f.ctime DESC';
+		if (!$guest) $query .= ', f.rec_end DESC';
 		$db->setQuery( $query );
 		$clist = $db->loadObjectList();
 		return $clist;
@@ -38,23 +38,15 @@ class ContinuEdModelContinuEd extends JModel
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query  = 'SELECT course ';
-		$query .= 'FROM #__ce_completed';
-		$query .= ' WHERE user = '.$userid;
-		$query .= ' && cpass = "pass"';
+		$query  = 'SELECT rec_course ';
+		$query .= 'FROM #__ce_records';
+		$query .= ' WHERE rec_user = '.$userid;
+		$query .= ' && rec_pass = "pass"';
 		$db->setQuery( $query );
 		$clist = $db->loadResultArray();
 		return $clist;
 	}
 	
-	function getCourseDegrees($courseid)
-	{
-		$db =& JFactory::getDBO();
-		$q='SELECT cd_id FROM #__ce_coursecerts WHERE cd_course = "'.$courseid.'"';
-		$db->setQuery($q);
-		$cn = $db->loadResultArray();
-		return $cn;
-	}
 	
 	function getCatInfo($cat)
 	{
@@ -65,15 +57,6 @@ class ContinuEdModelContinuEd extends JModel
 		return $cn;
 	}
 	
-	function getCertifAssoc($group)
-	{
-		$db =& JFactory::getDBO();
-		//determine which certif
-		$q='SELECT cert FROM #__ce_groupcerts WHERE gc_group = "'.$group.'"';
-		$db->setQuery($q);
-		$cn = $db->loadResult();
-		return $cn;
-	}
 	
 	function getUserInfo() {
 		$user =& JFactory::getUser();

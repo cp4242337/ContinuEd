@@ -17,14 +17,17 @@ defined('_JEXEC') or die('Restricted Access');
 			<?php echo JHtml::_('grid.id', $i, $item->opt_id); ?>
 		</td>
 		<td>
-				<a href="<?php echo JRoute::_('index.php?option=com_mpoll&task=answer.edit&opt_id='.(int) $item->opt_id); ?>">
+				<a href="<?php echo JRoute::_('index.php?option=com_continued&task=answer.edit&opt_id='.(int) $item->opt_id); ?>">
 				<?php echo $this->escape($item->opt_text); ?></a>
 		</td>
 		<td class="center">
 			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'answers.', true);?>
 		</td>
 		<td>
-			<?php echo $item->opt_correct; ?>
+			<?php 
+			if ($item->opt_correct) echo '<span style="color:#008800">Yes</span>';
+			else echo '<span style="color:#880000">No</span>'; 
+			?>
 		</td>
         <td class="order">
 				<?php if ($saveOrder) :?>

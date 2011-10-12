@@ -34,9 +34,10 @@ class ContinuEdViewFrontMatter extends JView
 		$hasfm = $fmtext->course_hasfm;
 		$ctd = date(Ymdhis);
 		if (empty($token)) $token=md5($ctd);
+		ContinuedHelper::startSession($courseid,$token);
 		if ($fmtext->course_prereq != 0) $cantake = $model->checkPreReq($fmtext->course_prereq);
 		else $cantake = true;
-		if (in_array($fmtext->access,$aid) || $fmtext->published != 1) { $cantake=false; }
+		if (!in_array($fmtext->access,$aid) || $fmtext->published < 1) { $cantake=false; }
 		if (!$cantake) $app->redirect($fmtext->course_cataloglink);
 		$haspassed = $model->hasPassed($courseid);
 		if ($haspassed) $app->redirect('index.php?option=com_continued&view=fmpass&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid);

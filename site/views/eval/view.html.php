@@ -10,7 +10,7 @@ class ContinuEdViewEval extends JView
 {
 	function display($tpl = null)
 	{
-		global $mainframe;
+		$app = JFactory::getApplication();
 		$model =& $this->getModel();
 		$courseid = JRequest::getVar( 'course' );
 		$token = JRequest::getVar('token');
@@ -18,10 +18,10 @@ class ContinuEdViewEval extends JView
 		//check if logged in, logging in is REQUIRED
 		$user =& JFactory::getUser();
 		$username = $user->guest ? 'Guest' : $user->name;
-		$should=$model->checkSteped($courseid,$token);
-		$already=$model->checkStepedN($courseid,$token);
+		$should=ContinuedHelper::checkViewed("mt",$courseid,$token);
+		$already=ContinuedHelper::checkViewed("chk",$courseid,$token);
 		$mtext=$model->getEval($courseid);
-		$haseval = $mtext['haseval'];
+		$haseval = $mtext->course_haseval;
 		if ($username != 'Guest' && $token && $should && !$already && $haseval) {
 			$part = JRequest::getVar( 'part' );
 			$evalstep = JRequest::getVar( 'evalstep' );
@@ -52,25 +52,25 @@ class ContinuEdViewEval extends JView
 			if ($courseid && $addans && !$evaldone) {
 				//save answers to current part and take user to next or prev part
 				$se=$model->saveEval($courseid,$part,$token,$hasans);
-				$mainframe->redirect('index.php?option=com_continued&view=eval&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&part='.$pn.'&token='.$token);
+				$app->redirect('index.php?option=com_continued&view=eval&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&part='.$pn.'&token='.$token);
 
 			}
 			if ($courseid && $evaldone) {
 				//save final part and take to check step
 				$se=$model->saveEval($courseid,$part,$token,$hasans);
-				$fmtext=$model->EvalDone($courseid,$token);
-				$mainframe->redirect('index.php?option=com_continued&view=check&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
+				$fmtext=ContinuedHelper::trackViewed("qz",$courseid,$token);
+				$app->redirect('index.php?option=com_continued&view=check&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
 			}
 		} else if ($already && $should && $token && $haseval) {
 			//take user to certif page id they have already completed and checked it
-			$mainframe->redirect('index.php?option=com_continued&view=assess&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
+			$app->redirect('index.php?option=com_continued&view=assess&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
 		} else if (!$haseval) {
 			//take user to end when there is no eval but ther has been a pretest
-			$fmtext=$model->EvalDone($courseid,$token);
-			$mainframe->redirect('index.php?option=com_continued&view=check&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
+			$fmtext=ContinuedHelper::trackViewed("qz",$courseid,$token);
+			$app->redirect('index.php?option=com_continued&view=check&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
 		} else {
 			//take user to frontmatter if they have not viewed frontmatter, material, or aren't logged in
-			$mainframe->redirect('index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid);
+			$app->redirect('index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid);
 		}
 	}
 }

@@ -47,7 +47,7 @@ class ContinuEdHelper {
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$q = 'INSERT INTO #__ce_track	(user,course,step,sessionid,token,track_ipaddr) VALUES ("'.$userid.'","'.$course.'","'.$what.'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'")';
+		$q = 'INSERT INTO #__ce_track (user,course,step,sessionid,token,track_ipaddr) VALUES ("'.$userid.'","'.$course.'","'.$what.'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'")';
 		$db->setQuery( $q );
 		if ($db->query()) return 1;
 		else return 0;
@@ -59,9 +59,59 @@ class ContinuEdHelper {
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_track WHERE step="'.$what.'" && user="'.$userid.'" && sessionid="'.$sessionid.'" && token="'.$token.'" && course="'.$courseid.'"';
+		$query = 'SELECT * FROM #__ce_track WHERE step="'.$what.'" && user="'.$userid.'" && sessionid="'.$sessionid.'" && token="'.$token.'" && course="'.$course.'"';
 		$db->setQuery($query);
 		$data = $db->loadAssoc();
 		return count($data);
+	}
+	
+	/**
+	* Start CE Session.
+	*
+	* @param int $course Course id number
+	* @param string $token CE Session token.
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
+	function startSession($course,$token) {
+		$db =& JFactory::getDBO();
+		$sewn = JFactory::getSession();
+		$sessionid = $sewn->getId();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$q1 = 'UPDATE #__ce_records SET rec_recent = 0 WHERE rec_user ="'.$userid.'" && rec_course = "'.$course.'"';
+		$db->setQuery($q1);
+		$db->query();
+		$q = 'INSERT INTO #__ce_records (rec_user,rec_course,rec_start,rec_session,rec_token,rec_ipaddr,rec_recent,rec_pass) VALUES ("'.$userid.'","'.$course.'","'.date("Y-m-d H:i:s").'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'",1,"incomplete")';
+		$db->setQuery( $q );
+		if ($db->query()) return 1;
+		else return 0;
+	}
+	
+	/**
+	* End CE Session.
+	*
+	* @param int $course Course id number
+	* @param string $token CE Session token.
+	* @param float $prescore Pre test score
+	* @param float $postscore Post test score
+	* @param string $pass pass or fail based on score and pass percentage
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
+	function endSession($course,$token,$prescore,$postscore,$pass) {
+		$db =& JFactory::getDBO();
+		$sewn = JFactory::getSession();
+		$sessionid = $sewn->getId();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$q = 'UPDATE #__ce_records SET rec_end = "'.date("Y-m-d H:i:s").'", rec_prescore = "'.$prescore.'", rec_postscore = "'.$postscore.'", rec_pass = "'.$pass.'" WHERE rec_token = "'.$token.'" && rec_user = "'.$userid.'"';
+		$db->setQuery( $q );
+		if ($db->query()) return 1;
+		else return 0;
 	}
 }

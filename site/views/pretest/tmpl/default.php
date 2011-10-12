@@ -1,7 +1,6 @@
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 global $cecfg;
-$db =& JFactory::getDBO();
 echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
 echo '<h3>Pretest Part '.$this->part.' of '.$this->mtext->course_preparts;
 if ($this->parti) echo ' - '.$this->parti->part_name;
@@ -28,12 +27,13 @@ foreach ($this->qdata as $qdata) {
 	if ($this->adata) {	foreach ($this->adata as $adata) { if ($adata->question== $qdata->q_id) { $curans = $adata->answer;} } }
 
 	//Question #
-	echo $qdata->ordering.'. ';
+	if ($qdata->q_type != 'message') echo $qdata->ordering.'. ';
 
 	//Question text if not a single checkbox
 	if ($qdata->q_type != 'cbox') {
 		echo '<strong>';
-		echo $qdata->qtext;
+		if ($qdata->q_type != 'message') echo $qdata->q_text;
+		else echo $qdata->q_expl;
 		echo '</strong>';
 	}
 
@@ -41,7 +41,7 @@ foreach ($this->qdata as $qdata) {
 	if ($qdata->q_type == 'cbox') {
 		echo '<label><input type="checkbox" size="40" name="p'.$this->part.'q'.$qdata->q_id.'"';
 		if ($curans == 'on') echo ' checked="checked"';
-		echo '>'.$qdata->q_text.'</label><br>';
+		echo '> '.$qdata->q_text.'</label><br>';
 	}
 
 	//verification msg area
@@ -49,29 +49,23 @@ foreach ($this->qdata as $qdata) {
 
 	//output radio select
 	if ($qdata->q_type == 'multi') {
-		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata->q_id.' ORDER BY ordering ASC';
-		$db->setQuery( $query );
-		$qopts = $db->loadAssocList();
 		$numopts=0;
-		foreach ($qopts as $opts) {
+		foreach ($qdata->options as $opts) {
 			echo '<label><input type="radio" name="p'.$this->part.'q'.$qdata->q_id.'" value="'.$opts->opt_id.'"';
 			if ($curans == $opts->opt_id) { echo ' checked="checked"'; }
-			echo '>'.$opts->opt_text.'</label><br>';
+			echo '> '.$opts->opt_text.'</label><br>';
 			$numopts++;
 		}
 	}
 
 	//output dropdown select
 	if ($qdata->q_type == 'dropdown') {
-		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata->q_id.' ORDER BY ordering ASC';
-		$db->setQuery( $query );
-		$qopts = $db->loadAssocList();
 		$numopts=0;
 		echo '<select name="p'.$this->part.'q'.$qdata->q_id.'">';
-		foreach ($qopts as $opts) {
+		foreach ($qdata->options as $opts) {
 			echo '<option value="'.$opts->opt_id.'"';
 			if ($curans == $opts->opt_id) { echo ' SELECTED'; }
-			echo '>'.$opts->opt_text.'</option>';
+			echo '> '.$opts->opt_text.'</option>';
 			$numopts++;
 		}
 		echo '</select>';
@@ -80,14 +74,11 @@ foreach ($this->qdata as $qdata) {
 	//output multi checkbox
 	if ($qdata->q_type == 'mcbox') {
 		echo '<em>(check all that apply)</em><br />';
-		$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$qdata->q_id.' ORDER BY ordering ASC';
-		$db->setQuery( $query );
-		$qopts = $db->loadAssocList();
 		$selected = explode(' ',$curans);
-		foreach ($qopts as $opts) {
+		foreach ($qdata->options as $opts) {
 			echo '<label><input type="checkbox" name="p'.$this->part.'q'.$qdata->q_id.'[]" value="'.$opts->opt_id.'"';
 			if (in_array($opts->opt_id,$selected)) { echo ' CHECKED'; }
-			echo '>'.$opts->opt_text.'</label><br>';
+			echo '> '.$opts->opt_text.'</label><br>';
 			$numopts++;
 		}
 	}

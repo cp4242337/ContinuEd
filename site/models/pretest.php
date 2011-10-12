@@ -37,6 +37,13 @@ class ContinuEdModelPreTest extends JModel
 		$query .= 'WHERE q_course = '.$courseid.' && q_part = '.$part.' && q_area = "pre" ORDER BY ordering ASC';
 		$db->setQuery( $query );
 		$qdata = $db->loadObjectList();
+		foreach ($qdata as &$q) {
+			if ($q->q_type == "mcbox" || $q->q_type == "dropdown" || $q->q_type == "multi") {
+				$qo = 'SELECT * FROM #__ce_questions_opts WHERE published >= 1  && opt_question = '.$q->q_id.' ORDER BY ordering ASC';
+				$db->setQuery( $qo );
+				$q->options = $db->loadObjectList();
+			}
+		}
 		return $qdata;
 	}
 	function getAnswered($courseid,$part,$token) {
@@ -62,7 +69,7 @@ class ContinuEdModelPreTest extends JModel
 		if ($hasans) $queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "pre" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
 		$db->setQuery($queryd);
 		$db->query();
-		$query = 'SELECT q_id,q_course,q_part,q_type FROM #__ce_questions WHERE q_course = '.$courseid.' && q_area = "pre" && qs_part = '.$part;
+		$query = 'SELECT q_id,q_course,q_part,q_type FROM #__ce_questions WHERE q_type != "message" && q_course = '.$courseid.' && q_area = "pre" && q_part = '.$part;
 		$db->setQuery( $query );
 		$qdata = $db->loadObjectList();
 		foreach ($qdata as $ques) {
