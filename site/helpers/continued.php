@@ -1,9 +1,33 @@
 <?php
-
+/**
+ * @version		$Id: continued.php 2011-10-12 $
+ * @package		ContinuEd.Site
+ * @subpackage	com_continued
+ * @copyright	Copyright (C) 2008 - 2011 Corona Productions.
+ * @license		GNU General Public License version 2
+ */
 defined('_JEXEC') or die('Restricted access');
 
+/**
+ * ContinuEd Component Helper
+ *
+ * @static
+ * @package		ContinuEd.Site
+ * @subpackage	com_continued
+ * @since		1.20
+ */
 class ContinuEdHelper {
 
+	/**
+	* Check if course acess has been purchased. For use with OS Commerece related stores.
+	*
+	* @param int $userid Uesrs id number
+	* @param string $skunum SKu of item to check for purchase
+	*
+	* @return boolean true if purchased, false if not.
+	*
+	* @since 1.20
+	*/
 	function SKUCheck($userid,$skunum) {
 		//for naadac
 		$db =& JFactory::getDBO();
@@ -26,12 +50,29 @@ class ContinuEdHelper {
 		return $chksout;
 	}
 
+	/**
+	* Check if course access has been purchased. For use with AmbraSubs.
+	*
+	* @param int $userid Uesrs id number
+	* @param int $courseid Course id number
+	*
+	* @return boolean true if purchased, false if not.
+	*
+	* @since 1.20
+	*/
 	function PurchaseCheck($userid,$courseid) {
 		if (method_exists('AmbraSubsHelperCourse', 'hasPurchased')) {
 			return AmbraSubsHelperCourse::hasPurchased($courseid,$userid);
 		} else { return false; }
 	}
 	
+	/**
+	* Check if step completed in current CE Session.
+	*
+	* @return object The current config parameters
+	*
+	* @since 1.20
+	*/
 	function getConfig() {
 		$db =& JFactory::getDBO();
 		$q = 'SELECT * FROM #__ce_config';
@@ -41,6 +82,17 @@ class ContinuEdHelper {
 		return $cecfg;
 	}
 	
+	/**
+	* Mark step completed in current CE Session.
+	*
+	* @param string $what Step
+	* @param int $course Course id number
+	* @param string $token CE Session token.
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
 	function trackViewed($what,$course,$token) {
 		$db =& JFactory::getDBO();
 		$sewn = JFactory::getSession();
@@ -53,6 +105,17 @@ class ContinuEdHelper {
 		else return 0;
 	}
 	
+	/**
+	* Check if step completed in current CE Session.
+	*
+	* @param string $what Step
+	* @param int $course Course id number
+	* @param string $token CE Session token.
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
 	function checkViewed($what,$course,$token) {
 		$db =& JFactory::getDBO();
 		$sewn = JFactory::getSession();
@@ -75,16 +138,20 @@ class ContinuEdHelper {
 	*
 	* @since 1.20
 	*/
-	function startSession($course,$token) {
+	function startSession($course,$token,$type="ce") {
 		$db =& JFactory::getDBO();
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$q1 = 'UPDATE #__ce_records SET rec_recent = 0 WHERE rec_user ="'.$userid.'" && rec_course = "'.$course.'"';
-		$db->setQuery($q1);
-		$db->query();
-		$q = 'INSERT INTO #__ce_records (rec_user,rec_course,rec_start,rec_session,rec_token,rec_ipaddr,rec_recent,rec_pass) VALUES ("'.$userid.'","'.$course.'","'.date("Y-m-d H:i:s").'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'",1,"incomplete")';
+		$recent=0;
+		if ($type=='ce') {
+			$q1 = 'UPDATE #__ce_records SET rec_recent = 0 WHERE rec_user ="'.$userid.'" && rec_course = "'.$course.'"';
+			$db->setQuery($q1);
+			$db->query();
+			$recent=1;
+		}
+		$q = 'INSERT INTO #__ce_records (rec_user,rec_course,rec_start,rec_session,rec_token,rec_ipaddr,rec_recent,rec_pass,rec_type) VALUES ("'.$userid.'","'.$course.'","'.date("Y-m-d H:i:s").'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'","'.$recent.'","incomplete","'.$type.'")';
 		$db->setQuery( $q );
 		if ($db->query()) return 1;
 		else return 0;
@@ -113,5 +180,25 @@ class ContinuEdHelper {
 		$db->setQuery( $q );
 		if ($db->query()) return 1;
 		else return 0;
+	}
+	
+	/**
+	* Has user passed course.
+	*
+	* @param int $course Course id number
+	*
+	* @return boolean true if passed, false if not.
+	*
+	* @since 1.20
+	*/
+	function passedCourse($course) {
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass = "pass" && rec_course = '.$course;
+		$db =& JFactory::getDBO();
+		$db->setQuery( $query );
+		$fmtext = $db->loadAssoc();
+		if (count($fmtext) > 0) return true;
+		else return false;
 	}
 }

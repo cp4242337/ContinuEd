@@ -1,3 +1,4 @@
+<div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 global $cecfg;
@@ -76,4 +77,4 @@ else
 	echo '<a href="'.$this->cinfo->course_cataloglink.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a>';
 }
 ?>
-
+</div>

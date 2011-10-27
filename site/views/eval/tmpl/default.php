@@ -1,3 +1,4 @@
+<div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 global $cecfg;
@@ -216,4 +217,4 @@ function isChecked(elem, helperMsg,msgl) {
 
 
 </script>
-
+</div>

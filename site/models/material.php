@@ -17,7 +17,7 @@ class ContinuEdModelMaterial extends JModel
 	function getMaterial($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT course_id,course_material,course_name,course_hasfm,course_hasmat,course_haseval,course_cataloglink,course_haspre,course_hasinter,course_qanda FROM #__ce_courses WHERE course_id = '.$courseid;
+		$query = 'SELECT course_id,course_material,course_name,course_hasfm,course_hasmat,course_haseval,course_cataloglink,course_haspre,course_hasinter,course_qanda,course_startdate,course_enddate FROM #__ce_courses WHERE course_id = '.$courseid;
 		$db->setQuery( $query );
 		$mtext = $db->loadObject();
 		return $mtext;

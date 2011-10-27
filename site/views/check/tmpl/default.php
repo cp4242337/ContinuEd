@@ -1,10 +1,13 @@
+<div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 global $cecfg;
 $db =& JFactory::getDBO();
 echo '<div class="componentheading">'.$this->cinfo->course_name.'</div>';
 $cpart = 0;
-echo '<p>Please check your answers before proceeding. You may go back to a part by clicking the Change button for each part.</p>';
+echo '<p>Please check your answers before proceeding. ';
+if ($this->haseval) echo 'You may go back to a part by clicking the Change button for each part.';
+echo '</p>';
 
 echo '<div align="center"><table align="center" width="90%"><tr><td align="left"><b>Question</b></td><td align="right"><b>Your Answer</b></td></tr>';
 if ($this->haspre) { foreach ($this->preqa as $preqa) {
@@ -160,6 +163,7 @@ function isChecked(elem) {
 	}
 }
 
+
 //-->
 </script>
 <?php
@@ -172,3 +176,4 @@ function isChecked(elem) {
 	echo '</form></div>';
 }
 ?>
+</div>

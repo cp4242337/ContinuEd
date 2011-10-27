@@ -24,7 +24,7 @@ global $cecfg;
 $cecfg = ContinuEdHelper::getConfig();
 
 $doc = &JFactory::getDocument();
-$doc->addStyleSheet('media/com_continued/template/'.$cecfg->TEMPLATE.'/template.css');
+$doc->addStyleSheet('media/com_continued/template/'.$cecfg->TEMPLATE.'/continued.css');
 
 $classname	= 'ContinuEdController'.$controller;
 $controller = new $classname( );

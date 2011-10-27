@@ -1,3 +1,4 @@
+<div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 global $cecfg;
@@ -7,7 +8,7 @@ if (!$this->print) {
 	href="index2.php?option=com_continued&view=userce&print=1"
 	target="_blank"><img src="components/com_continued/printButton.png"
 	border="0" align="right"></a><?php echo $cecfg['REC_TIT']; ?></div>
-<p><?php 
+<?php 
 } else {
 	echo '<div class="componentheading">'.$cecfg['REC_TIT'].'<a href="javascript:print()"><img src="components/com_continued/printButton.png" border="0"> Print</a> </div>';
 }
@@ -37,3 +38,4 @@ if ($this->catalog) {
 if (!$this->print) {
 	if ($cecfg['REC_POSTTXT']) echo '<br />'.$cecfg['REC_POSTTXT'];
 	?> <?php } ?>
+	</div>

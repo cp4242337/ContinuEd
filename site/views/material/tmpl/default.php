@@ -1,9 +1,24 @@
+<div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
 
 echo $this->mtext->course_material;
 global $cecfg;
+if ($this->expired || $this->passed) {
+	echo '<div align="center">';
+	
+	echo '<form name="continued_material" id="continued_material" method="post" action="">';
+	echo '<input type="hidden" name="gte" value="return">';
+	echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
+	echo '<input type="hidden" name="token" value="'.$this->token.'">';
+	if ($this->mtext->course_hasinter) {
+		foreach ($this->reqids as $r) {
+			echo '<input type="hidden" name="req'.$r.'d" value="1">';
+		}
+	}
+	echo '</form></div>';
+} else {
 if ($this->mtext->course_qanda == "submit") {
 	?>
 	<script type="text/javascript" src="media/com_continued/scripts/jquery.js"></script>
@@ -62,7 +77,6 @@ if ($this->mtext->course_hasinter) {
 }
 
 ?>
-<input type="hidden" name="gte" value="true">
 <input type="hidden" name="token" value="<?php echo $this->token; ?>">
 <div align="center">
 <table id="agreet" style="border: medium none; padding: 5px;" border="0"
@@ -82,10 +96,16 @@ if ($this->mtext->course_hasinter) {
 
 			<?php
 			if ($this->mtext->haseval) {
+				//continue to eval
+				echo '<input type="hidden" name="gte" value="eval">';
 				echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continueeval.png">';
 			} else if ($this->mtext->course_haspre) {
+				//continue to check page if no no eval and pretest
+				echo '<input type="hidden" name="gte" value="eval">';
 				echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continue.png">';
 			} else {
+				//return to menu, no eval, no pretest, or done/exp/nonce
+				echo '<input type="hidden" name="gte" value="return">';
 				echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
 			}
 			?></td>
@@ -146,3 +166,5 @@ if ($this->mtext->course_hasinter) {
 
  
 		</script> 
+<?php } ?>
+</div>
