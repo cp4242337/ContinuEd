@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `jos_ce_cats` (
+CREATE TABLE IF NOT EXISTS `#__ce_cats` (
   `cat_id` int(11) NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(255) NOT NULL,
   `cat_desc` text NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `jos_ce_cats` (
   PRIMARY KEY (`cat_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_cattrack` (
+CREATE TABLE IF NOT EXISTS `#__ce_cattrack` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
   `cat` int(11) NOT NULL,
@@ -24,15 +24,15 @@ CREATE TABLE IF NOT EXISTS `jos_ce_cattrack` (
   `viewed` enum('fm','menu','det') NOT NULL,
   `sessionid` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_certifs` (
+CREATE TABLE IF NOT EXISTS `#__ce_certifs` (
   `crt_id` int(11) NOT NULL AUTO_INCREMENT,
   `crt_name` varchar(50) NOT NULL,
   PRIMARY KEY (`crt_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_certiftempl` (
+CREATE TABLE IF NOT EXISTS `#__ce_certiftempl` (
   `ctmpl_id` int(11) NOT NULL AUTO_INCREMENT,
   `ctmpl_cert` int(11) NOT NULL,
   `ctmpl_prov` int(11) NOT NULL,
@@ -41,22 +41,10 @@ CREATE TABLE IF NOT EXISTS `jos_ce_certiftempl` (
   PRIMARY KEY (`ctmpl_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_completed` (
-  `fid` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user` int(11) NOT NULL,
-  `ctime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `cpercent` float NOT NULL,
-  `cpass` enum('pass','fail') NOT NULL,
-  `course` int(11) NOT NULL,
-  `crecent` tinyint(1) NOT NULL DEFAULT '1',
-  `fsessionid` varchar(32) NOT NULL,
-  `cmpl_prescore` int(11) DEFAULT '0',
-  PRIMARY KEY (`fid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `jos_ce_config` (
+CREATE TABLE IF NOT EXISTS `#__ce_config` (
   `CFG_ID` smallint(6) NOT NULL AUTO_INCREMENT,
   `FM_TEXT` text NOT NULL,
+  `FM_AGREE_ERROR` varchar(255) NOT NULL,
   `EV_TEXT` text NOT NULL,
   `EVAL_PERCENT` float NOT NULL,
   `EVAL_EXPL` tinyint(1) NOT NULL,
@@ -77,16 +65,16 @@ CREATE TABLE IF NOT EXISTS `jos_ce_config` (
   `TEMPLATE` varchar(50) NOT NULL DEFAULT 'default',
   `INTER_REQMSG` varchar(255) NOT NULL,
   PRIMARY KEY (`CFG_ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_coursecerts` (
+CREATE TABLE IF NOT EXISTS `#__ce_coursecerts` (
   `cd_id` int(4) NOT NULL AUTO_INCREMENT,
   `cd_course` int(11) NOT NULL,
   `cd_cert` int(11) NOT NULL,
   PRIMARY KEY (`cd_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_courses` (
+CREATE TABLE IF NOT EXISTS `#__ce_courses` (
   `course_id` int(11) NOT NULL AUTO_INCREMENT,
   `course_name` varchar(255) NOT NULL,
   `course_keywords` text NOT NULL,
@@ -142,14 +130,7 @@ CREATE TABLE IF NOT EXISTS `jos_ce_courses` (
   PRIMARY KEY (`course_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_degreecert` (
-  `dc_id` tinyint(4) NOT NULL AUTO_INCREMENT,
-  `degree` varchar(25) NOT NULL,
-  `cert` tinyint(4) NOT NULL,
-  PRIMARY KEY (`dc_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `jos_ce_evalans` (
+CREATE TABLE IF NOT EXISTS `#__ce_evalans` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `course` int(11) NOT NULL,
@@ -163,9 +144,16 @@ CREATE TABLE IF NOT EXISTS `jos_ce_evalans` (
   PRIMARY KEY (`id`),
   KEY `course` (`course`),
   KEY `question` (`question`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_parts` (
+CREATE TABLE IF NOT EXISTS `#__ce_groupcerts` (
+  `gc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `gc_group` int(11) NOT NULL,
+  `gc_cert` int(11) NOT NULL,
+  PRIMARY KEY (`gc_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__ce_parts` (
   `part_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `part_course` int(11) NOT NULL,
   `part_part` tinyint(4) NOT NULL,
@@ -175,7 +163,7 @@ CREATE TABLE IF NOT EXISTS `jos_ce_parts` (
   PRIMARY KEY (`part_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_providers` (
+CREATE TABLE IF NOT EXISTS `#__ce_providers` (
   `prov_id` int(11) NOT NULL AUTO_INCREMENT,
   `prov_name` varchar(50) NOT NULL,
   `prov_logo` varchar(255) NOT NULL,
@@ -183,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `jos_ce_providers` (
   PRIMARY KEY (`prov_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_questions` (
+CREATE TABLE IF NOT EXISTS `#__ce_questions` (
   `q_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `q_course` int(11) NOT NULL,
   `ordering` smallint(6) NOT NULL COMMENT 'qnum',
@@ -200,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `jos_ce_questions` (
   PRIMARY KEY (`q_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_questions_opts` (
+CREATE TABLE IF NOT EXISTS `#__ce_questions_opts` (
   `opt_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `opt_question` bigint(20) NOT NULL,
   `opt_text` text NOT NULL,
@@ -211,7 +199,23 @@ CREATE TABLE IF NOT EXISTS `jos_ce_questions_opts` (
   PRIMARY KEY (`opt_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_track` (
+CREATE TABLE IF NOT EXISTS `#__ce_records` (
+  `rec_token` varchar(255) NOT NULL,
+  `rec_user` int(11) NOT NULL,
+  `rec_start` datetime NOT NULL,
+  `rec_end` datetime NOT NULL,
+  `rec_postscore` float NOT NULL,
+  `rec_pass` enum('pass','fail','incomplete','audit','complete') NOT NULL,
+  `rec_course` int(11) NOT NULL,
+  `rec_recent` tinyint(1) NOT NULL DEFAULT '1',
+  `rec_session` varchar(32) NOT NULL,
+  `rec_prescore` int(11) DEFAULT '0',
+  `rec_ipaddr` varchar(15) NOT NULL,
+  `rec_type` enum('nonce','ce','review','expired','viewed') NOT NULL,
+  PRIMARY KEY (`rec_token`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__ce_track` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
   `course` int(11) NOT NULL,
@@ -221,30 +225,31 @@ CREATE TABLE IF NOT EXISTS `jos_ce_track` (
   `token` varchar(32) NOT NULL,
   `track_ipaddr` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_ufields` (
+CREATE TABLE IF NOT EXISTS `#__ce_ufields` (
   `uf_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `uf_sname` varchar(50) NOT NULL,
   `ordering` smallint(6) NOT NULL COMMENT 'qnum',
   `uf_name` varchar(255) NOT NULL,
-  `uf_type` enum('textar','textbox','multi','cbox','mcbox','yesno','dropdown','message') NOT NULL,
+  `uf_type` enum('textar','textbox','multi','cbox','mcbox','yesno','dropdown','message','email','username','phone','password') NOT NULL,
   `uf_req` tinyint(1) NOT NULL DEFAULT '1',
   `uf_note` text NOT NULL,
+  `uf_match` int(11) NOT NULL DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`uf_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_ufields_opts` (
+CREATE TABLE IF NOT EXISTS `#__ce_ufields_opts` (
   `opt_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `opt_field` bigint(20) NOT NULL,
   `opt_text` text NOT NULL,
   `ordering` int(11) NOT NULL,
   `published` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`opt_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_ugroups` (
+CREATE TABLE IF NOT EXISTS `#__ce_ugroups` (
   `ug_id` int(11) NOT NULL AUTO_INCREMENT,
   `ug_name` varchar(255) NOT NULL,
   `access` int(11) NOT NULL,
@@ -252,14 +257,22 @@ CREATE TABLE IF NOT EXISTS `jos_ce_ugroups` (
   PRIMARY KEY (`ug_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_uguf` (
+CREATE TABLE IF NOT EXISTS `#__ce_uguf` (
   `uguf_field` int(11) NOT NULL,
   `uguf_group` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `jos_ce_users` (
-  `usr_id` bigint(20) NOT NULL,
+CREATE TABLE IF NOT EXISTS `#__ce_usergroup` (
+  `userg_user` int(11) NOT NULL,
+  `userg_group` int(11) NOT NULL,
+  `userg_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`userg_user`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__ce_users` (
+  `usr_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `usr_user` int(11) NOT NULL,
   `usr_field` int(11) NOT NULL,
-  `usr_data` text NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `usr_data` text NOT NULL,
+  PRIMARY KEY (`usr_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
