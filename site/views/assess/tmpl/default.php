@@ -67,14 +67,14 @@ if ($pass) {
 		echo '<a href="index2.php?option=com_continued&view=certif&course='.$this->courseid.'" target="_blank">';
 		echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_certif.png" border="0" alt="Get Certificate"></a>';
 	}
-	echo '<a href="'.$this->cinfo->course_cataloglink.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a></p>';
+	echo '<a href="'.$this->redirurl.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a></p>';
 }
 else
 {
 	if ($this->cinfo->course_failmsg) echo '<p>'.$this->cinfo->course_failmsg.'</p>';
 	echo '<p align="center"><a href="index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->courseid.'">';
 	echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_failed.png" border="0" alt="Take Again"></a>';
-	echo '<a href="'.$this->cinfo->course_cataloglink.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a>';
+	echo '<a href="'.$this->redirurl.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a>';
 }
 ?>
 </div>

@@ -65,8 +65,10 @@ class ContinuEdViewFrontMatter extends JView
 		//Check Passed
 		$this->passed = ContinuEdHelper::passedCourse($courseid);
 		
-		if ($fmagree || !$this->cinfo->course_hasfm) {
+		if ($fmagree) {
 			$this->moveOn();
+		} else if (!$this->cinfo->course_hasfm) {
+			$this->noFM();
 		} else if ($this->passed) {
 			$this->Passed();
 		} else if ($this->expired) {
@@ -117,7 +119,7 @@ class ContinuEdViewFrontMatter extends JView
 		
 	}
 	
-	//Move to next Step or No FM
+	//Move to next Step
 	function moveOn() {
 		$app =& JFactory::getApplication();
 		$user =& JFactory::getUser();
@@ -147,6 +149,45 @@ class ContinuEdViewFrontMatter extends JView
 		if ($proceed) $app->redirect('index.php?option=com_continued&view='.$nextstep.'&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->cinfo->course_id.'&token='.$this->token);
 		else echo 'A database error has occured and you cannot continue. Please contact a site admin.';
 	}
+
+	//No FM
+	function noFM() {
+		if ($this->cinfo->course_haspre || $this->cinfo->course_haseval) { $type = 'ce'; }
+		else { $type = 'viewed'; }
+		
+		//Start Session
+		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,$type);
+		
+		$app =& JFactory::getApplication();
+		$user =& JFactory::getUser();
+		
+		//Track FM Viewed
+		if ($this->passed) {
+			$what = "fmp";
+		} else if ($this->expired) {
+			$what = "fme";
+		} else if ($this->eligable) {
+			$what = "fm";
+		}
+		$proceed=ContinuEdHelper::trackViewed($what,$this->cinfo->course_id,$this->token);
+		
+		//Course has Pretest
+		if ($this->cinfo->course_haspre && !$this->passed && !$this->expired) {
+			$nextstep='pretest';
+			if (!$user->id) {
+				$url = base64_encode('index.php?option=com_continued&view='.$nextstep.'&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->cinfo->course_id.'&token='.$this->token);
+				$app->redirect('index.php?option=com_user&view=login&return='.$url,'You must login first');
+				$proceed=false;
+			}
+		}
+		//No Pretest
+		else $nextstep = 'material';
+		
+		//Proceed to next step
+		if ($proceed) $app->redirect('index.php?option=com_continued&view='.$nextstep.'&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->cinfo->course_id.'&token='.$this->token);
+		else echo 'A database error has occured and you cannot continue. Please contact a site admin.';
+	}
+	
 	
 	function moveBack() {
 		$app =& JFactory::getApplication();

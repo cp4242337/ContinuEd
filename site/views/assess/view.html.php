@@ -44,6 +44,9 @@ class ContinuEdViewAssess extends JView
 					}
 				} else $canrate=false;
 				$this->assignRef('course_canrate',$canrate);
+				$redirurl = $cinfo->course_cataloglink;
+				if (!$redirurl) $redirurl = 'index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$cinfo->course_cat;
+				$this->assignRef('redirurl',$redirurl);
 				parent::display($tpl);
 			}
 		} else { $app->redirect('index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid); }

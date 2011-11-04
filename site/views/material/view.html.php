@@ -72,11 +72,18 @@ class ContinuEdViewMaterial extends JView
 			
 				if ($passed) {
 					ContinuedHelper::trackViewed('mtp',$courseid,$token);
+					$pass = 'complete';
 				} else if ($expired) {
 					ContinuedHelper::trackViewed('vo',$courseid,$token);
+					$pass = 'complete';
+				} else {
+					$pass = 'complete';
 				} 
-				$res = ContinuEdHelper::endSession($courseid,$token,0,0,"audit");
-				$app->redirect($mtext->course_cataloglink);
+				
+				$res = ContinuEdHelper::endSession($courseid,$token,0,0,$pass);
+				$redirurl = $mtext->course_cataloglink;
+				if (!$redirurl) $redirurl = 'index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$mtext->course_cat;
+				$app->redirect($redirurl);
 				
 			}
 

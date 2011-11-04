@@ -70,7 +70,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_failed.png" border="0" alt="Take Again">';
 				$clink  .= '</a>';
-			} else if ($course->rec_pass == 'pass' && $cantake && !$expired) {
+			} else if (($course->rec_pass == 'pass' || $course->rec_pass == 'complete') && $cantake && !$expired) {
 				// Passed, Can Take, Not Expired
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" border="0" alt="Completed, Review">';

@@ -133,6 +133,7 @@ class ContinuEdHelper {
 	*
 	* @param int $course Course id number
 	* @param string $token CE Session token.
+	* @param string $type CE Session type: nonce,ce,review, or expired.
 	*
 	* @return boolean true if scucessfull, false if not.
 	*
@@ -145,7 +146,7 @@ class ContinuEdHelper {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		$recent=0;
-		if ($type=='ce') {
+		if ($type=='ce' || $type=='viewed') {
 			$q1 = 'UPDATE #__ce_records SET rec_recent = 0 WHERE rec_user ="'.$userid.'" && rec_course = "'.$course.'"';
 			$db->setQuery($q1);
 			$db->query();
@@ -164,7 +165,7 @@ class ContinuEdHelper {
 	* @param string $token CE Session token.
 	* @param float $prescore Pre test score
 	* @param float $postscore Post test score
-	* @param string $pass pass or fail based on score and pass percentage
+	* @param string $pass pass or fail based on score and pass percentage, audit if not a ce session
 	*
 	* @return boolean true if scucessfull, false if not.
 	*

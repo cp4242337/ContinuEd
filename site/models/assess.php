@@ -17,7 +17,7 @@ class ContinuEdModelAssess extends JModel
 	function getCourse($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT course_id,course_name,course_hascertif,course_cataloglink,course_defaultcertif,course_passmsg,course_failmsg,course_allowrate,course_evaltype,course_haspre,course_haseval FROM #__ce_courses WHERE course_id = '.$courseid;
+		$query = 'SELECT course_id,course_cat,course_name,course_hascertif,course_cataloglink,course_defaultcertif,course_passmsg,course_failmsg,course_allowrate,course_evaltype,course_haspre,course_haseval FROM #__ce_courses WHERE course_id = '.$courseid;
 		$db->setQuery( $query );
 		$mtext = $db->loadObject();
 		return $mtext;
