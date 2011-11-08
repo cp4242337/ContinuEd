@@ -162,12 +162,16 @@
 		/>
 		<field
 			name="course_prereq"
-			type="Courses"
-			class="inputbox"
+			type="radio"
 			label="COM_CONTINUED_COURSE_FIELD_PREREQ_LABEL"
 			description="COM_CONTINUED_COURSE_FIELD_PREREQ_DESC"
+			size="1"
+			class="inputbox"
 			required="false"
-		/>
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>	
 		
 	</fieldset>
 	<fieldset name="fmsettings">

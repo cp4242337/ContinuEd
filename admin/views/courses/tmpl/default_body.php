@@ -41,6 +41,15 @@ defined('_JEXEC') or die('Restricted Access');
 		}
 		?></td>
 		<td><?php 
+		if ($item->course_prereq) {
+			
+			echo '<a href="index.php?option=com_continued&view=prereqs&filter_course='.$item->course_id.'">PreReqs ';
+			$query = 'SELECT count(*) FROM #__ce_prereqs WHERE pr_course="'.$item->course_id.'"';
+			$db->setQuery( $query );
+			echo ' ['.$db->loadResult().']</a>';
+		}
+		?></td>
+		<td><?php 
 		if ($item->course_haspre) {
 			echo '<a href="index.php?option=com_continued&view=questions&filter_area=pre&filter_course='.$item->course_id.'">Questions';
 			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="pre"';

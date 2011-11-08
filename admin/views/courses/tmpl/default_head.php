@@ -15,6 +15,7 @@ $saveOrder	= $listOrder == 'c.ordering';
 	</th>
 	<th width="50"><?php echo JText::_( 'Added' ); ?></th>
 	<th width="50"><?php echo JText::_( 'Avail. Certs.' ); ?></th>
+	<th width="50"><?php echo JText::_( 'PreReqs' ); ?></th>
 	<th width="80"><?php echo JText::_( 'PreTest<br />Questions' ); ?></th>
 	<th width="80"><?php echo JText::_( 'Inter<br />Questions' ); ?></th>
 	<th width="80"><?php echo JText::_( 'PostTest<br />Questions' ); ?></th>

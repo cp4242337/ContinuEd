@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: prereq.xml 62 2010-11-28 16:08:16Z chdemko $ -->
+<form>
+	<fieldset name="details">
+		<field
+			name="gc_id"
+			type="hidden"
+		/>
+		<field 
+			name="pr_course" 
+			type="Courses" 
+			class="inputbox"
+			label="COM_CONTINUED_PREREQ_FIELD_COURSE_LABEL"
+			description="COM_CONTINUED_PREREQ_FIELD_COURSE_DESC" 
+		/>
+		<field 
+			name="pr_reqcourse" 
+			type="Courses" 
+			class="inputbox"
+			label="COM_CONTINUED_PREREQ_FIELD_REQCOURSE_LABEL"
+			description="COM_CONTINUED_PREREQ_FIELD_REQCOURSE_DESC" 
+		/>
+	</fieldset>
+</form>
+
