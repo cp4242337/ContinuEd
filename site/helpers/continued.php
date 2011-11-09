@@ -202,4 +202,27 @@ class ContinuEdHelper {
 		if (count($fmtext) > 0) return true;
 		else return false;
 	}
+	
+	/**
+	* Get users Course Completed list with status.
+	*
+	* @return Array list of completed courses courseid=>status.
+	*
+	* @since 1.20
+	*/
+	function completedList() {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$query  = 'SELECT rec_course,rec_pass ';
+		$query .= 'FROM #__ce_records';
+		$query .= ' WHERE rec_recent = 1 && rec_user = '.$userid;
+		$db->setQuery( $query );
+		$reclist = $db->loadObjectList();
+		$rlist = array();
+		foreach ($reclist as $r) {
+			$rlist[$r->rec_course]=$r->rec_pass;
+		}
+		return $rlist;
+	}
 }

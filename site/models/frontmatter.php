@@ -23,16 +23,23 @@ class ContinuEdModelFrontMatter extends JModel
 		return $fmtext;
 	}
 	
-	function checkPreReq($prereq) {
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass = "pass" && rec_course = '.$prereq;
-		$db =& JFactory::getDBO();
-		$db->setQuery( $query );
-		$fmtext = $db->loadAssoc();
-		if (count($fmtext) > 0) return true;
-		else return false;
+	function checkPreReq($courseid) {
+		$cmpllist =ContinuEdHelper::completedList();
+		// can take
+		$qp = 'SELECT pr_reqcourse FROM #__ce_prereqs WHERE pr_course = '.$courseid;
+		$this->_db->setQuery($qp);
+		$prlist = $this->_db->loadResultArray();
+		$prm=true;
+		foreach ($prlist as $p) {
+			if ($cmpllist[$p]) {
+				if ($cmpllist[$p] == 'incomplete' || $cmpllist[$p] == 'fail') $prm=false;
+			} else {
+				$prm=false;
+			}
+		} 	
+		return $prm;
 	}
+	
 	function getCatInfo($cat)
 	{
 		$db =& JFactory::getDBO();
@@ -41,5 +48,7 @@ class ContinuEdModelFrontMatter extends JModel
 		$cn = $db->loadObject();
 		return $cn;
 	}
+	
+
 
 }

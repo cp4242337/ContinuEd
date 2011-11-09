@@ -17,15 +17,8 @@ class ContinuEdViewCourse extends JView
 		if ($username == 'Guest') $guest = true; else $guest=false;
 
 		$course=$model->getCourse($guest,$courseid);
-		$clist = $model->getCompletedList();
 		
 
-		if (!$guest && in_array($course->course_prereq,$clist)) $cantake=true;
-		else $cantake=false;
-		if ($course->course_prereq==0) $cantake = true;
-		if ($course->rec_pass == 'pass' && !$course->course_hasfm && !$course->course_hasmat) $cantake = false;
-		if ((strtotime($course->course_enddate."+ 1 day") <= strtotime("now")) && ($course->course_enddate != '0000-00-00 00:00:00')) $expired=true; else $expired = false;
-		if ($expired && !$course->course_hasmat) $cantake = false;
 		if ($course->course_purchase) {
 			if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$course->course_purchasesku);
 			else $paid = ContinuEdHelper::PurchaseCheck($user->id,$course->course_id);
@@ -36,24 +29,24 @@ class ContinuEdViewCourse extends JView
 		} else if ($course->course_extlink) { //External Link
 			$url = $course->course_exturl;
 		} else{
-			if ($course->rec_pass == 'fail'  && $cantake && !$expired) { //Failed,Can Take,Not Expired
+			if ($course->status == 'fail'  && $course->cantake && !$course->expired) { //Failed,Can Take,Not Expired
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
-			} else if ($course->rec_pass == 'pass' && $cantake && !$expired) {  //Passes, Can Take, NotExpired
+			} else if ($course->status == 'pass' && $course->cantake && !$course->expired) {  //Passes, Can Take, NotExpired
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
-			} else if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && $cantake && !$expired && $paid) { //Not Yet Taken, Can TAke, NOt Expired, Paid
+			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && $paid) { //Not Yet Taken, Can TAke, NOt Expired, Paid
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
-			} else if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && $cantake && !$expired && !$paid) { //Not Yet Taken, Can TAke, NOt Expired, Not Paid
+			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && !$paid) { //Not Yet Taken, Can TAke, NOt Expired, Not Paid
 				//$url = $course->course_purchaselink;
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
-			} else if ($course->rec_pass == 'pass' && !$cantake && !$expired){ //Passed, Cannot Take, Not Expired
+			} else if ($course->status == 'pass' && !$course->cantake && !$course->expired){ //Passed, Cannot Take, Not Expired
 				$url = JURI::current().'?option=com_continued&cat='.$course->course_cat.'&Itemid='.JRequest::getVar( 'Itemid' );
-			} else if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && !$cantake && !$expired) { //Not Yet taken,Can't take, Not Expired
+			} else if (($course->status == 'incomplete' || !$course->status) && !$course->cantake && !$course->expired) { //Not Yet taken,Can't take, Not Expired
 				$url = JURI::current().'?option=com_continued&cat='.$course->course_cat.'&Itemid='.JRequest::getVar( 'Itemid' );
-			} else if ($expired && $course->rec_pass != 'pass' && $cantake) { //Failed, Can Take, Expired
+			} else if ($course->expired && $course->status != 'pass' && $course->cantake) { //Failed, Can Take, Expired
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
-			} else if ($expired && $course->rec_pass == 'pass' && $cantake) { //Passed, Can Take, Expired
+			} else if ($course->expired && $course->status == 'pass' && $course->cantake) { //Passed, Can Take, Expired
 				$url  = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
-			} else if ($expired && !$cantake) { //Cannot take, Expired
+			} else if ($course->expired && !$course->cantake) { //Cannot take, Expired
 				$url = JURI::current().'?option=com_continued&cat='.$course->course_cat.'&Itemid='.JRequest::getVar( 'Itemid' );
 			}
 		}

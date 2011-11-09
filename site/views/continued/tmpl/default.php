@@ -27,10 +27,6 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 	foreach ($this->catalog as $course) {
 		//$coursecerts=$this->model->getCourseDegrees($course->id);
 		//if (!$this->guest) $hascert=in_array($this->cert,$coursecerts); else $hascert=false;
-		if (!$this->guest && in_array($course->course_prereq,$this->clist)) $cantake=true;
-		else $cantake=false;
-		if ($course->course_prereq==0) $cantake = true;
-		if ($course->rec_pass == 'pass' && !$course->course_hasfm && !$course->course_hasmat) $cantake = false;
 		echo '<table width="100%" cellspacing="0" cellpadding="4" border="0"><tr>';
 		if ($course->course_previmg != '' || $course->course_allowrate || $course->course_catrate) {
 			echo '<td rowspan="4" valign="top" align="center">';
@@ -45,9 +41,8 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '<b>'.$course->course_name.'</b>';
 		if ($course->course_subtitle) echo '<br>'.$course->course_subtitle;
 		if ($cecfg->SHOW_FAC == '1') echo '<br><em>'.$course->course_faculty.'</em>';
-		if ((strtotime($course->course_enddate."+ 1 day") <= strtotime("now")) && ($course->course_enddate != '0000-00-00 00:00:00')) $expired=true; else $expired = false;
 		$courseurl = JURI::current().'?option=com_continued&view=course&course='.$course->course_id.'&Itemid='.JRequest::getVar( 'Itemid' );
-		if ($expired && !$course->course_hasmat) $cantake = false;
+		
 		if ($course->course_purchase) {
 			if ($course->course_purchasesku) $paid = ContinuEdHelperCourse::SKUCheck($user->id,$catinfo->course_purchasesku);
 			else $paid = ContinuEdHelperCourse::PurchaseCheck($user->id,$course->id);
@@ -56,7 +51,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		if ($course->course_catlink) {
 			//Catalog Page
 			$clink  = '<a href="'.$courseurl.'">';
-			if ($expired && $course->course_catexp)	$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_view.png" border="0" alt="View Only, CE Expired">';
+			if ($course->expired && $course->course_catexp)	$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_view.png" border="0" alt="View Only, CE Expired">';
 			else $clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_menu.png" border="0" alt="Program Menu">';
 			$clink  .= '</a>';
 		} else if ($course->course_extlink) {
@@ -65,50 +60,50 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 			$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" border="0" alt="Begin">';
 			$clink  .= '</a>';
 		} else {
-			if (($course->rec_pass == 'fail') && $cantake && !$expired) {
+			if (($course->status == 'fail') && $course->cantake && !$course->expired) {
 				// Failed, Can Take, Not Expired
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_failed.png" border="0" alt="Take Again">';
 				$clink  .= '</a>';
-			} else if (($course->rec_pass == 'pass' || $course->rec_pass == 'complete') && $cantake && !$expired) {
+			} else if (($course->status == 'pass' || $course->status == 'complete') && $course->cantake && !$course->expired) {
 				// Passed, Can Take, Not Expired
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" border="0" alt="Completed, Review">';
 				$clink  .= '</a>';
-			} else if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && $cantake && !$expired && $paid) {
+			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && $paid) {
 				// Not Taken, Can Take, Not Expired, Paid
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" border="0" alt="Begin">';
 				$clink  .= '</a>';
-			} else if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && $cantake && !$expired && !$paid) {
+			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && !$paid) {
 				// Not Taken, Can Take, Not Expired, Not Paid
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_purchase.png" border="0" alt="Purchase">';
 				$clink  .= '</a>';
-			} else if ($course->rec_pass == 'pass' && !$cantake && !$expired){
+			} else if ($course->status == 'pass' && !$course->cantake && !$course->expired){
 				// Passed, Cannot Take, Not Expired
 				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_completed.png" border="0" alt="Completed">';
-			} else if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && !$cantake && !$expired && $paid) {
+			} else if (($course->status == 'incomplete' || !$course->status) && !$course->cantake && !$course->expired && $paid) {
 				// Not Taken, Cannot Take, Not Expired, Paid
 				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nolaunch.png" border="0" alt="Prerequsite not met">';
-			} else if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && !$cantake && !$expired && !$paid) {
+			} else if (($course->status == 'incomplete' || !$course->status) && !$course->cantake && !$course->expired && !$paid) {
 				// Not Taken, Cannot Take, Not Expired, Not Paid
 				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nopurchase.png" border="0" alt="Purchase & Prerequsite not met">';
-			} else if ($expired && $course->rec_pass != 'pass' && $cantake) {
+			} else if ($course->expired && $course->status != 'pass' && $course->cantake) {
 				// Not Passed, Can Take, Expired
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_view.png" border="0" alt="View Only, CE Expired">';
 				$clink  .= '</a>';
-			} else if ($expired && $course->rec_pass == 'pass' && $cantake) {
+			} else if ($course->expired && $course->status == 'pass' && $course->cantake) {
 				// Passed Can Take, Expired
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" border="0" alt="Completed, View Only">';
 				$clink  .= '</a>';
-			} else if ($expired && !$cantake) {
+			} else if ($course->expired && !$course->cantake) {
 				// Any Status, Cannot Take, Expired
 				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_expired.png" border="0" alt="Expired">';
 			}
-			if (($course->rec_pass == 'incomplete' || !$course->rec_pass) && $course->course_haseval && $course->course_viewans) {
+			if (($course->status == 'incomplete' || !$course->status) && $course->course_haseval && $course->course_viewans) {
 				$clink  .= '<a href="'.JURI::current().'?option=com_continued&view=answers&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->id.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_answers.png" border="0" alt="View Answers">';
 				$clink  .= '</a>';
@@ -128,10 +123,10 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '</td></tr><tr><td>';
 		if (!empty($course->course_desc)) echo $course->course_desc;
 		echo '</td></tr><tr><td colspan="2">'.$clink;
-		if (!$this->guest && $course->rec_pass == 'pass' && $course->course_hascertif) {
+		if (!$this->guest && $course->status == 'pass' && $course->course_hascertif) {
 			echo '<a href="index2.php?option=com_continued&view=certif&course='.$course->course_id.'" target="_blank">';
 			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_certif.png" border="0" alt="Get Certificate"></a>';
-		} else if (!$this->guest && $course->course_hascertif && !$expired) {
+		} else if (!$this->guest && $course->course_hascertif && !$course->expired) {
 			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocertif.png" border="0" alt="Certificate Not Yet Awarded">';
 		}
 

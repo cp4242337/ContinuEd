@@ -54,7 +54,7 @@ class ContinuEdViewFrontMatter extends JView
 		if (empty($this->token)) $this->token=md5($ctd);
 		
 		//Check Pre Requisite
-		if ($this->cinfo->course_prereq != 0) $this->eligable = $model->checkPreReq($this->cinfo->course_prereq);
+		if ($this->cinfo->course_prereq) $this->eligable = $model->checkPreReq($this->cinfo->course_id);
 		else $this->eligable = true;
 		
 		//Check Access

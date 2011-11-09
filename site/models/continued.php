@@ -19,34 +19,61 @@ class ContinuEdModelContinuEd extends JModel
 		$userid = $user->id;
 		$aid = $user->aid;
 		$query  = 'SELECT c.*,p.*';
-		if (!$guest) $query .= ',f.rec_pass';
 		$query .= ',r.course_rating as catrating ';
 		$query .= 'FROM #__ce_courses as c ';
 		$query .= 'LEFT JOIN #__ce_providers as p ON c.course_provider = p.prov_id ';
-		if (!$guest) $query .= 'LEFT JOIN #__ce_records AS f ON c.course_id = f.rec_course && f.rec_user = '.$userid.' && rec_recent=1 ';
 		$query .= 'LEFT JOIN #__ce_courses as r ON c.course_catrate = r.course_id ';
 		$query .= 'WHERE c.published = 1 && c.access IN ('.implode(",",$user->getAuthorisedViewLevels()).') ';
 		if ($cat != 0) $query .= ' && c.course_cat = '.$cat;
 		$query .= ' GROUP BY c.course_id ORDER BY c.ordering ASC';
-		if (!$guest) $query .= ', f.rec_end DESC';
 		$db->setQuery( $query );
 		$clist = $db->loadObjectList();
+		$clist = $this->statusCheck($clist);
 		return $clist;
 	}
 	
-	function getCompletedList() {
-		$db =& JFactory::getDBO();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$query  = 'SELECT rec_course ';
-		$query .= 'FROM #__ce_records';
-		$query .= ' WHERE rec_user = '.$userid;
-		$query .= ' && rec_pass = "pass"';
-		$db->setQuery( $query );
-		$clist = $db->loadResultArray();
+	/**
+	* Course list user status check.
+	*
+	* @param array $clist Course object list
+	*
+	* @return array course object list with user status.
+	*
+	* @since 1.20
+	*/
+	function statusCheck($clist) {
+		$cmpllist =ContinuEdHelper::completedList();
+		foreach ($clist as &$c) {
+			// expired
+			if ((strtotime($c->course_enddate."+ 1 day") <= strtotime("now")) && ($c->course_enddate != '0000-00-00 00:00:00')) {
+				$c->expired=true;
+			} else {
+				$c->expired=false;
+			}
+			// status
+			$c->status=$cmpllist[$c->course_id];
+			// can take
+			if (!$c->course_prereq || $c->expired) $c->cantake = true;
+			else {
+				$qp = 'SELECT pr_reqcourse FROM #__ce_prereqs WHERE pr_course = '.$c->course_id;
+				$this->_db->setQuery($qp);
+				$prlist = $this->_db->loadResultArray();
+				$prm=true;
+				foreach ($prlist as $p) {
+					if ($cmpllist[$p]) {
+						if ($cmpllist[$p] == 'incomplete' || $cmpllist[$p] == 'fail') $prm=false;
+					} else {
+						$prm=false;
+					}
+				} 	
+				$c->cantake=$prm;
+			}
+			if ($c->status == 'pass' && !$c->course_hasfm && !$c->course_hasmat) $c->cantake = false;
+			if ($c->expired && !$c->course_hasmat) $c->cantake = false;
+			
+		}
 		return $clist;
 	}
-	
 	
 	function getCatInfo($cat)
 	{

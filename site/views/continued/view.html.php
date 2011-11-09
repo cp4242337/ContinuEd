@@ -36,11 +36,8 @@ class ContinuEdViewContinuEd extends JView
 		}
 		if (!$guest) {
 			$uinfo=$model->getUserInfo();
-			
-			$clist = $model->getCompletedList();
 		}
 		$this->catalog=$catalog;
-		$this->clist=$clist;
 		$this->guest=$guest;
 		$this->model=$model;
 		$this->showfm=$showfm;
