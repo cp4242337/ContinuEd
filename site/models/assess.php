@@ -24,7 +24,7 @@ class ContinuEdModelAssess extends JModel
 	}
 	function loadAnswers($courseid,$token,$etype,$haspre,$haseval)
 	{
-		global $cecfg;
+		$cecfg = ContinuEdHelper::getConfig();
 		$db =& JFactory::getDBO();
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
@@ -113,7 +113,7 @@ class ContinuEdModelAssess extends JModel
 	{
 		$db =& JFactory::getDBO();
 		//determine which certif
-		$q='SELECT gc_cert FROM #__ce_groupcert WHERE gc_group = "'.$group.'"';
+		$q='SELECT gc_cert FROM #__ce_groupcerts WHERE gc_group = "'.$group.'"';
 		$db->setQuery($q);
 		$cn = $db->loadResult();
 		return $cn;
@@ -128,7 +128,7 @@ class ContinuEdModelAssess extends JModel
 		return $res->userg_group;
 	}
 	function getUserCertif($dc) {
-		global $cecfg;
+		$cecfg = ContinuEdHelper::getConfig();
 		$usergroup = $this->getUserGroup();
 		$certype = $this->getCertifAssoc($usergroup);
 		$db =& JFactory::getDBO();

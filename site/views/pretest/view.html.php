@@ -15,7 +15,6 @@ class ContinuEdViewPreTest extends JView
 		$courseid = JRequest::getVar( 'course' );
 		$token = JRequest::getVar('token');
 		$itemid = JRequest::getVar( 'Itemid' );
-		//check if logged in, logging in is REQUIRED
 		$user =& JFactory::getUser();
 		$username = $user->guest ? 'Guest' : $user->name;
 		$should=ContinuEdHelper::checkViewed("fm",$courseid,$token);

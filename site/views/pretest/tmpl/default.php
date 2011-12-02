@@ -1,14 +1,14 @@
 <div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
-global $cecfg;
+$cecfg = ContinuEdHelper::getConfig();
 echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
 echo '<h3>Pretest Part '.$this->part.' of '.$this->mtext->course_preparts;
 if ($this->parti) echo ' - '.$this->parti->part_name;
 echo '</h3>';
 if ($this->parti) echo '<p>'.$this->parti->part_desc.'</p>';
 echo '<form name="evalf" method="post" action="" onSubmit="return checkRq();"><input type="hidden" name="stepnext" value="">';
-//echo $this->mtext->material;
+
 $assess=0;
 if ($this->adata) echo '<input type="hidden" name="hasans" value="1">';
 else echo '<input type="hidden" name="hasans" value="0">';

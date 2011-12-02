@@ -18,12 +18,14 @@ class ContinuEdViewMaterial extends JView
 		$user =& JFactory::getUser();
 		$username = $user->guest ? 'Guest' : $user->name;
 		$mtext=$model->getMaterial($courseid);
+		
 		//Check Validity
 		if ((strtotime($mtext->course_enddate."+ 1 day") <= strtotime("now")) && ($mtext->course_enddate != '0000-00-00 00:00:00')) {
 			$expired=true; 
 		} else {
 			$expired = false;
 		}
+		
 		//Check Passed
 		$passed = ContinuEdHelper::passedCourse($courseid);
 		if ($passed) {

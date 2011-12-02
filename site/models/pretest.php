@@ -47,14 +47,14 @@ class ContinuEdModelPreTest extends JModel
 		return $qdata;
 	}
 	function getAnswered($courseid,$part,$token) {
-		global $cecfg;
+		$cecfg = ContinuEdHelper::getConfig();
 		$db =& JFactory::getDBO();
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		$query = 'SELECT * FROM #__ce_evalans WHERE ans_area = "pre" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
-		if (!$cecfg->EVAL_ANSRPT) $query .= ' && tokenid="'.$token.'"';
+		$query .= ' && tokenid="'.$token.'"';
 		$db->setQuery($query);
 		$data = $db->loadObjectList();
 		return $data;
@@ -66,9 +66,11 @@ class ContinuEdModelPreTest extends JModel
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		if ($hasans) $queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "pre" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
-		$db->setQuery($queryd);
-		$db->query();
+		if ($hasans) { 
+			$queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "pre" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && tokenid="'.$tokenid.'" && course="'.$courseid.'"';
+			$db->setQuery($queryd);
+			$db->query();
+		}
 		$query = 'SELECT q_id,q_course,q_part,q_type FROM #__ce_questions WHERE q_type != "message" && q_course = '.$courseid.' && q_area = "pre" && q_part = '.$part;
 		$db->setQuery( $query );
 		$qdata = $db->loadObjectList();

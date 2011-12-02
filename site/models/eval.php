@@ -44,14 +44,14 @@ class ContinuEdModelEval extends JModel
 	}
 	
 	function getAnswered($courseid,$part,$token) {
-		global $cecfg;
+		$cecfg = ContinuEdHelper::getConfig();
 		$db =& JFactory::getDBO();
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		$query = 'SELECT * FROM #__ce_evalans WHERE ans_area = "post" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
-		if (!$cecfg->EVAL_ANSRPT) $query .= ' && tokenid="'.$token.'"';
+		$query .= ' && tokenid="'.$token.'"';
 		$db->setQuery($query);
 		$data = $db->loadObjectList();
 		return $data;
@@ -65,7 +65,7 @@ class ContinuEdModelEval extends JModel
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		
-		$queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "post" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
+		$queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "post" && part="'.$part.'" && userid="'.$userid.'" && tokenid="'.$sessionid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
 		$db->setQuery($queryd);
 		$db->query();
 		

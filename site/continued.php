@@ -7,7 +7,6 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
-
 // Require the base controller
 require_once (JPATH_COMPONENT.DS.'controller.php');
 
@@ -16,16 +15,15 @@ if($controller = JRequest::getVar('controller')) {
 	require_once (JPATH_COMPONENT.DS.'controllers'.DS.$controller.'.php');
 }
 
-
+// Load helper
 require_once(JPATH_COMPONENT.DS.'helpers'.DS.'continued.php');
 
-// Create the controller
-global $cecfg;
+// Load StyleSheet for template, based on config
 $cecfg = ContinuEdHelper::getConfig();
-
 $doc = &JFactory::getDocument();
 $doc->addStyleSheet('media/com_continued/template/'.$cecfg->TEMPLATE.'/continued.css');
 
+// Create the controller
 $classname	= 'ContinuEdController'.$controller;
 $controller = new $classname( );
 JPluginHelper::importPlugin('continued');

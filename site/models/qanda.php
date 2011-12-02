@@ -10,10 +10,10 @@ class ContinuEdModelQandA extends JModel
 	function getCourse($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT id,cname,cataloglink FROM #__ce_courses WHERE id = '.$courseid;
+		$query = 'SELECT id,course_name,course_cataloglink,course_cat FROM #__ce_courses WHERE id = '.$courseid;
 		$db->setQuery( $query );
-		$mtext = $db->loadAssoc();
-		return $mtext;
+		$cinfo = $db->loadObject();
+		return $cinfo;
 	}
 	function loadQuestions($courseid)
 	{
@@ -28,16 +28,5 @@ class ContinuEdModelQandA extends JModel
 		$db->setQuery( $query );
 		$qdata = $db->loadObjectList();
 		return $qdata;
-	}
-	function trackView($courseid) {
-		$db =& JFactory::getDBO();
-		$sewn = JFactory::getSession();
-		$sessionid = $sewn->getId();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$q = 'INSERT INTO #__ce_track (user,course,step,sessionid,token,track_ipaddr) VALUES ("'.$userid.'","'.$courseid.'","qaa","'.$sessionid.'","DoneNotTokenNeeded","'.$_SERVER['REMOTE_ADDR'].'")';
-		$db->setQuery( $q );
-		if ($db->query()) return 1;
-		else return 0;
 	}
 }

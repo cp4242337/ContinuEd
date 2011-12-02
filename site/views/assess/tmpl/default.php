@@ -1,7 +1,7 @@
 <div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
-global $cecfg;
+$cecfg = ContinuEdHelper::getConfig();
 echo '<div class="componentheading">'.$this->cinfo->course_name.'</div>';
 $assess = '<p>Assessment Question Score</p>';
 $assess .= '<div align="center"><table align="center" width="90%"><tr><td><b>Question & Explanation</b></td><td align="right"><b>Your Answer</b></td><td align="right"><b>Assessment</b></td></tr>';

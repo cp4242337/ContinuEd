@@ -2,9 +2,8 @@
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
-
 echo $this->mtext->course_material;
-global $cecfg;
+$cecfg = ContinuEdHelper::getConfig();
 if ($this->expired || $this->passed) {
 	echo '<div align="center">';
 	

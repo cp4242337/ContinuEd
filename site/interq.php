@@ -9,7 +9,6 @@ require_once ( JPATH_BASE .DS.'includes'.DS.'defines.php' );
 require_once ( JPATH_BASE .DS.'includes'.DS.'framework.php' );
 
 $mainframe =& JFactory::getApplication('site');
-$cfg =& JFactory::getConfig();
 $db  =& JFactory::getDBO();
 $user = &JFactory::getUser();
 
@@ -32,57 +31,58 @@ $db->query();
 
 //show results
 $query = 'SELECT * FROM #__ce_questions ';
-$query .= 'WHERE id = '.$qid;
+$query .= 'WHERE q_id = '.$qid;
 $db->setQuery( $query );
 $qdata = $db->loadObject();
 $anscor=false;
-echo '<p><b>'.$qdata->qtext.'</b><br /><br />';
-switch ($qdata->qtype) {
+echo '<p><b>'.$qdata->q_text.'</b><br /><br />';
+switch ($qdata->q_type) {
 case 'multi':
-	echo '<table width="100%" border="0">'; 
 	$qnum = 'SELECT count(question) FROM #__ce_evalans WHERE question = '.$qid.' GROUP BY question';
 	$db->setQuery( $qnum );
 	$qnums = $db->loadAssoc();
 	$numr=$qnums['count(question)'];
 	$query  = 'SELECT o.* FROM #__ce_questions_opts as o ';
-	$query .= 'WHERE o.question = '.$qid.' ORDER BY ordering ASC';
+	$query .= 'WHERE o.opt_question = '.$qid.' ORDER BY ordering ASC';
 	$db->setQuery( $query );
 	$qopts = $db->loadObjectList();
+	$tph=0;
 	foreach ($qopts as &$o) {
-		$qa = 'SELECT count(*) FROM #__ce_evalans WHERE question = '.$qid.' && answer = '.$o->id.' GROUP BY answer';
+		$qa = 'SELECT count(*) FROM #__ce_evalans WHERE question = '.$qid.' && answer = '.$o->opt_id.' GROUP BY answer';
 		$db->setQuery($qa);
 		$o->anscount = $db->loadResult();
 		if ($o->anscount == "") $o->anscount = 0;
+		$tph = $tph + $o->prehits;
 	}
-	$ans = JRequest::getVar('q'.$ques['q_id']);
 	$barc=1; $gper=0; $ansper=0; $gperid = 0;
-	//$cbg = "#FFFFFF";
 	foreach ($qopts as $opts) {
-		if ($numr != 0) $per = $opts->anscount/$numr; else $per=1;
-		echo '<tr><td valign="center" align="left">';
+		if ($numr != 0) $per = ($opts->anscount+$opts->prehits)/($numr+$tph); else $per=1;
 		if ($qans == $opts->id && $opts->correct) {
 			$anscor=true;
 		}
 		
-		if ($opts->correct) echo '<b>'.$opts->opttxt.'</b>';
-		else echo $opts->opttxt;
-		echo '</td>';
-		echo '<td valign="center" width="320"><img src="media/com_continued/bar_'.$barc.'.jpg" height="15" width="'.($per*300).'" align="absmiddle"> ';
-		echo '<b>'.$opts->anscount.'</b></td></tr>';
+		if ($opts->opt_correct) echo '<span class="opt-correct"><b>'.$opts->opt_text.'</b></span>';
+		else echo $opts->opt_text;
+		echo '<br />';
+		echo '<img src="media/com_continued/bar_'.$barc.'.jpg" height="15" width="'.($per*600).'" align="absmiddle" style="padding-bottom:8px;"> ';
+		echo '<b>'.($opts->anscount+$opts->prehits).'</b>';
+		echo '<br />';
 		$barc = $barc + 1;
 		if ($barc==5) $barc=1;
 		if ($gper < $per) { $gper = $per; $gperid = $opts->id; }
-		if ($qans==$opts->id) {
+		if ($qans==$opts->opt_id) {
 			if ($qdata->q_expl) $expl=$qdata->q_expl;
-			else $expl=$opts->optexpl;
+			else $expl=$opts->opt_expl;
 		}
 	}
-	echo '</table></p>';
 	break;
 	
 }
 if ($expl) {
 	echo '<div class="continued_mat_qexpl">'.$expl.'</div>';
 }
+
+
+
 
 

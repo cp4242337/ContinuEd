@@ -102,22 +102,8 @@ defined('_JEXEC') or die('Restricted Access');
 		?></td>
 		<td><?php 
 		if ($item->course_haseval || $item->course_haspre || $item->course_hasinter) {
-			/*for ($j=1; $j<=$numq; $j=$j+5) {
-			 echo '<a href="index.php?option=com_continued&view=coursereport&course='.$item->id.'&stnum='.$j.'">Q'.$j.'</a>';
-			 if (($j + 5)<=$numq) echo '-';
-			 }*/
-			if ($item->course_haspre) {
-				echo 'Pre: <a href="index.php?option=com_continued&view=coursereport&area=pre&course='.$item->course_id.'">Ans</a>';
-				echo ' - <a href="index.php?option=com_continued&view=tally&area=pre&course='.$item->course_id.'">Tally</a><br />';
-			}
-			if ($item->course_hasinter) {
-				echo 'Inter: <a href="index.php?option=com_continued&view=coursereport&area=inter&course='.$item->course_id.'">Ans</a>';
-				echo ' - <a href="index.php?option=com_continued&view=tally&area=inter&course='.$item->course_id.'">Tally</a><br />';
-			}
-			if ($item->course_haseval) {
-				echo 'Post: <a href="index.php?option=com_continued&view=coursereport&area=post&course='.$item->course_id.'">Ans</a>';
-				echo ' - <a href="index.php?option=com_continued&view=tally&area=post&course='.$item->course_id.'">Tally</a>';
-			}
+			echo '<a href="index.php?option=com_continued&view=coursereport&course='.$item->course_id.'">Full</a><br />';
+			echo '<a href="index.php?option=com_continued&view=tally&course='.$item->course_id.'">Tally</a>';
 		}
 		?></td>
 		

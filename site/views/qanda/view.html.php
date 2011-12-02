@@ -8,19 +8,24 @@ class ContinuEdViewQandA extends JView
 {
 	function display($tpl = null)
 	{
-		global $mainframe;
+		$app = JFactory::getApplication();
 		$model =& $this->getModel();
 		$courseid = JRequest::getVar( 'course' );
-		$course = $model->getCourse($courseid);
+		$cinfo = $model->getCourse($courseid);
 		$user =& JFactory::getUser();
 		$username = $user->guest ? 'Guest' : $user->name;
-		$model->trackView($courseid);
+		$qanda=ContinuedHelper::trackViewed("qaa",$courseid,"NoTokenNeeded");
+		$redirurl = $cinfo->course_cataloglink;
+		if (!$redirurl) $redirurl = 'index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$cinfo->course_cat;
 		if ($username != 'Guest') {
 			$qanda=$model->loadQuestions($courseid);
 			$this->assignRef('qanda',$qanda);
-			$this->assignRef('cinfo',$course);
+			$this->assignRef('cinfo',$cinfo);
+			$this->assignRef('redirurl',$redirurl);
 			parent::display($tpl);
-		} else  { $mainframe->redirect($course['cataloglink']); }
+		} else  { 
+			$app->redirect($redirurl); 
+		}
 	}
 }
 ?>

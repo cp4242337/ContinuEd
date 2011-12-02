@@ -6,7 +6,6 @@ class ContinuEdViewCourse extends JView
 {
 	function display($tpl = null)
 	{
-		global $cecfg;
 		$app = JFactory::getApplication();
 		$courseid = JRequest::getVar('course');
 		$model =& $this->getModel();
@@ -18,13 +17,12 @@ class ContinuEdViewCourse extends JView
 
 		$course=$model->getCourse($guest,$courseid);
 		
-
 		if ($course->course_purchase) {
 			if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$course->course_purchasesku);
 			else $paid = ContinuEdHelper::PurchaseCheck($user->id,$course->course_id);
 		}
 		else $paid = true;
-		if ($course->course_catlink) { //Catagory Program
+		if ($course->course_catlink) { //Category Program
 			$url = JURI::current().'?option=com_continued&cat='.$course->course_catmenu.'&Itemid='.JRequest::getVar( 'Itemid' );
 		} else if ($course->course_extlink) { //External Link
 			$url = $course->course_exturl;
@@ -36,7 +34,6 @@ class ContinuEdViewCourse extends JView
 			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && $paid) { //Not Yet Taken, Can TAke, NOt Expired, Paid
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
 			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && !$paid) { //Not Yet Taken, Can TAke, NOt Expired, Not Paid
-				//$url = $course->course_purchaselink;
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
 			} else if ($course->status == 'pass' && !$course->cantake && !$course->expired){ //Passed, Cannot Take, Not Expired
 				$url = JURI::current().'?option=com_continued&cat='.$course->course_cat.'&Itemid='.JRequest::getVar( 'Itemid' );

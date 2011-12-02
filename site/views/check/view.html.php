@@ -1,7 +1,4 @@
 <?php
-/**
- *
- */
 
 jimport( 'joomla.application.component.view');
 
@@ -45,7 +42,7 @@ class ContinuEdViewCheck extends JView
 				parent::display($tpl);
 			}
 			if ($courseid && $compagree) {
-				$qanda=ContinuedHelper::trackViewed("chk",$courseid,$token);
+				$tracked=ContinuedHelper::trackViewed("chk",$courseid,$token);
 				$app->redirect('index.php?option=com_continued&view=assess&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
 			}
 		} else if ($editpart && $should && $username != 'Guest' && !$done) {

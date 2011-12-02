@@ -11,6 +11,7 @@ class ContinuEdViewFrontMatter extends JView
 	var $paid = true;
 	var $eligable = true;
 	var $token = null;
+	var $redirurl = null;
 	
 	function display($tpl = null)
 	{
@@ -20,10 +21,14 @@ class ContinuEdViewFrontMatter extends JView
 		$this->token = JRequest::getVar('token','');
 		$user =& JFactory::getUser();
 		$model =& $this->getModel();
-		
+				
 		//Get Course Info
 		$this->cinfo=$model->getFrontMatter($courseid);
 		
+		//Set redirct URL if needed
+		$this->redirurl = $cinfo->course_cataloglink;
+		if (!$this->redirurl) $this->redirurl = 'index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cinfo->course_cat;
+				
 		//Get Category Info
 		$this->catinfo=$model->getCatInfo($this->cinfo->course_cat);
 		
@@ -31,7 +36,7 @@ class ContinuEdViewFrontMatter extends JView
 		if ($this->catinfo->cat_free == 0) {
 			$bought=ContinuEdHelper::SKUCheck($user->id,$this->catinfo->cat_sku);
 		} else { $bought=true; }
-		if (!$bought) { $app->redirect($this->cinfo->course_cataloglink); }
+		if (!$bought) { $app->redirect($this->redirurl,"Purchase Required"); }
 
 		//Course Purchase Check
 		if ($this->cinfo->course_purchase) {
@@ -60,7 +65,7 @@ class ContinuEdViewFrontMatter extends JView
 		//Check Access
 		$aid = $user->getAuthorisedViewLevels();
 		if (!in_array($this->cinfo->access,$aid) || $this->cinfo->published < 1) { $this->eligable=false; }
-		if (!$this->eligable) $app->redirect($this->cinfo->course_cataloglink);
+		if (!$this->eligable) $app->redirect($this->redirurl,"You are ineligable for this course".$user->getAuthorisedViewLevels());
 		
 		//Check Passed
 		$this->passed = ContinuEdHelper::passedCourse($courseid);
@@ -137,8 +142,7 @@ class ContinuEdViewFrontMatter extends JView
 		if ($this->cinfo->course_haspre && !$this->passed && !$this->expired) {
 			$nextstep='pretest';
 			if (!$user->id) {
-				$url = base64_encode('index.php?option=com_continued&view='.$nextstep.'&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->cinfo->course_id.'&token='.$this->token);
-				$app->redirect('index.php?option=com_user&view=login&return='.$url,'You must login first');
+				$app->redirect($this->redirurl,'You must login first');
 				$proceed=false;
 			}
 		}
@@ -175,8 +179,7 @@ class ContinuEdViewFrontMatter extends JView
 		if ($this->cinfo->course_haspre && !$this->passed && !$this->expired) {
 			$nextstep='pretest';
 			if (!$user->id) {
-				$url = base64_encode('index.php?option=com_continued&view='.$nextstep.'&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->cinfo->course_id.'&token='.$this->token);
-				$app->redirect('index.php?option=com_user&view=login&return='.$url,'You must login first');
+				$app->redirect($this->redirurl,'You must login first');
 				$proceed=false;
 			}
 		}
@@ -191,7 +194,7 @@ class ContinuEdViewFrontMatter extends JView
 	
 	function moveBack() {
 		$app =& JFactory::getApplication();
-		$app->redirect('index.php?option=com_continued&view=continued&cat='.$this->catinfo->cat_id.'&Itemid='.JRequest::getVar( 'Itemid' ),'You are not eligable for this course');
+		$app->redirect($this->redirurl,'You are not eligable for this course');
 		
 	}
 	

@@ -1,25 +1,19 @@
 <?php defined('_JEXEC') or die('Restricted access');
-
 $pf[0]=JHTML::_('select.option','pass','Pass');
 $pf[1]=JHTML::_('select.option','fail','Fail');
-$pf[2]=JHTML::_('select.option','','Both');
+$pf[2]=JHTML::_('select.option','incomplete','Incomplete');
+$pf[3]=JHTML::_('select.option','audit','Audit');
+$pf[4]=JHTML::_('select.option','complete','complete');
+$pf[5]=JHTML::_('select.option','','All');
 
-$monthsl[1] = JHTML::_('select.option',  '','--None--');
-$monthsl[2] = JHTML::_('select.option',  '1','Jan');
-$monthsl[3] = JHTML::_('select.option',  '2','Feb');
-$monthsl[4] = JHTML::_('select.option',  '3','Mar');
-$monthsl[5] = JHTML::_('select.option',  '4','Apr');
-$monthsl[6] = JHTML::_('select.option',  '5','May');
-$monthsl[7] = JHTML::_('select.option',  '6','Jun');
-$monthsl[8] = JHTML::_('select.option',  '7','Jul');
-$monthsl[9] = JHTML::_('select.option',  '8','Aug');
-$monthsl[10] = JHTML::_('select.option',  '9','Sep');
-$monthsl[11] = JHTML::_('select.option',  '10','Oct');
-$monthsl[12] = JHTML::_('select.option',  '11','Nov');
-$monthsl[13] = JHTML::_('select.option',  '12','Dec');
 
-$yearsl[] = JHTML::_('select.option',  '','--None--');
-for ($y=2007; $y <= date("Y"); $y++) {$yearsl[] = JHTML::_('select.option',  $y,$y);}
+$type[0]=JHTML::_('select.option','','All');
+$type[1]=JHTML::_('select.option','','Non CE');
+$type[2]=JHTML::_('select.option','','CE');
+$type[3]=JHTML::_('select.option','','Review');
+$type[4]=JHTML::_('select.option','','Expired');
+$type[5]=JHTML::_('select.option','','Viewed');
+
 ?>
 <form action="" method="post" name="adminForm">
 <table>
@@ -29,6 +23,7 @@ for ($y=2007; $y <= date("Y"); $y++) {$yearsl[] = JHTML::_('select.option',  $y,
 		echo 'Start: '.JHTML::_('calendar',$this->startdate,'startdate','startdate','%Y-%m-%d','onchange="submitform();"');
 		echo ' End: '.JHTML::_('calendar',$this->enddate,'enddate','enddate','%Y-%m-%d','onchange="submitform();"');
 		echo JText::_(' Pass/Fail:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
+		echo JText::_(' Type:').JHTML::_('select.genericlist',$type,'type','onchange="submitform();"','value','text',$this->type,'type');
 		?></td>
 	</tr>
 </table>
@@ -38,12 +33,26 @@ for ($y=2007; $y <= date("Y"); $y++) {$yearsl[] = JHTML::_('select.option',  $y,
 	<thead>
 		<tr>
 			<th><?php echo JText::_( 'Name' ); ?></th>
+			<th><?php echo JText::_( 'Group' ); ?></th>
 			<th><?php echo JText::_( 'Course' ); ?></th>
-			<th><?php echo JText::_( 'Completed On' ); ?></th>
-			<th><?php echo JText::_( 'Score' ); ?></th>
+			<th><?php echo JText::_( 'Type' ); ?></th>
+			<th><?php echo JText::_( 'Status' ); ?></th>
+			<th><?php echo JText::_( 'Start' ); ?></th>
+			<th><?php echo JText::_( 'End' ); ?></th>
+			<th><?php echo JText::_( 'Pre Score' ); ?></th>
+			<th><?php echo JText::_( 'Post Score' ); ?></th>
 			<?php
-			foreach ($this->questions as $qu) {
-				echo '<th>#'.$qu->ordering.' '.$qu->qtext.'</th>';
+			//pretest
+			foreach ($this->qpre as $qu) {
+				echo '<th>#'.$qu->ordering.' '.$qu->q_text.'</th>';
+			}
+			//inter
+			foreach ($this->qinter as $qu) {
+				echo '<th>#'.$qu->ordering.' '.$qu->q_text.'</th>';
+			}
+			//posttest
+			foreach ($this->qpost as $qu) {
+				echo '<th>#'.$qu->ordering.' '.$qu->q_text.'</th>';
 			}
 			?>
 		</tr>
@@ -58,29 +67,85 @@ for ($y=2007; $y <= date("Y"); $y++) {$yearsl[] = JHTML::_('select.option',  $y,
 		?>
 	<tr class="<?php echo "row$k"; ?>">
 		<td><?php echo $row->fullname; ?></td>
-		<td><?php echo $row->cname; ?></td>
-		<td><?php echo $row->ctime; ?></td>
-		<td><?php 
-			if ($this->area == 'post') echo $row->cpercent;
-			if ($this->area == 'pre') echo $row->cmpl_prescore;
-			if ($this->area == 'inter') echo 'n/a';
-			 ?>
-		</td>
+		<td><?php echo $row->ug_name; ?></td>
+		<td><?php echo $row->course_name; ?></td>
+		<td><?php echo $row->rec_type; ?></td>
+		<td><?php echo $row->rec_pass; ?></td>
+		<td><?php echo $row->rec_start; ?></td>
+		<td><?php echo $row->rec_end; ?></td>
+		<td><?php echo $row->rec_prescore; ?> </td>
+		<td><?php echo $row->rec_postscore; ?> </td>
 		<?php
-		foreach ($this->questions as $qu) {
+		//pretest
+		foreach ($this->qpre as $qu) {
 			echo '<td>';
-			$qnum = 'q'.$qu->id.'ans';
-			if ($qu->qtype == 'multi' || $qu->qtype == 'dropdown') { echo $this->opts[$row->$qnum]; }
-			if ($qu->qtype == 'textbox') { echo $row->$qnum; }
-			if ($qu->qtype == 'textar') { echo $row->$qnum; }
-			if ($qu->qtype == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
-			if ($qu->qtype == 'mcbox') {
+			$qnum = 'q'.$qu->q_id.'ans';
+			if ($qu->q_type == 'multi' || $qu->q_type == 'dropdown') { 
+				if ($qu->q_cat == 'assess') {
+					if ($this->opts[$row->$qnum]->correct) echo '<span style="color:#008000">';
+					else echo '<span style="color:#800000">';
+				}
+				echo $this->opts[$row->$qnum]->text; 
+				if ($qu->q_cat == 'assess') echo '</span>';
+			}
+			if ($qu->q_type == 'textbox') { echo $row->$qnum; }
+			if ($qu->q_type == 'textar') { echo $row->$qnum; }
+			if ($qu->q_type == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
+			if ($qu->q_type == 'mcbox') {
 				$answers = explode(' ',$row->$qnum);
 				foreach ($answers as $ans) {
-					echo $this->opts[$ans].'<br />';
+					echo $this->opts[$ans]->text.'<br />';
 				}
 			}
-			if ($qu->qtype == 'yesno') { echo $row->$qnum; }
+			if ($qu->q_type == 'yesno') { echo $row->$qnum; }
+			echo '</td>';
+		}
+		//inter
+		foreach ($this->qinter as $qu) {
+			echo '<td>';
+			$qnum = 'q'.$qu->q_id.'ans';
+			if ($qu->q_type == 'multi' || $qu->q_type == 'dropdown') { 
+				if ($qu->q_cat == 'assess') {
+					if ($this->opts[$row->$qnum]->correct) echo '<span style="color:#008000">';
+					else echo '<span style="color:#800000">';
+				}
+				echo $this->opts[$row->$qnum]->text; 
+				if ($qu->q_cat == 'assess') echo '</span>';
+			}
+			if ($qu->q_type == 'textbox') { echo $row->$qnum; }
+			if ($qu->q_type == 'textar') { echo $row->$qnum; }
+			if ($qu->q_type == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
+			if ($qu->q_type == 'mcbox') {
+				$answers = explode(' ',$row->$qnum);
+				foreach ($answers as $ans) {
+					echo $this->opts[$ans]->text.'<br />';
+				}
+			}
+			if ($qu->q_type == 'yesno') { echo $row->$qnum; }
+			echo '</td>';
+		}
+		//posttest
+		foreach ($this->qpost as $qu) {
+			echo '<td>';
+			$qnum = 'q'.$qu->q_id.'ans';
+			if ($qu->q_type == 'multi' || $qu->q_type == 'dropdown') { 
+				if ($qu->q_cat == 'assess') {
+					if ($this->opts[$row->$qnum]->correct) echo '<span style="color:#008000">';
+					else echo '<span style="color:#800000">';
+				}
+				echo $this->opts[$row->$qnum]->text; 
+				if ($qu->q_cat == 'assess') echo '</span>';
+			}
+			if ($qu->q_type == 'textbox') { echo $row->$qnum; }
+			if ($qu->q_type == 'textar') { echo $row->$qnum; }
+			if ($qu->q_type == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
+			if ($qu->q_type == 'mcbox') {
+				$answers = explode(' ',$row->$qnum);
+				foreach ($answers as $ans) {
+					echo $this->opts[$ans]->text.'<br />';
+				}
+			}
+			if ($qu->q_type == 'yesno') { echo $row->$qnum; }
 			echo '</td>';
 		}
 		?>

@@ -1,7 +1,7 @@
 <div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
-global $cecfg;
+$cecfg = ContinuEdHelper::getConfig();
 $db =& JFactory::getDBO();
 echo '<div class="componentheading">'.$this->cinfo->course_name.'</div>';
 $cpart = 0;

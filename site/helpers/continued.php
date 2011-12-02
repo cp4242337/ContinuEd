@@ -67,7 +67,7 @@ class ContinuEdHelper {
 	}
 	
 	/**
-	* Check if step completed in current CE Session.
+	* Get configuration for component.
 	*
 	* @return object The current config parameters
 	*
