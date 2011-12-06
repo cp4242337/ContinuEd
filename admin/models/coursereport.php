@@ -28,7 +28,9 @@ class ContinuEdModelCourseReport extends JModel
 		$type			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.type','type','' );
 		$startdate		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.startdate','startdate',date("Y-m-d",strtotime("-1 months") ));
 		$enddate		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.enddate','enddate',date("Y-m-d") );
-		
+		$course			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.course','course','' );
+		$cat			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.cat','cat','' );
+		$usergroup		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.usergroup','usergroup','' );
 		
 		$this->setState('startdate', $startdate);
 		$this->setState('enddate', $enddate);
@@ -36,6 +38,9 @@ class ContinuEdModelCourseReport extends JModel
 		$this->setState('type', $type);
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
+		$this->setState('course', $course);
+		$this->setState('cat', $cat);
+		$this->setState('usergroup', $usergroup);
 		$this->area = JRequest::getVar('area');
 
 	}
@@ -47,18 +52,26 @@ class ContinuEdModelCourseReport extends JModel
 		$enddate = $this->getState('enddate');
 		$pf = $this->getState('pf');
 		$type = $this->getState('type');
-		$cid = JRequest::getVar('course');
+		$cid = $this->getState('course');
+		$cat = $this->getState('cat');
+		$usergroup = $this->getState('usergroup');
 		$stnum = JRequest::getVar('stnum');
-		$questions = $this->getQuestions($cid,$this->area);
-		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,u.email,u.name as fullname';
-		$q .= ',ug.ug_name';
+		if ($cid) $questions = $this->getQuestions($cid,$this->area);
+		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,cat.cat_name';
+		//$q .= ,u.email,u.name as fullname';
+		//$q .= ',ug.ug_name';
 		$q .= ' FROM #__ce_records as r';
 		$q .= ' STRAIGHT_JOIN #__ce_courses as c ON r.rec_course = c.course_id';
-		$q .= ' LEFT JOIN #__ce_usergroup as g ON r.rec_user = g.userg_user';
-		$q .= ' LEFT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
-		$q .= ' RIGHT JOIN #__users as u ON r.rec_user = u.id';
-		$q .= ' WHERE r.rec_course = '.$cid.' ';
-		$q .= ' && date(r.rec_start) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
+		$q .= ' RIGHT JOIN #__ce_cats as cat ON c.course_cat = cat.cat_id';
+		if ($usergroup) {
+			$q .= ' LEFT JOIN #__ce_usergroup as g ON r.rec_user = g.userg_user';
+			$q .= ' LEFT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
+		}
+		//$q .= ' LEFT JOIN #__users as u ON r.rec_user = u.id';
+		$q .= ' WHERE date(r.rec_start) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
+		if ($cid) $q .= ' && r.rec_course = '.$cid.' ';
+		else if ($cat) $q .= ' && c.course_cat = '.$cat.' '; 
+		if ($usergroup) $q .= ' && ug.ug_id = '.$usergroup.' '; 
 		if ($pf) $q .= ' && r.rec_pass = "'.$pf.'" ';
 		if ($type) $q .= ' && r.rec_type = "'.$type.'" ';
 		$q .= ' ORDER BY r.rec_start DESC';
@@ -74,7 +87,7 @@ class ContinuEdModelCourseReport extends JModel
 			if (!$csv) $this->_data = $this->_getList($query, $this->getState('limitstart'), $this->getState('limit'));
 			else $this->_data = $this->_getList($query);
 		}
-		$this->_data = $this->applyAns($this->_data);
+		if ($this->getState('course')) $this->_data = $this->applyAns($this->_data);
 		return $this->_data;
 	}
 
@@ -152,6 +165,50 @@ class ContinuEdModelCourseReport extends JModel
 		return $records;
 			
 			
+	}
+
+	public function getCats() {
+		$query = 'SELECT cat_id AS value, cat_name AS text' .
+				' FROM #__ce_cats' .
+				' ORDER BY cat_name';
+		$this->_db->setQuery($query);
+		$clist = $this->_db->loadObjectList();
+		$clist[]->text='-- All --';
+		return $clist;
+	}
+	
+	public function getUsers() {
+		$q  = 'SELECT u.*,ug.ug_name as usergroup FROM #__users as u';
+		$q .= ' LEFT JOIN #__ce_usergroup as g ON u.id = g.userg_user';
+		$q .= ' RIGHT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
+		$this->_db->setQuery($q);
+		$ulist = $this->_db->loadObjectList();
+		foreach ($ulist as $u) {
+			$uarray[$u->id]=$u;
+		}
+		$uarray[0]->name="Guest User";
+		$uarray[0]->usergroup="Guests";
+		return $uarray;
+	}
+	
+	public function getUserGroups() {
+		$q  = 'SELECT ug.ug_name as text,ug.ug_id as value FROM #__ce_ugroups as ug';
+		$q .= ' ORDER BY ug.ug_name';
+		$this->_db->setQuery($q);
+		$glist = $this->_db->loadObjectList();
+		$glist[]->text='-- All --';
+		return $glist;
+	}
+	
+	public function getCourses() {
+		$query = 'SELECT course_id AS value, course_name AS text' .
+				' FROM #__ce_courses' ;
+		if ($this->getState('cat')) $query .= ' WHERE course_cat = '.$this->getState('cat');
+		$query .= ' ORDER BY course_name';
+		$this->_db->setQuery($query);
+		$clist = $this->_db->loadObjectList();
+		$clist[]->text='-- All --';
+		return $clist;
 	}
 
 }

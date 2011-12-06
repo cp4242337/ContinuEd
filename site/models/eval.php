@@ -65,7 +65,7 @@ class ContinuEdModelEval extends JModel
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		
-		$queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "post" && part="'.$part.'" && userid="'.$userid.'" && tokenid="'.$sessionid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
+		$queryd = 'DELETE FROM #__ce_evalans WHERE ans_area = "post" && part="'.$part.'" && userid="'.$userid.'" && tokenid="'.$tokenid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
 		$db->setQuery($queryd);
 		$db->query();
 		

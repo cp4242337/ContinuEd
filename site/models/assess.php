@@ -39,7 +39,7 @@ class ContinuEdModelAssess extends JModel
 			$query .= 'FROM #__ce_questions as q ';
 			$query .= 'LEFT JOIN #__ce_evalans as a ON q.q_id = a.question ';
 			$query .= 'LEFT JOIN #__ce_questions_opts AS o ON a.answer = o.opt_id ';
-			$query .= 'WHERE q.q_type != "message" && q.q_area = "post" && q.q_cat = "assess" && q.q_course = '.$courseid.' && a.userid="'.$userid.'" && a.sessionid = "'.$sessionid.'" ';
+			$query .= 'WHERE q.q_type != "message" && q.q_area = "post" && q.q_cat = "assess" && q.q_course = '.$courseid.' && a.userid="'.$userid.'" && a.tokenid = "'.$token.'" ';
 			$query .= 'GROUP BY q.q_id ';
 			$query .= 'ORDER BY q.q_part ASC , q.ordering ASC ';
 			$db->setQuery( $query );
@@ -63,7 +63,7 @@ class ContinuEdModelAssess extends JModel
 			$query .= 'FROM #__ce_questions as q ';
 			$query .= 'LEFT JOIN #__ce_evalans as a ON q.q_id = a.question ';
 			$query .= 'LEFT JOIN #__ce_questions_opts AS o ON a.answer = o.opt_id ';
-			$query .= 'WHERE q.q_type != "message" && q.q_area = "pre" && q.q_cat = "assess" && q.q_course = '.$courseid.' && a.userid="'.$userid.'" && a.sessionid = "'.$sessionid.'" ';
+			$query .= 'WHERE q.q_type != "message" && q.q_area = "pre" && q.q_cat = "assess" && q.q_course = '.$courseid.' && a.userid="'.$userid.'" && a.tokenid = "'.$token.'" ';
 			$query .= 'GROUP BY q.q_id ';
 			$query .= 'ORDER BY q.q_part ASC , q.ordering ASC ';
 			$db->setQuery( $query );

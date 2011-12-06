@@ -8,36 +8,48 @@ class ContinuEdViewCourseReport extends JView
 {
 	function display($tpl = null)
 	{
-		$cid = JRequest::getVar('course');
-		$area = JRequest::getVar('area');
 		JToolBarHelper::title(   JText::_( 'ContinuEd Course Report' ), 'generic.png' );
-		$tbar =& JToolBar::getInstance('toolbar');
-		$tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&controller=coursereport&task=csvme&course='.$cid.'&area='.$area.'&format=raw');
-		JToolBarHelper::back('Courses','index.php?option=com_continued&view=courses');
-		// Get data from the model
 		$model = $this->getModel('coursereport');
-		//$questions = $model->getQuestions($cid,$area);
-		$qpre = $model->getQuestions($cid,'pre');
-		$qpost = $model->getQuestions($cid,'post');
-		$qinter = $model->getQuestions($cid,'inter');
+		$cid = $model->getState('course');
+		$cat = $model->getState('cat');
+		$usergroup = $model->getState('usergroup');
+		$tbar =& JToolBar::getInstance('toolbar');
+		$tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&controller=coursereport&task=csvme&course='.$cid.'&cat='.$cat.'&format=raw');
+		if ($cid) JToolBarHelper::back('Courses','index.php?option=com_continued&view=courses');
+		if ($cid) {
+			$qpre = $model->getQuestions($cid,'pre');
+			$qpost = $model->getQuestions($cid,'post');
+			$qinter = $model->getQuestions($cid,'inter');
+			if ($qpre || $qinter || $qpost) $options = $model->getOptions();
+			$this->assignRef('opts',$options);
+			$this->assignRef('qpre',$qpre);
+			$this->assignRef('qinter',$qinter);
+			$this->assignRef('qpost',$qpost);
+		}
+		
 		$items		= & $this->get( 'Data');
 		$pagination = & $this->get( 'Pagination' );
+		$courselist = & $this->get( 'Courses' );
+		$catlist = & $this->get( 'Cats' );
+		$userlist = & $this->get( 'Users' );
+		$grouplist = & $this->get( 'UserGroups' );
 		$startdate = $model->getState('startdate');
 		$enddate = $model->getState('enddate');
 		$pf=$model->getState('pf');
 		$type=$model->getState('type');
 
-		$options = $model->getOptions();
 		$this->assignRef('startdate',$startdate);
 		$this->assignRef('enddate',$enddate);
 		$this->assignRef('area',$area);
 		$this->assignRef('pf',$pf);
 		$this->assignRef('type',$type);
-		$this->assignRef('opts',		$options);
-		//$this->assignRef('questions',		$questions);
-		$this->assignRef('qpre',$qpre);
-		$this->assignRef('qinter',$qinter);
-		$this->assignRef('qpost',$qpost);
+		$this->assignRef('cat',$cat);
+		$this->assignRef('course',$cid);
+		$this->assignRef('grouplist',$grouplist);
+		$this->assignRef('courselist',$courselist);
+		$this->assignRef('catlist',$catlist);
+		$this->assignRef('userlist',$userlist);
+		$this->assignRef('usergroup',$usergroup);
 		$this->assignRef('items',		$items);
 		$this->assignRef('pagination',	$pagination);
 		parent::display($tpl);

@@ -102,7 +102,7 @@ defined('_JEXEC') or die('Restricted Access');
 		?></td>
 		<td><?php 
 		if ($item->course_haseval || $item->course_haspre || $item->course_hasinter) {
-			echo '<a href="index.php?option=com_continued&view=coursereport&course='.$item->course_id.'">Full</a><br />';
+			echo '<a href="index.php?option=com_continued&view=coursereport&cat='.$item->course_cat.'&course='.$item->course_id.'">Full</a><br />';
 			echo '<a href="index.php?option=com_continued&view=tally&course='.$item->course_id.'">Tally</a>';
 		}
 		?></td>

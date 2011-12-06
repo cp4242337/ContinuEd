@@ -1,22 +1,8 @@
 <?php
-/**
- * Hello Controller for Hello World Component
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- * @link http://dev.joomla.org/component/option,com_jd-wiki/Itemid,31/id,tutorials:components/
- * @license		GNU/GPL
- */
-
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
 
-/**
- * Hello Hello Controller
- *
- * @package    Joomla.Tutorials
- * @subpackage Components
- */
+
 class ContinuEdControllerCourseReport extends ContinuEdController
 {
 	/**
@@ -29,67 +15,126 @@ class ContinuEdControllerCourseReport extends ContinuEdController
 	}
 
 	function csvme() {
-		$filename       = 'ContinuEd_Course_Report' . '-' . date("Y-m-d");
-		$cid = JRequest::getVar('course');
-		$area = JRequest::getVar('area');
 		$model = $this->getModel('coursereport');
-		$questions = $model->getQuestions($cid,$area);
-		$qopts = $model->getOptions();
+		$cid = $model->getState('course');
+		if ($cid) {
+			$qpre = $model->getQuestions($cid,'pre');
+			$qpost = $model->getQuestions($cid,'post');
+			$qinter = $model->getQuestions($cid,'inter');
+			$qopts = $model->getOptions();
+		}
+		$userlist = & $this->get( 'Users' );
 		$items = $model->getData(true);
 		$db =& JFactory::getDBO();
+		if ($cid) $filename = 'ContinuEd_Course_Report' . '-' . date("Y-m-d");
+		else $filename = 'ContinuEd_Report' . '-' . date("Y-m-d");
 		JResponse::setHeader('Content-Type', 'application/octet-stream');
 		JResponse::setHeader('Content-Disposition', 'attachment; filename="'. $filename . '.csv"');
 		//echo 'Course: '.$data->qtext."\n";
-		echo "Name,EMail,Degree,Course,Timestamp,Score";
-		foreach ($questions as $qu) {
-			echo ',#'.$qu->ordering;
+		echo "Name,EMail,Group,SessionID,IP Address,Course,Cat,Status,Type,Start,End,Pre Score,Post Score";
+		if ($cid) {
+			//Pretest
+			foreach ($qpre as $qu) {
+				echo ',PRE#'.$qu->ordering;
+			}
+			//Inter
+			foreach ($qinter as $qu) {
+				echo ',INTER#'.$qu->ordering;
+			}
+			//Posttest
+			foreach ($qpost as $qu) {
+				echo ',POST#'.$qu->ordering;
+			}
 		}
 		echo "\n";
 		for ($i=0, $n=count( $items ); $i < $n; $i++)
 		{
 			$row = &$items[$i];
-			echo $row->fullname.',';
-			echo $row->email.',';
-			echo $row->cb_degree.',';
-			echo str_replace(',','',$row->cname).',';
-			echo $row->ctime.',';
-			if ($area == 'post') echo $row->cpercent.',';
-			else echo $row->cmpl_prescore.',';
-			foreach ($questions as $qu) {
-				$qnum = 'q'.$qu->id.'ans';
-				if ($qu->qtype == 'multi' || $qu->qtype == 'dropdown') {
+			echo $this->userlist[$row->rec_user]->name.',';
+			echo $this->userlist[$row->rec_user]->email.',';
+			echo $this->userlist[$row->rec_user]->usergroup.',';
+			echo $row->rec_session.',';
+			echo $row->rec_ipaddr.',';
+			echo str_replace(',','',$row->course_name).',';
+			echo str_replace(',','',$row->cat_name).',';
+			switch ($row->rec_pass) {
+				case 'pass': echo 'Pass'; break;
+				case 'fail': echo 'Fail'; break;
+				case 'incomplete': echo 'Incomplete'; break;
+				case 'audit': echo 'Audit'; break;
+				case 'complete': echo 'Completed'; break;
+			}
+			echo ',';
+		 	switch ($row->rec_type) {
+				case 'nonce': echo 'Non-CE'; break;
+				case 'ce': echo 'CE'; break;
+				case 'review': echo 'Review'; break;
+				case 'expired': echo 'Expired'; break;
+				case 'viewed'	: echo 'Viewed'; break;
+				
+			}
+			echo ",";
+			echo $row->rec_start.',';
+			echo $row->rec_end.',';
+			if ($row->rec_prescore == -1 || !$row->rec_user || $row->rec_type != 'ce') echo 'N/A'.','; else echo $row->rec_prescore.',';
+			if ($row->rec_postscore == -1 || !$row->rec_user || $row->rec_type != 'ce') echo 'N/A'.','; else echo $row->rec_postscore.',';
+			//Pre
+			foreach ($qpre as $qu) {
+				$qnum = 'q'.$qu->q_id.'ans';
+				if ($qu->q_type == 'multi' || $qu->q_type == 'dropdown') {
 					echo str_replace(',','',$qopts[$row->$qnum]);
 				}
-				if ($qu->qtype == 'textbox') { echo str_replace(',','',$row->$qnum); }
-				if ($qu->qtype == 'textar') { echo str_replace(',','',$row->$qnum); }
-				if ($qu->qtype == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
-				if ($qu->qtype == 'mcbox') {
+				if ($qu->q_type == 'textbox') { echo str_replace(',','',$row->$qnum); }
+				if ($qu->q_type == 'textar') { echo str_replace(',','',$row->$qnum); }
+				if ($qu->q_type == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
+				if ($qu->q_type == 'mcbox') {
 					$answers = explode(' ',$row->$qnum);
 					foreach ($answers as $ans) {
 						echo str_replace(',','',$qopts[$ans]).' ';
 					}
 				}
 
-				if ($qu->qtype == 'yesno') { echo str_replace(',','',$row->$qnum); }
+				if ($qu->q_type == 'yesno') { echo str_replace(',','',$row->$qnum); }
 				echo ',';
 			}
-
-
-			/*if (qtype == 'multi') {
-				if ($this->data->qcat=='assess') {
-				if ($row->correct) echo $row->opttxt;
-				else echo $row->opttxt;
+			//Inter
+			foreach ($qinter as $qu) {
+				$qnum = 'q'.$qu->q_id.'ans';
+				if ($qu->q_type == 'multi' || $qu->q_type == 'dropdown') {
+					echo str_replace(',','',$qopts[$row->$qnum]);
 				}
-				else echo $row->opttxt;
-				} else if ($qtype == 'mcbox') {
-				$query = 'SELECT * FROM #__ce_questions_opts WHERE question = '.$row->question.' ORDER BY disporder ASC';
-				$db->setQuery( $query );
-				$qopts = $db->loadAssocList();
-				$answers = explode(' ',$row->answer);
-				foreach ($qopts as $opts) {
-				if (in_array($opts['id'],$answers)) { echo $opts['opttxt'].'  '; }
+				if ($qu->q_type == 'textbox') { echo str_replace(',','',$row->$qnum); }
+				if ($qu->q_type == 'textar') { echo str_replace(',','',$row->$qnum); }
+				if ($qu->q_type == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
+				if ($qu->q_type == 'mcbox') {
+					$answers = explode(' ',$row->$qnum);
+					foreach ($answers as $ans) {
+						echo str_replace(',','',$qopts[$ans]).' ';
+					}
 				}
-				} else { echo $row->answer; }*/
+
+				if ($qu->q_type == 'yesno') { echo str_replace(',','',$row->$qnum); }
+				echo ',';
+			}
+			//post
+			foreach ($qpost as $qu) {
+				$qnum = 'q'.$qu->q_id.'ans';
+				if ($qu->q_type == 'multi' || $qu->q_type == 'dropdown') {
+					echo str_replace(',','',$qopts[$row->$qnum]);
+				}
+				if ($qu->q_type == 'textbox') { echo str_replace(',','',$row->$qnum); }
+				if ($qu->q_type == 'textar') { echo str_replace(',','',$row->$qnum); }
+				if ($qu->q_type == 'cbox') { if ($row->$qnum == 'on') echo 'Checked'; else echo 'Unchecked'; }
+				if ($qu->q_type == 'mcbox') {
+					$answers = explode(' ',$row->$qnum);
+					foreach ($answers as $ans) {
+						echo str_replace(',','',$qopts[$ans]).' ';
+					}
+				}
+
+				if ($qu->q_type == 'yesno') { echo str_replace(',','',$row->$qnum); }
+				echo ',';
+			}
 			echo "\n";
 		}
 

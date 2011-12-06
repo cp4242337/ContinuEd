@@ -46,7 +46,7 @@
 		<submenu>
 			<menu view="config">COM_CONTINUED_SUBMENU_CONFIG</menu>
 			<menu view="courses">COM_CONTINUED_SUBMENU_COURSES</menu>
-			<menu view="reports">COM_CONTINUED_SUBMENU_REPORTS</menu>
+			<menu view="coursereport">COM_CONTINUED_SUBMENU_REPORTS</menu>
 			<menu view="cats">COM_CONTINUED_SUBMENU_CATEGORIES</menu>
 			<menu view="provs">COM_CONTINUED_SUBMENU_PROVIDERS</menu>
 			<menu view="certifs">COM_CONTINUED_SUBMENU_CERTIFICATES</menu>

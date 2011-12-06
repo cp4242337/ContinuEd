@@ -39,7 +39,6 @@
 			rows="4"
 			cols="70"
 			class="inputbox"
-			required="true"
 			filter="safehtml"
 			buttons="false"
 		/>
@@ -50,7 +49,6 @@
 			description="COM_CONTINUED_CAT_FIELD_PREV_DESC"
 			size="1"
 			class="inputbox"
-			required="true"
 			default="0">
 			<option	value="1">Yes</option>
 			<option	value="0">No</option>
@@ -113,7 +111,6 @@
 			label="COM_CONTINUED_CAT_FIELD_FM_LABEL"
 			description="COM_CONTINUED_CAT_FIELD_FM_DESC"
 			class="inputbox"
-			required="true"
 			filter="safehtml"
 			buttons="false"
 		/>
@@ -138,7 +135,6 @@
 			description="COM_CONTINUED_CAT_FIELD_SKU_DESC"
 			size="40"
 			class="inputbox"
-			required="true"
 			default=""
 		/>
 		<field
@@ -148,7 +144,6 @@
 			description="COM_CONTINUED_CAT_FIELD_SKULINK_DESC"
 			size="60"
 			class="inputbox"
-			required="true"
 			default=""
 		/>
 	

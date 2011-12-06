@@ -139,12 +139,14 @@ class ContinuEdModelUser extends JModelAdmin
 			
 			//Update Joomla User Info
 			$user=JFactory::getUser($userId);
-			$user->name=$item->fname." ".$item->lname;
-			$user->email=$item->email;
-			$user->username=$item->username;
-			$user->password_clear=$item->password;
-			$user->block=$item->block;
-			$user->save();
+			$udata['name']=$item->fname." ".$item->lname;
+			$udata['email']=$item->email;
+			$udata['username']=$item->username;
+			$udata['password']=$item->password;
+			$udata['password2']=$item->cpassword;
+			$udata['block']=$item->block;
+			$user->bind($udata);
+			$user->save(true);
 			
 			//remove joomla user info from item
 			unset($item->email);

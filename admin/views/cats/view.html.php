@@ -40,17 +40,17 @@ class ContinuedViewCats extends JView
 	{
 		$state	= $this->get('State');
 		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_CATS'), 'continued');
-		JToolBarHelper::addNew('prov.add', 'JTOOLBAR_NEW');
-		JToolBarHelper::editList('prov.edit', 'JTOOLBAR_EDIT');
+		JToolBarHelper::addNew('cat.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::editList('cat.edit', 'JTOOLBAR_EDIT');
 		JToolBarHelper::divider();
-		JToolBarHelper::custom('provs.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
-		JToolBarHelper::custom('provs.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);
+		JToolBarHelper::custom('cats.publish', 'publish.png', 'publish_f2.png','JTOOLBAR_PUBLISH', true);
+		JToolBarHelper::custom('cats.unpublish', 'unpublish.png', 'unpublish_f2.png','JTOOLBAR_UNPUBLISH', true);
 		JToolBarHelper::divider();
 		if ($state->get('filter.published') == -2) {
-			JToolBarHelper::deleteList('', 'provs.delete', 'JTOOLBAR_EMPTY_TRASH');
+			JToolBarHelper::deleteList('', 'cats.delete', 'JTOOLBAR_EMPTY_TRASH');
 			JToolBarHelper::divider();
 		} else  {
-			JToolBarHelper::trash('provs.trash');
+			JToolBarHelper::trash('cats.trash');
 		}
 	}
 	/**

@@ -25,9 +25,9 @@ class ContinuEdViewCheck extends JView
 				$haspre = $cinfo->course_haspre;
 				$hasinter = $cinfo->course_hasinter;
 				$haseval = $cinfo->course_haseval;
-				if ($haseval) $qanda=$model->loadAnswers($courseid,'post');
-				if ($haspre) $preqa=$model->loadAnswers($courseid,'pre');
-				if ($hasinter) $intera=$model->loadAnswers($courseid,'inter');
+				if ($haseval) $qanda=$model->loadAnswers($courseid,'post',$token);
+				if ($haspre) $preqa=$model->loadAnswers($courseid,'pre',$token);
+				if ($hasinter) $intera=$model->loadAnswers($courseid,'inter',$token);
 				if ($numreq > (count($qanda)+count($preqa)+count($intera))) $hasallreq = false;
 				else $hasallreq = true;
 				$this->assignRef('qanda',$qanda);
