@@ -157,7 +157,8 @@ class ContinuEdViewFrontMatter extends JView
 	//No FM
 	function noFM() {
 		if ($this->cinfo->course_haspre || $this->cinfo->course_haseval) { $type = 'ce'; }
-		else { $type = 'viewed'; }
+		else if (!$this->passed) { $type = 'viewed'; }
+		else { $type="review"; }
 		
 		//Start Session
 		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,$type);

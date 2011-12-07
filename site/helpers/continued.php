@@ -26,7 +26,7 @@ class ContinuEdHelper {
 	*
 	* @return boolean true if purchased, false if not.
 	*
-	* @since 1.20
+	* @since 1.00Nad
 	*/
 	function SKUCheck($userid,$skunum) {
 		//for naadac
@@ -58,7 +58,7 @@ class ContinuEdHelper {
 	*
 	* @return boolean true if purchased, false if not.
 	*
-	* @since 1.20
+	* @since 1.00JB
 	*/
 	function PurchaseCheck($userid,$courseid) {
 		if (method_exists('AmbraSubsHelperCourse', 'hasPurchased')) {
@@ -83,7 +83,7 @@ class ContinuEdHelper {
 	}
 	
 	/**
-	* Mark step completed in current CE Session.
+	* Mark step completed in current CE Session, set laststep in record.
 	*
 	* @param string $what Step
 	* @param int $course Course id number
@@ -101,7 +101,10 @@ class ContinuEdHelper {
 		$userid = $user->id;
 		$q = 'INSERT INTO #__ce_track (user,course,step,sessionid,token,track_ipaddr) VALUES ("'.$userid.'","'.$course.'","'.$what.'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'")';
 		$db->setQuery( $q );
-		if ($db->query()) return 1;
+		$tracked = $db->query();
+		$q2 = 'UPDATE #__ce_records SET rec_laststep = "'.$what.'" WHERE rec_token = "'.$token.'" && rec_user = "'.$userid.'"';
+		$db->setQuery( $q2 );
+		if ($db->query() && $tracked) return 1;
 		else return 0;
 	}
 	
@@ -195,7 +198,7 @@ class ContinuEdHelper {
 	function passedCourse($course) {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass = "pass" && rec_course = '.$course;
+		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass IN ("pass","complete") && rec_course = '.$course;
 		$db =& JFactory::getDBO();
 		$db->setQuery( $query );
 		$fmtext = $db->loadAssoc();

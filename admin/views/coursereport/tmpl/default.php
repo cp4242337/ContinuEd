@@ -44,6 +44,7 @@ $type[5]=JHTML::_('select.option','viewed','Viewed');
 			} ?>
 			<th><?php echo JText::_( 'Status' ); ?></th>
 			<th><?php echo JText::_( 'View Type' ); ?></th>
+			<th><?php echo JText::_( 'Last Step' ); ?></th>
 			<th><?php echo JText::_( 'Start' ); ?></th>
 			<th><?php echo JText::_( 'End' ); ?></th>
 			<th><?php echo JText::_( 'Pre Score' ); ?></th>
@@ -91,7 +92,8 @@ $type[5]=JHTML::_('select.option','viewed','Viewed');
 				case 'incomplete': echo 'Incomplete'; break;
 				case 'audit': echo 'Audit'; break;
 				case 'complete': echo 'Completed'; break;
-			} ?></td>
+			} ?>
+		</td>
 		<td><?php 
 			switch ($row->rec_type) {
 				case 'nonce': echo 'Non-CE'; break;
@@ -100,7 +102,26 @@ $type[5]=JHTML::_('select.option','viewed','Viewed');
 				case 'expired': echo 'Expired'; break;
 				case 'viewed'	: echo 'Viewed'; break;
 				
-			} ?></td>
+			} ?>
+		</td>
+		<td><?php 
+			switch ($row->rec_laststep) {
+				case 'fm': echo 'Front Matter'; break;
+				case 'mt': echo 'Material'; break;
+				case 'qz': echo 'Evaluation'; break;
+				case 'chk': echo 'Check'; break;
+				case 'asm': echo 'Assess (Grading)'; break;
+				case 'crt': echo 'Certificate'; break;
+				case 'vo': echo 'Material - Expired'; break;
+				case 'fmp': echo 'FM - Passed'; break;
+				case 'mtp': echo 'Material - Passed'; break;
+				case 'ans': echo 'View Answers'; break;
+				case 'pre': echo 'PreTest'; break;
+				case 'lnk': echo 'Entry Link'; break;
+				case 'fme': echo 'Front Matter - Exp'; break;
+			}
+			?>
+		</td>
 		<td><?php echo $row->rec_start; ?></td>
 		<td><?php echo $row->rec_end; ?></td>
 		<td><?php if ($row->rec_prescore == -1 || !$row->rec_user || $row->rec_type != 'ce') echo 'N/A'; else echo $row->rec_prescore; ?> </td>

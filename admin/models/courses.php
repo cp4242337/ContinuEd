@@ -27,9 +27,9 @@ class ContinuEdModelCourses extends JModelList
 		$app = JFactory::getApplication('administrator');
 
 		// Load the filter state.
-		$courseId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_cat',"");
-		$this->setState('filter.cat', $courseId);
-
+		$catId = $this->getUserStateFromRequest($this->context.'.filter.cat', 'filter_cat',"");
+		$this->setState('filter.cat', $catId);
+		
 		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '', 'string');
 		$this->setState('filter.published', $published);
 		

@@ -31,7 +31,7 @@ class ContinuEdControllerCourseReport extends ContinuEdController
 		JResponse::setHeader('Content-Type', 'application/octet-stream');
 		JResponse::setHeader('Content-Disposition', 'attachment; filename="'. $filename . '.csv"');
 		//echo 'Course: '.$data->qtext."\n";
-		echo "Name,EMail,Group,SessionID,IP Address,Course,Cat,Status,Type,Start,End,Pre Score,Post Score";
+		echo "Name,EMail,Group,SessionID,IP Address,Course,Cat,Status,Type,Last Step,Start,End,Pre Score,Post Score";
 		if ($cid) {
 			//Pretest
 			foreach ($qpre as $qu) {
@@ -72,6 +72,22 @@ class ContinuEdControllerCourseReport extends ContinuEdController
 				case 'expired': echo 'Expired'; break;
 				case 'viewed'	: echo 'Viewed'; break;
 				
+			}
+			echo ",";
+			switch ($row->rec_laststep) {
+				case 'fm': echo 'Front Matter'; break;
+				case 'mt': echo 'Material'; break;
+				case 'qz': echo 'Evaluation'; break;
+				case 'chk': echo 'Check'; break;
+				case 'asm': echo 'Assess (Grading)'; break;
+				case 'crt': echo 'Certificate'; break;
+				case 'vo': echo 'Material - Expired'; break;
+				case 'fmp': echo 'FM - Passed'; break;
+				case 'mtp': echo 'Material - Passed'; break;
+				case 'ans': echo 'View Answers'; break;
+				case 'pre': echo 'PreTest'; break;
+				case 'lnk': echo 'Entry Link'; break;
+				case 'fme': echo 'Front Matter - Exp'; break;
 			}
 			echo ",";
 			echo $row->rec_start.',';

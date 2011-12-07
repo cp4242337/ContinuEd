@@ -16,7 +16,64 @@ defined('_JEXEC') or die('Restricted Access');
 		<td><?php echo JHtml::_('grid.id', $i, $item->course_id); ?></td>
 		<td><a href="<?php echo JRoute::_('index.php?option=com_continued&task=course.edit&course_id='.(int) $item->course_id); ?>">
 				<?php echo $this->escape($item->course_name).'</a><br />'.$item->course_faculty; ?></td>
-        <td class="order">
+        <td><?php 
+		if ($item->course_startdate != '0000-00-00 00:00:00') echo 'B: '.date("m.d.y",strtotime($item->course_startdate)).'<br />E: '.date("m.d.y",strtotime($item->course_enddate));
+		?></td>
+		<td><?php echo 'Add: '.date("m.d.y",strtotime($item->course_dateadded)); ?></td>
+		<td><?php
+		echo $item->provider_name; 
+		?></td>
+		<td><?php 
+		if ($item->course_prereq) {
+			
+			echo '<a href="index.php?option=com_continued&view=prereqs&filter_course='.$item->course_id.'">PreReqs ';
+			$query = 'SELECT count(*) FROM #__ce_prereqs WHERE pr_course="'.$item->course_id.'"';
+			$db->setQuery( $query );
+			echo ' ['.$db->loadResult().']</a>';
+		}
+		?></td>
+		<td><?php 
+		if ($item->course_haspre) {
+			echo '<a href="index.php?option=com_continued&view=questions&filter_area=pre&filter_course='.$item->course_id.'">Pre';
+			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="pre"';
+			$db->setQuery( $query );
+			$numq=$db->loadResult();
+			echo ' ['.$numq.']</a><br />';
+		}
+		if ($item->course_hasinter) {
+			echo '<a href="index.php?option=com_continued&view=questions&filter_area=inter&filter_course='.$item->course_id.'">Inter';
+			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="inter"';
+			$db->setQuery( $query );
+			$numq=$db->loadResult();
+			echo ' ['.$numq.']</a><br />';
+		}
+		if ($item->course_qanda != 'none') {
+			echo '<a href="index.php?option=com_continued&view=questions&filter_area=qanda&filter_course='.$item->course_id.'">Q an A';
+			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="qanda"';
+			$db->setQuery( $query );
+			$numq=$db->loadResult();
+			echo ' ['.$numq.']</a><br />';
+		}
+		if ($item->course_haseval) {
+			echo '<a href="index.php?option=com_continued&view=questions&filter_area=post&filter_course='.$item->course_id.'">Post';
+			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="post"';
+			$db->setQuery( $query );
+			$numq=$db->loadResult();
+			echo ' ['.$numq.']</a>';
+		}
+		?></td>
+		<td><?php 
+		if ($item->course_haspre) {
+			echo '<a href="index.php?option=com_continued&view=parts&filter_area=pre&filter_course='.$item->course_id.'">Pre';
+			echo ' ['.$item->course_preparts.']</a><br />';
+		}
+
+		if ($item->course_haseval) {
+			echo '<a href="index.php?option=com_continued&view=parts&filter_area=post&filter_course='.$item->course_id.'">Post';
+			echo ' ['.$item->course_postparts.']</a>';
+		}
+		?></td>
+		<td class="order">
 				<?php if ($saveOrder) :?>
 					<?php if ($listDirn == 'asc') : ?>
 						<span><?php echo $this->pagination->orderUpIcon($i, ($item->course_cat == @$this->items[$i-1]->course_cat), 'courses.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
@@ -30,80 +87,19 @@ defined('_JEXEC') or die('Restricted Access');
 				<input type="text" name="order[]" size="5" value="<?php echo $item->ordering;?>" <?php echo $disabled ?> class="text-area-order" />
 
 		</td>
-		<td><?php echo date("m.d.y",strtotime($item->course_dateadded)); ?></td>
-		<td><?php 
-		if ($item->course_haseval && $item->course_hascertif) {
-			
-			echo 'Certs ';
-			$query = 'SELECT count(*) FROM #__ce_coursecerts WHERE cd_course="'.$item->course_id.'"';
-			$db->setQuery( $query );
-			echo ' ['.$db->loadResult().']';
-		}
-		?></td>
-		<td><?php 
-		if ($item->course_prereq) {
-			
-			echo '<a href="index.php?option=com_continued&view=prereqs&filter_course='.$item->course_id.'">PreReqs ';
-			$query = 'SELECT count(*) FROM #__ce_prereqs WHERE pr_course="'.$item->course_id.'"';
-			$db->setQuery( $query );
-			echo ' ['.$db->loadResult().']</a>';
-		}
-		?></td>
-		<td><?php 
-		if ($item->course_haspre) {
-			echo '<a href="index.php?option=com_continued&view=questions&filter_area=pre&filter_course='.$item->course_id.'">Questions';
-			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="pre"';
-			$db->setQuery( $query );
-			$numq=$db->loadResult();
-			echo ' ['.$numq.']</a><br />';
-			echo '<a href="index.php?option=com_continued&view=parts&filter_area=pre&filter_course='.$item->course_id.'">Parts';
-			echo ' ['.$item->course_preparts.']</a>';
-		}
-		?></td>
-		<td><?php 
-		if ($item->course_hasinter) {
-			echo '<a href="index.php?option=com_continued&view=questions&filter_area=inter&filter_course='.$item->course_id.'">Inter';
-			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="inter"';
-			$db->setQuery( $query );
-			$numq=$db->loadResult();
-			echo ' ['.$numq.']</a><br />';
-		}
-		if ($item->course_qanda != 'none') {
-			echo '<a href="index.php?option=com_continued&view=questions&filter_area=qanda&filter_course='.$item->course_id.'">Q an A';
-			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="qanda"';
-			$db->setQuery( $query );
-			$numq=$db->loadResult();
-			echo ' ['.$numq.']</a>';
-		}
-		?></td>
-		<td><?php 
-		if ($item->course_haseval) {
-			echo '<a href="index.php?option=com_continued&view=questions&filter_area=post&filter_course='.$item->course_id.'">Questions';
-			$query = 'SELECT count(*) FROM #__ce_questions WHERE q_course="'.$item->course_id.'" && q_area="post"';
-			$db->setQuery( $query );
-			$numq=$db->loadResult();
-			echo ' ['.$numq.']</a><br />';
-			echo '<a href="index.php?option=com_continued&view=parts&filter_area=post&filter_course='.$item->course_id.'">Parts';
-			echo ' ['.$item->course_postparts.']</a>';
-		}
-		?></td>
 		<td class="center">
 			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'options.', true);?>
 		</td>
 		<td align="center"><?php echo $item->access_level; ?></td>
-		<td><?php 
-		if ($item->course_startdate != '0000-00-00 00:00:00') echo 'B: '.date("m.d.y",strtotime($item->course_startdate)).'<br />E: '.date("m.d.y",strtotime($item->course_enddate));
-		?></td>
-		<td><?php echo $item->provider_name; ?></td>
 		<td><?php 
 		if (strlen($item->category_name) > 35) echo substr($item->category_name,0,32).'...';
 		else echo $item->category_name;
 
 		?></td>
 		<td><?php 
+			echo '<a href="index.php?option=com_continued&view=coursereport&cat='.$item->course_cat.'&course='.$item->course_id.'">Activity</a>';
 		if ($item->course_haseval || $item->course_haspre || $item->course_hasinter) {
-			echo '<a href="index.php?option=com_continued&view=coursereport&cat='.$item->course_cat.'&course='.$item->course_id.'">Full</a><br />';
-			echo '<a href="index.php?option=com_continued&view=tally&course='.$item->course_id.'">Tally</a>';
+			echo '<br /><a href="index.php?option=com_continued&view=tally&course='.$item->course_id.'">Tally</a>';
 		}
 		?></td>
 		

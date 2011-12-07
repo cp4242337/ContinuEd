@@ -19,7 +19,7 @@ class ContinuEdViewCourse extends JView
 		$item = $this->get('Item');
 		$script = $this->get('Script');
 		$ctypes = $this->get('CertTypes');
-
+		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{

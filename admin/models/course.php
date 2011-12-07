@@ -75,7 +75,7 @@ class ContinuEdModelCourse extends JModelAdmin
 		if (empty($data)) 
 		{
 			$data = $this->getItem();
-			if ($this->getState('course.course_id') == 0) {
+			if ($data->get('course_cat') == 0) {
 				$app = JFactory::getApplication();
 				$data->set('course_cat', JRequest::getInt('course_cat', $app->getUserState('com_continued.courses.filter.cat')));
 			}
