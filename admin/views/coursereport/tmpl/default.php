@@ -209,7 +209,7 @@ $type[5]=JHTML::_('select.option','viewed','Viewed');
 	$k = 1 - $k;
 	$cq = $row->disporder+1;
 	}
-	$colcount = 10 + count($qinter) + count($qpre) + count($qpost);
+	$colcount = 11 + count($qinter) + count($qpre) + count($qpost);
 	if ($this->course) $count = $count - 2;
 	?>
 	</tbody>

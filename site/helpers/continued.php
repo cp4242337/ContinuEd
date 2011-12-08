@@ -99,7 +99,8 @@ class ContinuEdHelper {
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$q = 'INSERT INTO #__ce_track (user,course,step,sessionid,token,track_ipaddr) VALUES ("'.$userid.'","'.$course.'","'.$what.'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'")';
+		$q  = 'INSERT INTO #__ce_track (user,course,step,sessionid,token,track_ipaddr) ';
+		$q .= 'VALUES ("'.$userid.'","'.$course.'","'.$what.'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'")';
 		$db->setQuery( $q );
 		$tracked = $db->query();
 		$q2 = 'UPDATE #__ce_records SET rec_laststep = "'.$what.'" WHERE rec_token = "'.$token.'" && rec_user = "'.$userid.'"';
@@ -125,7 +126,7 @@ class ContinuEdHelper {
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_track WHERE step="'.$what.'" && user="'.$userid.'" && sessionid="'.$sessionid.'" && token="'.$token.'" && course="'.$course.'"';
+		$query = 'SELECT * FROM #__ce_track WHERE step="'.$what.'" && user="'.$userid.'" && token="'.$token.'" && course="'.$course.'"';
 		$db->setQuery($query);
 		$data = $db->loadAssoc();
 		return count($data);
@@ -157,6 +158,27 @@ class ContinuEdHelper {
 		}
 		$q = 'INSERT INTO #__ce_records (rec_user,rec_course,rec_start,rec_session,rec_token,rec_ipaddr,rec_recent,rec_pass,rec_type) VALUES ("'.$userid.'","'.$course.'","'.date("Y-m-d H:i:s").'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'","'.$recent.'","incomplete","'.$type.'")';
 		$db->setQuery( $q );
+		if ($db->query()) return 1;
+		else return 0;
+	}
+	
+	/**
+	* Resume CE Session.
+	*
+	* @param int $course Course id number
+	* @param string $token CE Session token.
+	* @param string $type CE Session type: nonce,ce,review, or expired.
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
+	function resumeSession($token) {
+		$db =& JFactory::getDBO();
+		$sewn = JFactory::getSession();
+		$sessionid = $sewn->getId();
+		$q1 = 'UPDATE #__ce_records SET rec_session = "'.$sessionid.'" WHERE rec_user ="'.$userid.'" && rec_course = "'.$course.'"';
+		$db->setQuery($q1);
 		if ($db->query()) return 1;
 		else return 0;
 	}
@@ -203,6 +225,27 @@ class ContinuEdHelper {
 		$db->setQuery( $query );
 		$fmtext = $db->loadAssoc();
 		if (count($fmtext) > 0) return true;
+		else return false;
+	}
+	
+	/**
+	* Has user not completed the course.
+	*
+	* @param int $course Course id number
+	*
+	* @return session id if incomplete, 0 if no incomplete sessions
+	*
+	* @since 1.20
+	*/
+	function incompleteCourse($course) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$query = 'SELECT rec_token FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass IN ("incomplete") && rec_course = '.$course.' ORDER BY rec_start DESC';
+		$db =& JFactory::getDBO();
+		$db->setQuery( $query );
+		$token = $db->loadResult();
+		if ($token) return $token;
 		else return false;
 	}
 	

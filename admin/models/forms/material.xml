@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: material.xml 62 2010-11-28 16:08:16Z chdemko $ -->
+<form>
+	<fieldset name="details">
+		<field
+			name="mat_id"
+			type="hidden"
+		/>
+		<field
+			name="mat_title"
+			type="text"
+			label="COM_CONTINUED_MATERIAL_FIELD_TITLE_LABEL"
+			description="COM_CONTINUED_MATERIAL_FIELD_TITLE_DESC"
+			size="70"
+			class="inputbox"
+			required="false"
+			default=""
+		/>
+		<field
+			name="published"
+			type="list"
+			id="published"
+			class="inputbox"
+			label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC"
+			size="1"
+			default="1"
+			filter="integer">
+			<option	value="1">JPUBLISHED</option>
+			<option	value="0">JUNPUBLISHED</option>
+		</field>
+		<field
+			name="access"
+			type="accesslevel"
+			id="access"
+			class="inputbox"
+			label="JFIELD_ACCESS_LABEL"
+			description="JFIELD_ACCESS_DESC"
+			default="1"
+			filter="integer"/>
+		<field 
+			name="mat_course" 
+			type="Courses" 
+			class="inputbox"
+			label="COM_CONTINUED_MATERIAL_FIELD_COURSE_LABEL"
+			description="COM_CONTINUED_MATERIAL_FIELD_COURSE_DESC" 
+		/>
+		<field 
+			name="ordering" 
+			type="OrderQuestion" 
+			class="inputbox"
+			label="JFIELD_ORDERING_LABEL"
+			description="JFIELD_ORDERING_DESC" 
+		/>
+		<field
+			name="mat_type"
+			type="list"
+			extension="com_continued"
+			class="inputbox"
+			default=""
+			label="COM_CONTINUED_MATERIAL_FIELD_TYPE_LABEL"
+			description="COM_CONTINUED_MATERIAL_FIELD_TYPE_DESC"
+			required="true">
+			<option value="text">Text/HTML</option>
+			<option value="articulate">Articulate</option>
+			<option value="accordent">Accordent</option>
+		</field>
+	</fieldset>
+	<fieldset name="content">
+		<field
+			name="mat_content"
+			type="editor"
+			label="COM_CONTINUED_MATERIAL_FIELD_CONTENT_LABEL"
+			description="COM_CONTINUED_MATERIAL_FIELD_CONTENT_DESC"
+			class="inputbox"
+			filter="safehtml"
+			buttons="false"
+		/>
+	</fieldset>
+</form>
+

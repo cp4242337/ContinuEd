@@ -12,12 +12,14 @@ class ContinuEdViewFrontMatter extends JView
 	var $eligable = true;
 	var $token = null;
 	var $redirurl = null;
+	var $incomplete = false;
+	var $fmagree = false;
 	
 	function display($tpl = null)
 	{
 		$app = JFactory::getApplication();
 		$courseid = JRequest::getVar( 'course' );
-		$fmagree = JRequest::getVar( 'fmagree' );
+		$this->fmagree = JRequest::getVar( 'fmagree' );
 		$this->token = JRequest::getVar('token','');
 		$user =& JFactory::getUser();
 		$model =& $this->getModel();
@@ -70,24 +72,42 @@ class ContinuEdViewFrontMatter extends JView
 		//Check Passed
 		$this->passed = ContinuEdHelper::passedCourse($courseid);
 		
-		if ($fmagree) {
+		//Check Incomplete, if not passed
+		if (!$this->passed) $this->incomplete = ContinuEdHelper::incompleteCourse($courseid);
+		if ($this->incomplete) $this->token = $this->incomplete;
+		
+		if ($this->fmagree) {
 			$this->moveOn();
+		} else if ($this->incomplete && !$this->expired && $this->eligable) {
+			$this->resume();
 		} else if (!$this->cinfo->course_hasfm) {
 			$this->noFM();
 		} else if ($this->passed) {
-			$this->Passed();
+			$this->passed();
 		} else if ($this->expired) {
-			$this->Expired();
+			$this->expired();
 		} else if ($this->eligable) {
-			$this->Eligable();
+			$this->eligable();
 		} else {
 			$this->moveBack();
 		}
 		
 	}
 	
+	//Resume incomplete session
+	function resume() {
+		//Resume Session
+		ContinuedHelper::resumeSession($this->token);
+		$this->assignRef('cinfo',$this->cinfo);
+		$this->assignRef('token',$this->token);
+		$this->assignRef('paid',$this->paid);
+		$this->assignRef('expired',$this->expired);
+		$this->assignRef('haspassed',$this->passed);
+		parent::display($tpl);
+	}
+	
 	//Eligable, Not Expired, Not Passed
-	function Eligable() {
+	function eligable() {
 		//Start Session
 		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"ce");
 		$this->assignRef('cinfo',$this->cinfo);
@@ -99,7 +119,7 @@ class ContinuEdViewFrontMatter extends JView
 	}
 	
 	//Eligable, Passed
-	function Passed() {
+	function passed() {
 		//Start Session
 		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"review");
 		$this->assignRef('cinfo',$this->cinfo);
@@ -112,7 +132,7 @@ class ContinuEdViewFrontMatter extends JView
 	}
 	
 	//Eligable, Expired, Not Passed
-	function Expired() {
+	function expired() {
 		//Start Session
 		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"expired");
 		$this->assignRef('cinfo',$this->cinfo);

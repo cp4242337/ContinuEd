@@ -29,6 +29,13 @@ defined('_JEXEC') or die('Restricted Access');
 			echo '<a href="index.php?option=com_continued&view=prereqs&filter_course='.$item->course_id.'">PreReqs ';
 			$query = 'SELECT count(*) FROM #__ce_prereqs WHERE pr_course="'.$item->course_id.'"';
 			$db->setQuery( $query );
+			echo ' ['.$db->loadResult().']</a><br />';
+		}
+		if ($item->course_hasmat) {
+			
+			echo '<a href="index.php?option=com_continued&view=materials&filter_course='.$item->course_id.'">Material ';
+			$query = 'SELECT count(*) FROM #__ce_material WHERE mat_course="'.$item->course_id.'"';
+			$db->setQuery( $query );
 			echo ' ['.$db->loadResult().']</a>';
 		}
 		?></td>

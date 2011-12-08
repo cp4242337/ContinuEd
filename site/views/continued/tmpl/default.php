@@ -70,10 +70,15 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" border="0" alt="Completed, Review">';
 				$clink  .= '</a>';
-			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && $paid) {
+			} else if (!$course->status && $course->cantake && !$course->expired && $paid) {
 				// Not Taken, Can Take, Not Expired, Paid
 				$clink  = '<a href="'.$courseurl.'">';
 				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" border="0" alt="Begin">';
+				$clink  .= '</a>';
+			} else if ($course->status == 'incomplete' && $course->cantake && !$course->expired && $paid) {
+				// Not Completed, Can Take, Not Expired, Paid
+				$clink  = '<a href="'.$courseurl.'">';
+				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_resume.png" border="0" alt="Resume">';
 				$clink  .= '</a>';
 			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && !$paid) {
 				// Not Taken, Can Take, Not Expired, Not Paid

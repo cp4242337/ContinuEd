@@ -41,7 +41,6 @@ class ContinuEdModelCourseReport extends JModel
 		$this->setState('course', $course);
 		$this->setState('cat', $cat);
 		$this->setState('usergroup', $usergroup);
-		$this->area = JRequest::getVar('area');
 
 	}
 	

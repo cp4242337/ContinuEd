@@ -99,7 +99,7 @@ if ($this->mtext->course_hasinter) {
 				echo '<input type="hidden" name="gte" value="eval">';
 				echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continueeval.png">';
 			} else if ($this->mtext->course_haspre) {
-				//continue to check page if no no eval and pretest
+				//continue to check page if no eval and pretest
 				echo '<input type="hidden" name="gte" value="eval">';
 				echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continue.png">';
 			} else {

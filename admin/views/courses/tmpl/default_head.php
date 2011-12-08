@@ -12,7 +12,7 @@ $saveOrder	= $listOrder == 'c.ordering';
 	<th width="100"><?php echo JText::_( 'Valid' ); ?></th>
 	<th width="75"><?php echo JText::_( 'Date' ); ?></th>
 	<th width="50"><?php echo JText::_( 'Provider' ); ?></th>
-	<th width="75"><?php echo JText::_( 'PreReqs' ); ?></th>
+	<th width="75"><?php echo JText::_( 'Options' ); ?></th>
 	<th width="80"><?php echo JText::_( 'Questions' ); ?></th>
 	<th width="80"><?php echo JText::_( 'Parts' ); ?></th>
 	<th width="75">
