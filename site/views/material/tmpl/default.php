@@ -18,7 +18,7 @@ if ($this->mtext->course_material) {
 	foreach ($this->matpages as $mp) {
 		echo '<b>'.$mp->mat_title.'</b><br />';
 		if ($mp->mat_desc) echo $mp->mat_desc.'<br /><br />'; 
-		echo '<a href="index.php?option=com_content&view=matpage&token='.$this->token.'&Itemid='.JRequest::getVar('Itemid').'&&matid='.$mp->mat_id.'&&course='.$mp->mat_course.'">';
+		echo '<a href="index.php?option=com_continued&view=matpage&token='.$this->token.'&Itemid='.JRequest::getVar('Itemid').'&matid='.$mp->mat_id.'&course='.$mp->mat_course.'">';
 		if ($this->mpdata[$mp->mat_id]->mu_status == 'complete') echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" alt ="Review">';
 		else if ($this->mpdata[$mp->mat_id]->mu_status == 'incomplete') echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_resume.png" alt ="Resume">';
 		else echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" alt ="Begin">';
