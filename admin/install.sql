@@ -153,6 +153,27 @@ CREATE TABLE IF NOT EXISTS `#__ce_groupcerts` (
   PRIMARY KEY (`gc_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `#__ce_material` (
+  `mat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `mat_course` int(11) NOT NULL,
+  `mat_title` varchar(255) NOT NULL,
+  `mat_desc` text NOT NULL,
+  `mat_content` text NOT NULL,
+  `mat_type` enum('text','articulate','accordent') NOT NULL,
+  `access` int(11) NOT NULL,
+  `ordering` int(11) NOT NULL,
+  `published` int(11) NOT NULL,
+  PRIMARY KEY (`mat_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__ce_matuser` (
+  `mu_mat` int(11) NOT NULL,
+  `mu_user` int(11) NOT NULL,
+  `mu_start` datetime NOT NULL,
+  `mu_end` datetime NOT NULL,
+  `mu_status` enum('complete','incomplete') NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `#__ce_parts` (
   `part_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `part_course` int(11) NOT NULL,
@@ -161,6 +182,13 @@ CREATE TABLE IF NOT EXISTS `#__ce_parts` (
   `part_desc` text NOT NULL,
   `part_area` enum('pre','post','inter') NOT NULL DEFAULT 'post',
   PRIMARY KEY (`part_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__ce_prereqs` (
+  `pr_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pr_course` int(11) NOT NULL,
+  `pr_reqcourse` int(11) NOT NULL,
+  PRIMARY KEY (`pr_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__ce_providers` (
@@ -212,6 +240,7 @@ CREATE TABLE IF NOT EXISTS `#__ce_records` (
   `rec_prescore` int(11) DEFAULT '0',
   `rec_ipaddr` varchar(15) NOT NULL,
   `rec_type` enum('nonce','ce','review','expired','viewed') NOT NULL,
+  `rec_laststep` varchar(10) NOT NULL,
   PRIMARY KEY (`rec_token`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

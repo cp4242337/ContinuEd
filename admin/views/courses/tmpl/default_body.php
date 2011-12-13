@@ -95,7 +95,7 @@ defined('_JEXEC') or die('Restricted Access');
 
 		</td>
 		<td class="center">
-			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'options.', true);?>
+			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'courses.', true);?>
 		</td>
 		<td align="center"><?php echo $item->access_level; ?></td>
 		<td><?php 

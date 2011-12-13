@@ -1,6 +1,10 @@
 <?php
 /**
- *
+ * @version		$Id: material.php 2011-12-12 $
+ * @package		ContinuEd.Site
+ * @subpackage	material
+ * @copyright	Copyright (C) 2008 - 2011 Corona Productions.
+ * @license		GNU General Public License version 2
  */
 
 // Check to ensure this file is included in Joomla!
@@ -9,11 +13,25 @@ defined('_JEXEC') or die();
 jimport( 'joomla.application.component.model' );
 
 /**
+ * ContinuEd Material Model
  *
+ * @static
+ * @package		ContinuEd.Site
+ * @subpackage	material
+ * @since		always
  */
 class ContinuEdModelMaterial extends JModel
 {
 
+	/**
+	* Get course information.
+	*
+	* @param int $courseid Courses id number
+	*
+	* @return object of course info.
+	*
+	* @since always
+	*/
 	function getMaterial($courseid)
 	{
 		$db =& JFactory::getDBO();
@@ -23,6 +41,16 @@ class ContinuEdModelMaterial extends JModel
 		return $mtext;
 	}
 
+	/**
+	* Get answers to required inter questions
+	*
+	* @param int $courseid Courses id number
+	* @param array $reqids Array of question ids
+	*
+	* @return array of users answers.
+	*
+	* @since 1.11
+	*/
 	function getReqAns($courseid,$reqids) {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
@@ -32,11 +60,38 @@ class ContinuEdModelMaterial extends JModel
 		return $db->loadResultArray();
 	}
 
+	/**
+	* Get ids of required inter questions
+	*
+	* @param int $courseid Courses id number
+	*
+	* @return array of question ids.
+	*
+	* @since 1.11
+	*/
 	function getReQids($courseid) {
 		$db =& JFactory::getDBO();
 		$q='SELECT q_id FROM #__ce_questions as q WHERE q.q_area = "inter" && q.q_course = "'.$courseid.'" AND q.q_req = 1';
 		$db->setQuery($q);
 		$data = $db->loadResultArray();
 		return $data;
+	}
+	
+	/**
+	* Get material pages for course
+	*
+	* @param int $cid Courses id number
+	*
+	* @return object array of material pages.
+	*
+	* @since 1.20
+	*/
+	function getMatPages($cid) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$q  = 'SELECT * FROM #__ce_material ';
+		$q .= 'WHERE published = 1 && mat_course = '.$cid;
+		$db->setQuery( $q );
+		return $db->loadObjectList();
 	}
 }

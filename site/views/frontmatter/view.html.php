@@ -73,8 +73,10 @@ class ContinuEdViewFrontMatter extends JView
 		$this->passed = ContinuEdHelper::passedCourse($courseid);
 		
 		//Check Incomplete, if not passed
-		if (!$this->passed) $this->incomplete = ContinuEdHelper::incompleteCourse($courseid);
-		if ($this->incomplete) $this->token = $this->incomplete;
+		if ($user->id) {
+			if (!$this->passed) $this->incomplete = ContinuEdHelper::incompleteCourse($courseid);
+			if ($this->incomplete) $this->token = $this->incomplete;
+		}
 		
 		if ($this->fmagree) {
 			$this->moveOn();

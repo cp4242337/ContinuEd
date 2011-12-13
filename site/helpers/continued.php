@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id: continued.php 2011-10-12 $
+ * @version		$Id: continued.php 2011-12-12 $
  * @package		ContinuEd.Site
  * @subpackage	com_continued
  * @copyright	Copyright (C) 2008 - 2011 Corona Productions.
@@ -58,7 +58,7 @@ class ContinuEdHelper {
 	*
 	* @return boolean true if purchased, false if not.
 	*
-	* @since 1.00JB
+	* @since 1.7
 	*/
 	function PurchaseCheck($userid,$courseid) {
 		if (method_exists('AmbraSubsHelperCourse', 'hasPurchased')) {
@@ -80,6 +80,63 @@ class ContinuEdHelper {
 		global $cecfg;
 		$cecfg = $db->loadObject();
 		return $cecfg;
+	}
+	
+	/**
+	* Set material page as started, incomplete.
+	*
+	* @param int $page Material page id number
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
+	function startMat($page) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$q  = 'INSERT INTO #__ce_matuser (mu_user,mu_mat,mu_start,mu_status) ';
+		$q .= 'VALUES ("'.$userid.'","'.$page.'",NOW(),"incomplete")';
+		$db->setQuery( $q );
+		if ($db->query()) return 1;
+		else return 0;
+	}
+	
+	/**
+	* Set material page as completed.
+	*
+	* @param int $page Material page id number
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
+	function endMat($page) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$q  = 'UPDATE #__ce_matuser SET mu_end = NOW(), mu_status="complete" WHERE mu_user = '.$userid.' && mu_mat = '.$page;
+		$db->setQuery( $q );
+		if ($db->query()) return 1;
+		else return 0;
+	}
+	
+	/**
+	* Get material page status for user.
+	*
+	* @param int $page Material page id number
+	*
+	* @return object of users material page status.
+	*
+	* @since 1.20
+	*/
+	function checkMat($page) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$q  = 'SELECT * FROM #__ce_matuser  WHERE mu_user = '.$userid.' && mu_mat = '.$page;
+		$db->setQuery( $q );
+		return $db->loadObject();
 	}
 	
 	/**
@@ -270,5 +327,31 @@ class ContinuEdHelper {
 			$rlist[$r->rec_course]=$r->rec_pass;
 		}
 		return $rlist;
+	}
+	
+	/**
+	* Get users Material Page list with all data.
+	*
+	* @param Array $matarr Array of Material page ids
+	*
+	* @return Array list of material pages data for user.
+	*
+	* @since 1.20
+	*/
+	function userMatData($matarr=0) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$query  = 'SELECT * ';
+		$query .= 'FROM #__ce_matuser ';
+		$query .= 'WHERE mu_user = '.$userid;
+		if ($matarr) $query .= ' && mu_mat IN ('.implode(",",$matarr).')';
+		$db->setQuery( $query ); 
+		$matlist = $db->loadObjectList();
+		$mlist = array();
+		foreach ($matlist as $m) {
+			$mlist[$m->mu_mat]=$m;
+		}
+		return $mlist;
 	}
 }
