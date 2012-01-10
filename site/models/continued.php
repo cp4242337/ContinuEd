@@ -1,23 +1,42 @@
 <?php
 /**
- * Catalog Portion of ContinuEd Component
+ * @version		$Id: continued.php 2012-01-09 $
+ * @package		ContinuEd.Site
+ * @subpackage	continued
+ * @copyright	Copyright (C) 2008 - 2012 Corona Productions.
+ * @license		GNU General Public License version 2
  */
+
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
 
 jimport( 'joomla.application.component.model' );
 
-
+/**
+ * ContinuEd Catatlog Model
+ *
+ * @static
+ * @package		ContinuEd.Site
+ * @subpackage	continued
+ * @since		always
+ */
 class ContinuEdModelContinuEd extends JModel
 {
 
-	function getCatalog($guest,$cat)
+	/**
+	* Course list 
+	*
+	* @param int $cat Category id 
+	*
+	* @return array course object list with user status.
+	*
+	* @since always
+	*/
+	function getCatalog($cat)
 	{
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$aid = $user->aid;
 		$query  = 'SELECT c.*,p.*';
 		$query .= ',r.course_rating as catrating ';
 		$query .= 'FROM #__ce_courses as c ';
@@ -75,6 +94,15 @@ class ContinuEdModelContinuEd extends JModel
 		return $clist;
 	}
 	
+	/**
+	* Category Info 
+	*
+	* @param int $cat Category id 
+	*
+	* @return object object with cat info.
+	*
+	* @since always
+	*/
 	function getCatInfo($cat)
 	{
 		$db =& JFactory::getDBO();
@@ -85,6 +113,13 @@ class ContinuEdModelContinuEd extends JModel
 	}
 	
 	
+	/**
+	* User Info 
+	*
+	* @return object of user data.
+	*
+	* @since 1.20
+	*/
 	function getUserInfo() {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
@@ -113,6 +148,14 @@ class ContinuEdModelContinuEd extends JModel
 		return $user;
 	}
 	
+	/**
+	* Mark FM Viewed 
+	*
+	* @param int $userid User id 
+	* @param int $catid Category id 
+	*
+	* @since always
+	*/
 	function viewedFM($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
@@ -121,6 +164,14 @@ class ContinuEdModelContinuEd extends JModel
 		$db->setQuery( $query ); $db->query();
 	}
 	
+	/**
+	* Mark Menu Viewed 
+	*
+	* @param int $userid User id 
+	* @param int $catid Category id 
+	*
+	* @since always
+	*/
 	function viewedMenu($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
@@ -129,6 +180,14 @@ class ContinuEdModelContinuEd extends JModel
 		$db->setQuery( $query ); $db->query();
 	}
 	
+	/**
+	* Mark Details Viewed 
+	*
+	* @param int $userid User id 
+	* @param int $catid Category id 
+	*
+	* @since always
+	*/
 	function viewedDetails($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
@@ -137,6 +196,16 @@ class ContinuEdModelContinuEd extends JModel
 		$db->setQuery( $query ); $db->query();
 	}
 	
+	/**
+	* Mark FM Viewed 
+	*
+	* @param int $userid User id 
+	* @param int $catid Category id 
+	*
+	* @return boolean true if viewed, false if not.
+	*
+	* @since always
+	*/
 	function hasViewedFM($userid,$catid) {
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();

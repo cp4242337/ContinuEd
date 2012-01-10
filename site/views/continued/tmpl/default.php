@@ -26,7 +26,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 	echo '</p>';
 	foreach ($this->catalog as $course) {
 		//$coursecerts=$this->model->getCourseDegrees($course->id);
-		//if (!$this->guest) $hascert=in_array($this->cert,$coursecerts); else $hascert=false;
+		//if ($this->user->idguest) $hascert=in_array($this->cert,$coursecerts); else $hascert=false;
 		echo '<table width="100%" cellspacing="0" cellpadding="4" border="0"><tr>';
 		if ($course->course_previmg != '' || $course->course_allowrate || $course->course_catrate) {
 			echo '<td rowspan="4" valign="top" align="center">';
@@ -128,10 +128,10 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '</td></tr><tr><td>';
 		if (!empty($course->course_desc)) echo $course->course_desc;
 		echo '</td></tr><tr><td colspan="2">'.$clink;
-		if (!$this->guest && $course->status == 'pass' && $course->course_hascertif) {
-			echo '<a href="index2.php?option=com_continued&view=certif&course='.$course->course_id.'" target="_blank">';
+		if ($this->user->id && $course->status == 'pass' && $course->course_hascertif) {
+			echo '<a href="index.php?option=com_continued&view=certif&course='.$course->course_id.'&tmpl=component" target="_blank">';
 			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_certif.png" border="0" alt="Get Certificate"></a>';
-		} else if (!$this->guest && $course->course_hascertif && !$course->expired) {
+		} else if ($this->user->id && $course->course_hascertif && !$course->expired) {
 			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocertif.png" border="0" alt="Certificate Not Yet Awarded">';
 		}
 
@@ -143,7 +143,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 	// Cat FM
 	//********
 } else if ($this->dispfm && !$this->showfm && $this->cat != 0){
-	if ($this->guest) {
+	if (!$this->user->id) {
 		echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$cecfg->LOGIN_MSG.'</span></p>';
 	}
 
@@ -152,7 +152,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '<b>Expiration Date:</b> '.date("F d, Y", strtotime($this->catinfo->cat_end)).'</p>';
 	}
 	echo $this->catinfo->cat_fm;
-	if (!$this->guest) {
+	if ($this->user->id) {
 		if ($this->bought) {
 			echo '<form name="form1" method="post" action=""';
 			if (!$this->expired) echo 'onsubmit="return isChecked(this.fmv);"';

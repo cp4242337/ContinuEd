@@ -1,29 +1,54 @@
 <?php
+/**
+ * @version		$Id: view.html.php 2012-01-09 $
+ * @package		ContinuEd.Site
+ * @subpackage	certif
+ * @copyright	Copyright (C) 2008 - 2012 Corona Productions.
+ * @license		GNU General Public License version 2
+ */
+
 jimport( 'joomla.application.component.view');
 
-
+/**
+ * ContinuEd Certificate View
+ *
+ * @static
+ * @package		ContinuEd.Site
+ * @subpackage	assess
+ * @since		certif
+ */
 class ContinuEdViewCertif extends JView
 {
 	function display($tpl = null)
 	{
-		global $mainframe;
+		$app = JFactory::getApplication();
 		$courseid = JRequest::getVar( 'course' );
 		$model =& $this->getModel('certif');
-		$passinfo = $model->checkPassed($courseid);
-		$passed = count($passinfo);
-		if ($courseid && $passed) {
-			$dummy=$model->trackView($courseid,'GetCertificate');
+		
+		//Get Users status for course
+		$status = $model->statusCheck($courseid);
+		
+		//Valid Course id, Course Passed
+		if ($courseid && $status == "pass") {
+			ContinuEdHelper::trackViewed("crt",$courseid,'GetCertificate');
+			
+			//Get Course Information
 			$cinfo=$model->getCourseInfo($courseid);
+			
+			//Get User Information
 			$uinfo=$model->getUserInfo();
-			$cert=$model->getCertif($uinfo['cb_degree'],$cinfo['provider'],$courseid,$cinfo['defaultcertif']);
+			
+			//Get Certificate Info
+			$cert=$model->getCertif($uinfo->group,$cinfo->course_provider,$courseid,$cinfo->course_defaultcertif);
+			
+			//Assign Vars
 			$this->assignRef('cert',$cert);
-			$this->assignRef('pinfo',$passinfo);
 			$this->assignRef('cinfo',$cinfo);
 			$this->assignRef('uinfo',$uinfo);
+			
+			//Display
 			parent::display($tpl);
-		} else {
-			$mainframe->redirect('index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ));
-		}
+		} 
 	}
 }
 ?>

@@ -14,11 +14,10 @@ jimport( 'joomla.application.component.model' );
 class ContinuEdModelCourse extends JModel
 {
 
-	function getCourse($guest,$courseid)
+	function getCourse($courseid)
 	{
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
-		$userid = $user->id;
 		$aid = $user->getAuthorisedViewLevels();
 		$query  = 'SELECT c.*,p.*';
 		$query .= ',r.course_rating as catrating ';

@@ -1,11 +1,22 @@
 <?php
 /**
- *
+ * @version		$Id: view.html.php 2012-01-09 $
+ * @package		ContinuEd.Site
+ * @subpackage	eval
+ * @copyright	Copyright (C) 2008 - 2012 Corona Productions.
+ * @license		GNU General Public License version 2
  */
 
 jimport( 'joomla.application.component.view');
 
-
+/**
+ * ContinuEd Eval Page View
+ *
+ * @static
+ * @package		ContinuEd.Site
+ * @subpackage	eval
+ * @since		always
+ */
 class ContinuEdViewEval extends JView
 {
 	function display($tpl = null)
@@ -16,27 +27,37 @@ class ContinuEdViewEval extends JView
 		$token = JRequest::getVar('token');
 		$itemid = JRequest::getVar( 'Itemid' );
 		$user =& JFactory::getUser();
-		$username = $user->guest ? 'Guest' : $user->name;
+		
+		//Check proper access
 		$should=ContinuedHelper::checkViewed("mt",$courseid,$token);
 		$already=ContinuedHelper::checkViewed("chk",$courseid,$token);
+		
+		//Get Course Information
 		$mtext=$model->getEval($courseid);
 		$haseval = $mtext->course_haseval;
-		if ($username != 'Guest' && $token && $should && !$already && $haseval) {
+		
+		//Logged in, Has token, Material Complete, hasn't already done, eval exists
+		if ($user->id && $token && $should && !$already && $haseval) {
 			$part = JRequest::getVar( 'part' );
 			$evalstep = JRequest::getVar( 'evalstep' );
 			if (!$evalstep) $evalstep = JRequest::getVar( 'stepnext' );
 			$addans = JRequest::getVar( 'addans' );
 			$hasans = JRequest::getVar( 'hasans' );
+			
 			//determine where user will go
 			if (!$part) $part = 1;
 			if ($evalstep=='prev') $pn = $part-1;
 			if ($evalstep=='next') $pn = $part+1;
 			if ($evalstep=='eval') $evaldone=1;
+			
+			//Valid course, Eval not done, not saving answers
 			if ($courseid && !$evaldone && !$addans) {
-				//show part
+				//Get Q&A data
 				$parti=$model->getPart($courseid,$part);
 				$qdata=$model->getQuestions($courseid,$part);
 				$adata=$model->getAnswered($courseid,$part,$token);
+				
+				//Assign vars
 				$this->assignRef('mtext',$mtext);
 				$this->assignRef('qdata',$qdata);
 				$this->assignRef('adata',$adata);
@@ -44,16 +65,21 @@ class ContinuEdViewEval extends JView
 				$this->assignRef('part',$part);
 				$this->assignRef('parti',$parti);
 				$this->assignRef('courseid',$courseid);
-
 				$this->assignRef('itemid',$itemid);
+				
+				//display
 				parent::display($tpl);
 			}
+			
+			//Valid Course, Save Answers, eval not done
 			if ($courseid && $addans && !$evaldone) {
 				//save answers to current part and take user to next or prev part
 				$se=$model->saveEval($courseid,$part,$token,$hasans);
 				$app->redirect('index.php?option=com_continued&view=eval&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&part='.$pn.'&token='.$token);
 
 			}
+			
+			//valid course, eval done
 			if ($courseid && $evaldone) {
 				//save final part and take to check step
 				$se=$model->saveEval($courseid,$part,$token,$hasans);
@@ -68,8 +94,8 @@ class ContinuEdViewEval extends JView
 			$fmtext=ContinuedHelper::trackViewed("qz",$courseid,$token);
 			$app->redirect('index.php?option=com_continued&view=check&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
 		} else {
-			//take user to frontmatter if they have not viewed frontmatter, material, or aren't logged in
-			$app->redirect('index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid);
+			//take user to beginning if not properly stepped
+			$app->redirect('index.php?option=com_continued&view=course&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid);
 		}
 	}
 }

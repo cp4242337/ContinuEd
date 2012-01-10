@@ -1,7 +1,22 @@
 <?php
+/**
+ * @version		$Id: view.html.php 2012-01-09 $
+ * @package		ContinuEd.Site
+ * @subpackage	course
+ * @copyright	Copyright (C) 2008 - 2012 Corona Productions.
+ * @license		GNU General Public License version 2
+ */
 
 jimport( 'joomla.application.component.view');
 
+/**
+ * ContinuEd Course Entry
+ *
+ * @static
+ * @package		ContinuEd.Site
+ * @subpackage	course
+ * @since		always
+ */
 class ContinuEdViewCourse extends JView
 {
 	function display($tpl = null)
@@ -11,17 +26,18 @@ class ContinuEdViewCourse extends JView
 		$model =& $this->getModel();
 		$tracked = ContinuEdHelper::trackViewed("lnk",$courseid,"PageLinkNoToken");
 		$user =& JFactory::getUser();
-		$username = $user->guest ? 'Guest' : $user->name;
-		$userid = $user->id;
-		if ($username == 'Guest') $guest = true; else $guest=false;
 
-		$course=$model->getCourse($guest,$courseid);
+		//Get course info
+		$course=$model->getCourse($courseid);
 		
+		//Check purchase
 		if ($course->course_purchase) {
 			if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$course->course_purchasesku);
 			else $paid = ContinuEdHelper::PurchaseCheck($user->id,$course->course_id);
 		}
 		else $paid = true;
+		
+		//Get Route to first step
 		if ($course->course_catlink) { //Category Program
 			$url = JURI::current().'?option=com_continued&cat='.$course->course_catmenu.'&Itemid='.JRequest::getVar( 'Itemid' );
 		} else if ($course->course_extlink) { //External Link
@@ -47,6 +63,8 @@ class ContinuEdViewCourse extends JView
 				$url = JURI::current().'?option=com_continued&cat='.$course->course_cat.'&Itemid='.JRequest::getVar( 'Itemid' );
 			}
 		}
+		
+		//redirect user
 		$app->redirect($url);
 		
 	}

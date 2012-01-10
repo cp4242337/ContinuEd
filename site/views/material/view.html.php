@@ -1,9 +1,9 @@
 <?php
 /**
- * @version		$Id: view.html.php 2011-12-12 $
+ * @version		$Id: view.html.php 2012-01-09 $
  * @package		ContinuEd.Site
  * @subpackage	material
- * @copyright	Copyright (C) 2008 - 2011 Corona Productions.
+ * @copyright	Copyright (C) 2008 - 2012 Corona Productions.
  * @license		GNU General Public License version 2
  */
 
@@ -27,7 +27,6 @@ class ContinuEdViewMaterial extends JView
 		$courseid = JRequest::getVar( 'course' );
 		$token = JRequest::getVar( 'token' );
 		$user =& JFactory::getUser();
-		$username = $user->guest ? 'Guest' : $user->name;
 		
 		//Get material data
 		$mtext=$model->getMaterial($courseid);
@@ -92,7 +91,7 @@ class ContinuEdViewMaterial extends JView
 		}
 		
 		//Logged in, Token exists, had done appropriate steps
-		if ($username != 'Guest' && $token && $viewed) {
+		if ($user->id && $token && $viewed) {
 			//Valid Course, Not done with material, course has material, cannot go to eval
 			if ($courseid && !$gotoeval  && $hasmat) {
 				//Run plugin on text data
@@ -166,8 +165,8 @@ class ContinuEdViewMaterial extends JView
 			if (!$redirurl) $redirurl = 'index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$mtext->course_cat;
 			$app->redirect($redirurl);
 		} else {
-		//Go back to frontmatter, not stepped properly 
-			$app->redirect('index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid); 
+		//Go back to beginning, not stepped properly 
+			$app->redirect('index.php?option=com_continued&view=course&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid); 
 		}
 	}
 }

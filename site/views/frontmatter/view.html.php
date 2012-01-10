@@ -1,7 +1,23 @@
 <?php
+/**
+ * @version		$Id: view.html.php 2012-01-09 $
+ * @package		ContinuEd.Site
+ * @subpackage	frontmatter
+ * @copyright	Copyright (C) 2008 - 2012 Corona Productions.
+ * @license		GNU General Public License version 2
+ */
+
 jimport( 'joomla.application.component.view');
 
 
+/**
+ * ContinuEd FrontMatter Page View
+ *
+ * @static
+ * @package		ContinuEd.Site
+ * @subpackage	frontmatter
+ * @since		always
+ */
 class ContinuEdViewFrontMatter extends JView
 {
 	var $cinfo = null;
