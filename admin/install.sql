@@ -266,6 +266,8 @@ CREATE TABLE IF NOT EXISTS `#__ce_ufields` (
   `uf_note` text NOT NULL,
   `uf_match` int(11) NOT NULL DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '1',
+  `uf_hidden` BOOLEAN NOT NULL DEFAULT '0',
+  `uf_change` BOOLEAN NOT NULL DEFAULT '1',
   PRIMARY KEY (`uf_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 

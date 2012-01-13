@@ -62,6 +62,18 @@ defined('_JEXEC') or die('Restricted Access');
 			?>
 		</td>
 		<td>
+			<?php 
+			if ($item->uf_hidden) echo '<span style="color:#008800">Yes</span>';
+			else echo '<span style="color:#880000">No</span>'; 
+			?>
+		</td>
+		<td>
+			<?php 
+			if ($item->uf_change) echo '<span style="color:#008800">Yes</span>';
+			else echo '<span style="color:#880000">No</span>'; 
+			?>
+		</td>
+		<td>
 		<?php 
 			if ($item->uf_type=='multi' || $item->uf_type=='mcbox' || $item->uf_type=='dropdown') {
 				echo '<a href="'.JRoute::_('index.php?option=com_continued&view=uopts&filter_field='.$item->uf_id).'">Options'; 

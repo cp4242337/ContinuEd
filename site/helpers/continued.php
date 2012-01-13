@@ -354,4 +354,43 @@ class ContinuEdHelper {
 		}
 		return $mlist;
 	}
+	
+	/**
+	* User Info 
+	*
+	* @return object of user data.
+	*
+	* @since 1.20
+	*/
+	function getUserInfo() {
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$db =& JFactory::getDBO();
+		$query = 'SELECT ug.userg_group AS userGroupID, ug.userg_update AS lastUpdated, g.ug_name AS userGroupName FROM #__ce_usergroup as ug ';
+		$query.= 'RIGHT JOIN #__ce_ugroups AS g ON ug.userg_group = g.ug_id ';
+		$query.= 'WHERE ug.userg_user="'.$userid.'"';
+		$db->setQuery($query); $groupdata=$db->loadObject();
+		$user->userGroupID=$groupdata->userGroupID;
+		$user->userGroupName=$groupdata->userGroupName;
+		$user->lastUpdated=$groupdata->lastUpdated;
+		$qd = 'SELECT f.uf_sname,f.uf_type,u.usr_data FROM #__ce_uguf as g';
+		$qd.= ' RIGHT JOIN #__ce_ufields as f ON g.uguf_field = f.uf_id';
+		$qd.= ' RIGHT JOIN #__ce_users as u ON u.usr_field = f.uf_id && usr_user = '.$userid;
+		$qd.= ' WHERE g.uguf_group='.$user->userGroupID;
+		$db->setQuery( $qd ); 
+		$udata = $db->loadObjectList();
+		foreach ($udata as $u) {
+			$fn=$u->uf_sname;
+			if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox') {
+				$ansarr=explode(" ",$u->usr_data);
+				$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
+				$db->setQuery($q);
+				$user->$fn = implode(", ",$db->loadResultArray());
+			} else {
+				$user->$fn=$u->usr_data;
+			}
+		}
+		
+		return $user;
+	}
 }

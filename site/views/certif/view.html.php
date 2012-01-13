@@ -14,8 +14,8 @@ jimport( 'joomla.application.component.view');
  *
  * @static
  * @package		ContinuEd.Site
- * @subpackage	assess
- * @since		certif
+ * @subpackage	certif
+ * @since		always
  */
 class ContinuEdViewCertif extends JView
 {
