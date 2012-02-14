@@ -4,6 +4,9 @@
 #continued-fm-agree { border: medium none; padding: 5px; }
 #continued-fm-error { color: rgb(136, 0, 0); font-size: 10pt; font-weight: bold; display: none; position: relative; }
 
+.continued-user-info-row {clear:both; float:left; width:100%; border-bottom: 1px dotted #333333;}
+.continued-user-info-label { height:100%; font-weight:bold; float:left; width:150px; text-align:right; padding:3px;background-color:#dddddd;}
+.continued-user-info-value {float:left; width: auto; text-align:left; padding:3px;}
 
 #qabox-outer {
 	margin: 10px auto;

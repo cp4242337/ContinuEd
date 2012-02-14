@@ -29,6 +29,12 @@ $saveOrder	= $listOrder == 'f.ordering';
 		<?php echo JText::_( 'COM_CONTINUED_UFIELD_HEADING_REQUIRED' ); ?>
 	</th>
 	<th width="50">
+		<?php echo JText::_( 'COM_CONTINUED_UFIELD_HEADING_REG' ); ?>
+	</th>
+	<th width="50">
+		<?php echo JText::_( 'COM_CONTINUED_UFIELD_HEADING_PROFILE' ); ?>
+	</th>
+	<th width="50">
 		<?php echo JText::_( 'COM_CONTINUED_UFIELD_HEADING_HIDDEN' ); ?>
 	</th>
 	<th width="50">

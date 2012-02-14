@@ -109,6 +109,30 @@
 			<option	value="1">Yes</option>
 			<option	value="0">No</option>
 		</field>
+		<field
+			name="uf_reg"
+			type="radio"
+			label="COM_CONTINUED_UFIELD_FIELD_REG_LABEL"
+			description="COM_CONTINUED_UFIELD_FIELD_REG_DESC"
+			size="1"
+			class="inputbox"
+			required="true"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
+		<field
+			name="uf_profile"
+			type="radio"
+			label="COM_CONTINUED_UFIELD_FIELD_PROFILE_LABEL"
+			description="COM_CONTINUED_UFIELD_FIELD_PROFILE_DESC"
+			size="1"
+			class="inputbox"
+			required="true"
+			default="1">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
 	</fieldset>
 	<fieldset name="content">
 		<field

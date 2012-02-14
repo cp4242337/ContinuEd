@@ -63,6 +63,18 @@ defined('_JEXEC') or die('Restricted Access');
 		</td>
 		<td>
 			<?php 
+			if ($item->uf_reg) echo '<span style="color:#008800">Yes</span>';
+			else echo '<span style="color:#880000">No</span>'; 
+			?>
+		</td>
+		<td>
+			<?php 
+			if ($item->uf_profile) echo '<span style="color:#008800">Yes</span>';
+			else echo '<span style="color:#880000">No</span>'; 
+			?>
+		</td>
+		<td>
+			<?php 
 			if ($item->uf_hidden) echo '<span style="color:#008800">Yes</span>';
 			else echo '<span style="color:#880000">No</span>'; 
 			?>

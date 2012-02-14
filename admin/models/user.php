@@ -170,6 +170,7 @@ class ContinuEdModelUser extends JModelAdmin
 				$fieldname = $fl->uf_sname;
 				if (isset($item->$fieldname)) {
 					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
+					//if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
 					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$userId.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
 					$db->setQuery($qf);
 					if (!$db->query()) {

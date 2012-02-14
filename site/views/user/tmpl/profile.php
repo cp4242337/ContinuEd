@@ -5,13 +5,16 @@ $cecfg = ContinuEdHelper::getConfig();
 	?>
 <div class="componentheading">User Profile</div>
 <?php 
-echo '<b>User Group:</b> '.$this->userinfo->userGroupName.'<br />';
-echo '<b>Registered on:</b> '.$this->userinfo->registerDate.'<br />';
-echo '<b>Last Updated:</b> '.$this->userinfo->lastUpdated.'<br /><br />';
+echo '<div class="continued-user-info-row"><div class="continued-user-info-label">User Group</div><div class="continued-user-info-value">'.$this->userinfo->userGroupName.'</div></div>';
+echo '<div class="continued-user-info-row"><div class="continued-user-info-label">Registered on</div><div class="continued-user-info-value">'.$this->userinfo->registerDate.'</div></div>';
+echo '<div class="continued-user-info-row"><div class="continued-user-info-label">Last Updated</div><div class="continued-user-info-value">'.$this->userinfo->lastUpdated.'</div></div>';
 foreach ($this->userfields as $f) {
-	if ($f->uf_type != "password") {
+	if ($f->uf_type != "password" && $f->uf_profile) {
 		$field=$f->uf_sname;
-		echo '<b>'.$f->uf_name.':</b> '.$this->userinfo->$field.'<br />';
+		echo '<div class="continued-user-info-row">';
+		echo '<div class="continued-user-info-label">'.$f->uf_name.'</div>';
+		echo '<div class="continued-user-info-value">'.$this->userinfo->$field.'</div>';
+		echo '</div>';
 	}
 }
 ?>

@@ -31,6 +31,12 @@ class ContinuEdViewUser extends JView
 			case "profile": 
 				$this->userProfile();
 				break;
+			case "proedit": 
+				$this->userEdit();
+				break;
+			case "saveuser": 
+				$this->saveUser();
+				break;
 		}
 		parent::display($tpl);
 	}
@@ -60,6 +66,40 @@ class ContinuEdViewUser extends JView
 			$userfields=$model->getUserFields($userinfo->userGroupID);
 			$this->assignRef('userinfo',$userinfo);
 			$this->assignRef('userfields',$userfields);
+		}
+		
+	}
+	
+	protected function userEdit() {
+		$model =& $this->getModel();
+		$print = JRequest::getVar('print');
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		if ($userid != 0) {
+			$userinfo=ContinuEdHelper::getUserInfo(true);
+			$userfields=$model->getUserFields($userinfo->userGroupID,false,true);
+			$this->assignRef('userinfo',$userinfo);
+			$this->assignRef('userfields',$userfields);
+		}
+		
+	}
+	
+	protected function saveUser() {
+		$model =& $this->getModel();
+		$print = JRequest::getVar('print');
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		if ($userid != 0) {
+			if (!$model->save()) {
+				$userinfo=ContinuEdHelper::getUserInfo(true);
+				$userfields=$model->getUserFields($userinfo->userGroupID,false,true);
+				$this->assignRef('userinfo',$userinfo);
+				$this->assignRef('userfields',$userfields);
+				$this->setLayout('proedit');
+			} else {
+				$app=Jfactory::getApplication();
+				$app->redirect('index.php?option=com_continued&view=user&layout=profile',"Profile Saved");
+			}
 		}
 		
 	}

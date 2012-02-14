@@ -362,7 +362,7 @@ class ContinuEdHelper {
 	*
 	* @since 1.20
 	*/
-	function getUserInfo() {
+	function getUserInfo($useids = false) {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
 		$db =& JFactory::getDBO();
@@ -373,7 +373,7 @@ class ContinuEdHelper {
 		$user->userGroupID=$groupdata->userGroupID;
 		$user->userGroupName=$groupdata->userGroupName;
 		$user->lastUpdated=$groupdata->lastUpdated;
-		$qd = 'SELECT f.uf_sname,f.uf_type,u.usr_data FROM #__ce_uguf as g';
+		$qd = 'SELECT f.uf_sname,f.uf_type,u.usr_data,f.uf_change FROM #__ce_uguf as g';
 		$qd.= ' RIGHT JOIN #__ce_ufields as f ON g.uguf_field = f.uf_id';
 		$qd.= ' RIGHT JOIN #__ce_users as u ON u.usr_field = f.uf_id && usr_user = '.$userid;
 		$qd.= ' WHERE g.uguf_group='.$user->userGroupID;
@@ -382,10 +382,17 @@ class ContinuEdHelper {
 		foreach ($udata as $u) {
 			$fn=$u->uf_sname;
 			if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox') {
-				$ansarr=explode(" ",$u->usr_data);
-				$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
-				$db->setQuery($q);
-				$user->$fn = implode(", ",$db->loadResultArray());
+				if ($useids && $u->uf_change) {
+					$user->$fn=explode(" ",$u->usr_data);
+				} else { 
+					$ansarr=explode(" ",$u->usr_data);
+					$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
+					$db->setQuery($q);
+					$user->$fn = implode(", ",$db->loadResultArray());
+				}
+			} else if ($u->uf_type == 'cbox' || $u->uf_type == 'yesno') {
+				if ($useids && $u->uf_change) $user->$fn=$u->usr_data;
+				else $user->$fn = ($u->usr_data == "1") ? "Yes" : "No";
 			} else {
 				$user->$fn=$u->usr_data;
 			}
