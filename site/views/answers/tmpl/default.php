@@ -2,7 +2,7 @@
 defined('_JEXEC') or die('Restricted access');
 global $cecfg;
 $db =& JFactory::getDBO();
-echo '<div class="componentheading">'.$this->cinfo['cname'].'</div>';
+echo '<h2 class="componentheading">'.$this->cinfo['cname'].'</h2>';
 $cpart = 0;
 echo '<div align="center"><table align="center" width="90%"><tr><td align="left"><b>Question</b></td><td align="right"><b>Your Answer</b></td></tr>';
 foreach ($this->qanda as $qanda) {

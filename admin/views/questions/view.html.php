@@ -15,6 +15,7 @@ class ContinuEdViewQuestions extends JView
 		$pagination = $this->get('Pagination');
 		$this->state		= $this->get('State');
 		$clist = $this->get('Courses');
+		$qgroups = $this->get('QGroups');
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -25,6 +26,7 @@ class ContinuEdViewQuestions extends JView
 		$this->items = $items;
 		$this->pagination = $pagination;
 		$this->clist = $clist;
+		$this->qgroups = $qgroups;
 		// Set the toolbar
 		$this->addToolBar();
 

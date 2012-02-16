@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted access');
 $cecfg = ContinuEdHelper::getConfig();
 $db =& JFactory::getDBO();
-echo '<div class="componentheading">'.$this->cinfo->course_name.'</div>';
+echo '<h2 class="componentheading">'.$this->cinfo->course_name.'</h2>';
 $cpart = 0;
 echo '<p>Please check your answers before proceeding. ';
 if ($this->haseval) echo 'You may go back to a part by clicking the Change button for each part.';

@@ -31,6 +31,9 @@ $saveOrder	= $listOrder == 'q.ordering';
 	<th width="75">
 		<?php echo JText::_( 'COM_CONTINUED_QUESTION_HEADING_CAT' ); ?>
 	</th>
+	<th width="75">
+		<?php echo JText::_( 'COM_CONTINUED_QUESTION_HEADING_QGROUP' ); ?>
+	</th>
 	<th width="50">
 		<?php echo JText::_( 'COM_CONTINUED_QUESTION_HEADING_REQUIRED' ); ?>
 	</th>

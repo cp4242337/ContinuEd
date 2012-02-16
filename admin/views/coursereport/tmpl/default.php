@@ -4,15 +4,21 @@ $pf[1]=JHTML::_('select.option','fail','Fail');
 $pf[2]=JHTML::_('select.option','incomplete','Incomplete');
 $pf[3]=JHTML::_('select.option','audit','Audit');
 $pf[4]=JHTML::_('select.option','complete','Complete');
-$pf[5]=JHTML::_('select.option','','All');
+$pf[5]=JHTML::_('select.option','','- All -');
 
 
-$type[0]=JHTML::_('select.option','','All');
+$type[0]=JHTML::_('select.option','','- All -');
 $type[1]=JHTML::_('select.option','nonce','Non CE');
 $type[2]=JHTML::_('select.option','ce','CE');
 $type[3]=JHTML::_('select.option','review','Review');
 $type[4]=JHTML::_('select.option','expired','Expired');
 $type[5]=JHTML::_('select.option','viewed','Viewed');
+
+$area[0]=JHTML::_('select.option','','- All -');
+$area[1]=JHTML::_('select.option','pre','Pre Test');
+$area[2]=JHTML::_('select.option','post','Post Test');
+$area[3]=JHTML::_('select.option','inter','Intermediate');
+$area[4]=JHTML::_('select.option','qanda','Q & A');
 
 ?>
 <form action="" method="post" name="adminForm">
@@ -20,11 +26,15 @@ $type[5]=JHTML::_('select.option','viewed','Viewed');
 	<tr>
 		<td align="left" width="100%"></td>
 		<td nowrap="nowrap" align="right"><?php
+		echo 'Date Range: '.JHTML::_('calendar',$this->startdate,'startdate','startdate','%Y-%m-%d','onchange="submitform();"');
+		echo ' - '.JHTML::_('calendar',$this->enddate,'enddate','enddate','%Y-%m-%d','onchange="submitform();"').'<br/>';
 		echo JText::_(' Category:').JHTML::_('select.genericlist',$this->catlist,'cat','onchange="submitform();"','value','text',$this->cat,'cat').'<br />';
 		echo JText::_(' Course:').JHTML::_('select.genericlist',$this->courselist,'course','onchange="submitform();"','value','text',$this->course,'course').'<br />';
-		echo 'Start: '.JHTML::_('calendar',$this->startdate,'startdate','startdate','%Y-%m-%d','onchange="submitform();"');
-		echo ' End: '.JHTML::_('calendar',$this->enddate,'enddate','enddate','%Y-%m-%d','onchange="submitform();"');
-		echo JText::_(' Group:').JHTML::_('select.genericlist',$this->grouplist,'usergroup','onchange="submitform();"','value','text',$this->usergroup,'grouplist');
+		if ($this->course) {
+			echo JText::_(' Question Group:').JHTML::_('select.genericlist',$this->qgrouplist,'qgroup','onchange="submitform();"','value','text',$this->qgroup,'qgrouplist');
+			echo JText::_(' Question Area:').JHTML::_('select.genericlist',$area,'qarea','onchange="submitform();"','value','text',$this->qarea,'area');
+		}
+		echo JText::_(' User Group:').JHTML::_('select.genericlist',$this->grouplist,'usergroup','onchange="submitform();"','value','text',$this->usergroup,'grouplist');
 		echo JText::_(' Status:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
 		echo JText::_(' View Type:').JHTML::_('select.genericlist',$type,'type','onchange="submitform();"','value','text',$this->type,'type');
 		?></td>

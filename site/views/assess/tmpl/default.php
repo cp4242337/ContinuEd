@@ -2,7 +2,7 @@
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 $cecfg = ContinuEdHelper::getConfig();
-echo '<div class="componentheading">'.$this->cinfo->course_name.'</div>';
+echo '<h2 class="componentheading">'.$this->cinfo->course_name.'</h2>';
 $assess = '<p>Assessment Question Score</p>';
 $assess .= '<div align="center"><table align="center" width="90%"><tr><td><b>Question & Explanation</b></td><td align="right"><b>Your Answer</b></td><td align="right"><b>Assessment</b></td></tr>';
 $assess .= '<tr><td colspan="3"><hr size="1" /></td></tr>';
@@ -15,7 +15,7 @@ if ($this->cinfo->course_evaltype == 'assess' && $this->cinfo->course_haseval) {
 		$assess .= '</b></td><td align="right"><b>';
 		if ($qanda->q_type == 'multi') {
 			if ($qanda->q_cat == 'assess' && $qanda->opt_correct == 1) {
-				$assess .='<span style="color:#008000">'.$qanda->opt_twxt.'</span></b></td><td align="right"><b><span style="color:#008000">Correct'; $numcorrect++;
+				$assess .='<span style="color:#008000">'.$qanda->opt_text.'</span></b></td><td align="right"><b><span style="color:#008000">Correct'; $numcorrect++;
 			}
 			if ($qanda->q_cat == 'assess' && $qanda->opt_correct == 0) {
 				$assess .= '<span style="color:#800000">'.$qanda->opt_text.'</span></b></td><td align="right"><b><span style="color:#800000">Incorrect';

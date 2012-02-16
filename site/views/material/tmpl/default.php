@@ -2,7 +2,7 @@
 <?php // no direct access
 $cecfg = ContinuEdHelper::getConfig();
 defined('_JEXEC') or die('Restricted access');
-echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
+echo '<h2 class="componentheading">'.$this->mtext->course_name.'</h2>';
 
 //Gve error message if they tryed to jummop over material staright to the eval
 if ($this->jumpedover) echo '<div class="continued-error">Please complete all material before proceeding</div>';

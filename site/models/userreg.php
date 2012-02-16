@@ -11,27 +11,28 @@ jimport( 'joomla.application.component.model' );
 /**
  *
  */
-class ContinuEdModelUser extends JModel
+class ContinuEdModelUserReg extends JModel
 {
 
-	function getCERecords($userid)
-	{
-		$db =& JFactory::getDBO();
-		$user =& JFactory::getUser();
-		$userid = $user->id;
-		$query  = 'SELECT * ';
-		$query .= 'FROM #__ce_records as f ';
-		$query .= 'LEFT JOIN #__ce_courses as c ON f.rec_course = c.course_id ';
-		$query .= 'LEFT JOIN #__ce_cats as p ON c.course_cat = p.cat_id ';
-		$query .= 'WHERE f.rec_user = '.$userid;
-		$query .= ' ORDER BY f.rec_start DESC';
-		$db->setQuery( $query );
-		$postlist = $db->loadObjectList();
-		return $postlist;
-	}
-
 	/**
-	* User Fields 
+	* Get User Groups 
+	*
+	* @return object array of user groups.
+	*
+	* @since 1.20
+	*/
+	function getUserGroups($id=0) {
+		$db =& JFactory::getDBO();
+		$qd = 'SELECT ug.* FROM #__ce_ugroups as ug';
+		if ($id) $qd .= " WHERE ug.ug_id = ".$id;
+		$qd.= ' ORDER BY ug.ug_name';
+		$db->setQuery( $qd ); 
+		$ugroups = $db->loadObjectList();
+		return $ugroups;
+	}
+	
+	/**
+	* Get User Fields 
 	*
 	* @param int $group Group id for user
 	*
@@ -39,13 +40,13 @@ class ContinuEdModelUser extends JModel
 	*
 	* @since 1.20
 	*/
-	function getUserFields($group,$showhidden=false,$all=false,$changable=false) {
+	function getUserFields($group,$all=true) {
 		$db =& JFactory::getDBO();
 		$qd = 'SELECT f.* FROM #__ce_uguf as g';
 		$qd.= ' RIGHT JOIN #__ce_ufields as f ON g.uguf_field = f.uf_id';
 		$qd.= ' WHERE f.published = 1 && g.uguf_group='.$group;
-		if (!$showhidden) $qd.=" && f.uf_hidden = 0";
-		if ($changable) $qd.=" && f.uf_change = 1";
+		$qd.=" && f.uf_hidden = 0";
+		$qd.=" && f.uf_reg = 1";
 		$qd.= ' ORDER BY f.ordering';
 		$db->setQuery( $qd ); 
 		$ufields = $db->loadObjectList();
@@ -64,6 +65,7 @@ class ContinuEdModelUser extends JModel
 		}
 		return $ufields;
 	}
+	
 	
 	/**
 	* Save User 
@@ -89,7 +91,7 @@ class ContinuEdModelUser extends JModel
 		{
 			//setup item and bind data
 			$fids = array();
-			$flist = $this->getUserFields($data['userGroupID'],false,false,true);
+			$flist = $this->getUserFields($data['userGroupID'],false);
 			foreach ($flist as $d) {
 				$fieldname = $d->uf_sname;
 				$item->$fieldname = $data[$fieldname];
@@ -97,32 +99,37 @@ class ContinuEdModelUser extends JModel
 			}
 			
 			//Update Joomla User Info
-			$user=JFactory::getUser();
+			$user= new JUser;
 			$udata['name']=$item->fname." ".$item->lname;
+			$udata['email']=$item->email;
+			$udata['username']=$item->username;
 			$udata['password']=$item->password;
 			$udata['password2']=$item->cpassword;
-			$udata['block']=$user->block;
+			$udata['block']=0;
+			$udata['groups'][]=2;
 			$user->bind($udata);
-			if (!$user->save(true)) {
+			if (!$user->save()) {
 				$this->setError('Save Error');
+				return false;
+			}
+			
+			//Update update date
+			$qud = 'INSERT INTO #__ce_usergroup (userg_user,userg_group,userg_update) VALUES ('.$user->id.','.$data['userGroupID'].',NOW())';
+			$db->setQuery($qud);
+			if (!$db->query()) {
+				$this->setError($db->getErrorMsg());
 				return false;
 			}
 			
 			//remove joomla user info from item
 			unset($item->password);
 			unset($item->cpassword);
+			unset($item->email);
+			unset($item->username);
 			
 			
-			//Save ContinuEd Userinfo
-			$query	= $db->getQuery(true);
-			$query->delete();
-			$query->from('#__ce_users');
-			$query->where('usr_user = '.$user->id);
-			$query->where('usr_field IN ('.implode(",",$fids).')');
-			$db->setQuery((string)$query);
-			$db->query();
-			
-			$flist = $this->getUserFields($data['userGroupID'],false,false,true);
+			// Save ContinuED user info
+			$flist = $this->getUserFields($data['userGroupID'],false);
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
 				if (isset($item->$fieldname)) {
@@ -137,13 +144,6 @@ class ContinuEdModelUser extends JModel
 				}
 			}
 			
-			//Update update date
-			$qud = 'UPDATE #__ce_usergroup SET userg_update = NOW() WHERE userg_user = '.$user->id;
-			$db->setQuery($qud);
-			if (!$db->query()) {
-				$this->setError($db->getErrorMsg());
-				return false;
-			}
 			
 		}
 		catch (Exception $e)

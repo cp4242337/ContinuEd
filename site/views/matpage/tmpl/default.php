@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 $cecfg = ContinuEdHelper::getConfig();
 
 // Display Title
-echo '<div class="componentheading">'.$this->matpage->mat_title.'</div>';
+echo '<h2 class="componentheading">'.$this->matpage->mat_title.'</h2>';
 
 // Display content
 

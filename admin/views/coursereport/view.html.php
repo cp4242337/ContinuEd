@@ -13,6 +13,8 @@ class ContinuEdViewCourseReport extends JView
 		$cid = $model->getState('course');
 		$cat = $model->getState('cat');
 		$usergroup = $model->getState('usergroup');
+		$qgroup = $model->getState('qgroup');
+		$qarea = $model->getState('qarea');
 		$tbar =& JToolBar::getInstance('toolbar');
 		$tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&controller=coursereport&task=csvme&course='.$cid.'&cat='.$cat.'&format=raw');
 		if ($cid) JToolBarHelper::back('Courses','index.php?option=com_continued&view=courses');
@@ -33,6 +35,7 @@ class ContinuEdViewCourseReport extends JView
 		$catlist = & $this->get( 'Cats' );
 		$userlist = & $this->get( 'Users' );
 		$grouplist = & $this->get( 'UserGroups' );
+		$qgrouplist = & $this->get( 'QGroups' );
 		$startdate = $model->getState('startdate');
 		$enddate = $model->getState('enddate');
 		$pf=$model->getState('pf');
@@ -40,16 +43,18 @@ class ContinuEdViewCourseReport extends JView
 
 		$this->assignRef('startdate',$startdate);
 		$this->assignRef('enddate',$enddate);
-		$this->assignRef('area',$area);
+		$this->assignRef('qarea',$qarea);
 		$this->assignRef('pf',$pf);
 		$this->assignRef('type',$type);
 		$this->assignRef('cat',$cat);
 		$this->assignRef('course',$cid);
 		$this->assignRef('grouplist',$grouplist);
+		$this->assignRef('qgrouplist',$qgrouplist);
 		$this->assignRef('courselist',$courselist);
 		$this->assignRef('catlist',$catlist);
 		$this->assignRef('userlist',$userlist);
 		$this->assignRef('usergroup',$usergroup);
+		$this->assignRef('qgroup',$qgroup);
 		$this->assignRef('items',		$items);
 		$this->assignRef('pagination',	$pagination);
 		parent::display($tpl);

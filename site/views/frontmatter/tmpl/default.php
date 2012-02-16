@@ -5,7 +5,7 @@ defined('_JEXEC') or die('Restricted access');
 $config = ContinuEdHelper::getConfig();
 $user =& JFactory::getUser();
 $username = $user->guest ? 'Guest' : $user->name;
-echo '<div class="componentheading">'.$this->cinfo->course_name.'</div>';
+echo '<h2 class="componentheading">'.$this->cinfo->course_name.'</h2>';
 if ($username == 'Guest'){
 	echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$config->LOGIN_MSG.'</span></p>';
 }

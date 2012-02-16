@@ -4,10 +4,10 @@ defined('_JEXEC') or die('Restricted access');
 $cecfg = ContinuEdHelper::getConfig();
 if (!$this->print) {
 	?>
-<div class="componentheading"><a
+<h2 class="componentheading"><a
 	href="index.php?option=com_continued&view=userce&print=1&tmpl=component"
 	target="_blank"><img src="components/com_continued/printButton.png"
-	border="0" align="right"></a><?php echo $cecfg->REC_TIT; ?></div>
+	border="0" align="right"></a><?php echo $cecfg->REC_TIT; ?></h2>
 <?php 
 } else {
 	echo '<div class="componentheading">'.$cecfg->REC_TIT.'<a href="javascript:print()"><img src="components/com_continued/printButton.png" border="0"> Print</a> </div>';

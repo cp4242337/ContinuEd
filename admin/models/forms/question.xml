@@ -59,6 +59,13 @@
 			<option value="assess">Assessment</option>
 			<option value="message">Message</option>
 		</field>
+		<field 
+			name="q_group" 
+			type="QuestionGroups" 
+			class="inputbox"
+			label="COM_CONTINUED_QUESTION_FIELD_QGROUP_LABEL"
+			description="COM_CONTINUED_QUESTION_FIELD_QGROUP_DESC" 
+		/>
 		<field
 			name="q_type"
 			type="list"

@@ -2,7 +2,7 @@
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
 $cecfg = ContinuEdHelper::getConfig();
-echo '<div class="componentheading">'.$this->mtext->course_name.'</div>';
+echo '<h2 class="componentheading">'.$this->mtext->course_name.'</h2>';
 echo '<h3>Posttest Part '.$this->part.' of '.$this->mtext->course_postparts;
 if ($this->parti) echo ' - '.$this->parti->part_name;
 echo '</h3>';

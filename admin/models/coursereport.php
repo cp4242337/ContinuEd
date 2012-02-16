@@ -22,8 +22,8 @@ class ContinuEdModelCourseReport extends JModel
 		
 		$mainframe = JFactory::getApplication();
 
-		$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit',							'limit',			$mainframe->getCfg( 'list_limit' ),	'int' );
-		$limitstart		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.limitstart',		'limitstart',		0,				'int' );
+		$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit','limit',$mainframe->getCfg( 'list_limit' ),'int' );
+		$limitstart		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.limitstart','limitstart',0,'int' );
 		$pf				= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.pf','pf','' );
 		$type			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.type','type','' );
 		$startdate		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.startdate','startdate',date("Y-m-d",strtotime("-1 months") ));
@@ -31,6 +31,8 @@ class ContinuEdModelCourseReport extends JModel
 		$course			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.course','course','' );
 		$cat			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.cat','cat','' );
 		$usergroup		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.usergroup','usergroup','' );
+		$qgroup			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.qgroup','qgroup','' );
+		$qarea			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.area','qarea','' );
 		
 		$this->setState('startdate', $startdate);
 		$this->setState('enddate', $enddate);
@@ -40,7 +42,9 @@ class ContinuEdModelCourseReport extends JModel
 		$this->setState('limitstart', $limitstart);
 		$this->setState('course', $course);
 		$this->setState('cat', $cat);
+		$this->setState('qarea', $qarea);
 		$this->setState('usergroup', $usergroup);
+		$this->setState('qgroup', $qgroup);
 
 	}
 	
@@ -116,9 +120,13 @@ class ContinuEdModelCourseReport extends JModel
 	
 	function getQuestions($cid,$area)
 	{
+		$qgroup = $this->getState('qgroup');
+		$qarea = $this->getState('qarea');
 		$stnum = JRequest::getVar('stnum');
 		$query  = ' SELECT * FROM #__ce_questions ';
 		$query .= 'WHERE q_type != "message" && q_area = "'.$area.'" && q_course ='.$cid.' ';
+		if ($qgroup) $query .= ' && q_group = '.$qgroup.' ';
+		if ($qarea) $query .= ' && q_area = "'.$qarea.'" ';
 		$query .= 'ORDER BY ordering ASC';
 		$db =& JFactory::getDBO();
 		$db->setQuery($query);
@@ -208,6 +216,16 @@ class ContinuEdModelCourseReport extends JModel
 		$clist = $this->_db->loadObjectList();
 		$clist[]->text='-- All --';
 		return $clist;
+	}
+	
+	public function getQGroups() {
+		$query = 'SELECT qg_id AS value, qg_name AS text' .
+				' FROM #__ce_questions_groups' .
+				' ORDER BY qg_name';
+		$this->_db->setQuery($query);
+		$glist = $this->_db->loadObjectList();
+		$glist[]->text='-- All --';
+		return $glist;
 	}
 
 }

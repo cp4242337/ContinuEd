@@ -55,7 +55,16 @@ defined('_JEXEC') or die('Restricted Access');
 			?>
 		</td>
 		<td>
-			<?php echo $item->q_cat; ?>
+			<?php 
+			switch ($item->q_cat) {
+				case "eval": echo "Evaluation"; break;
+				case "assess": echo "Assessment"; break;
+				case "message": echo "Message"; break;
+			}
+			?>
+		</td>
+		<td>
+			<?php echo $item->qg_name; ?>
 		</td>
 		<td>
 			<?php 

@@ -5,7 +5,7 @@ $cecfg = ContinuEdHelper::getConfig();
 ?>
 <?php
 if ($this->cat != 0) {
-	echo '<div class="componentheading">'.$this->catinfo->cat_name.'</div>';
+	echo '<h2 class="componentheading">'.$this->catinfo->cat_name.'</h2>';
 }
 
 //****************

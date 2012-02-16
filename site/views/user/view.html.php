@@ -91,11 +91,8 @@ class ContinuEdViewUser extends JView
 		$userid = $user->id;
 		if ($userid != 0) {
 			if (!$model->save()) {
-				$userinfo=ContinuEdHelper::getUserInfo(true);
-				$userfields=$model->getUserFields($userinfo->userGroupID,false,true);
-				$this->assignRef('userinfo',$userinfo);
-				$this->assignRef('userfields',$userfields);
-				$this->setLayout('proedit');
+				$app=Jfactory::getApplication();
+				$app->redirect('index.php?option=com_continued&view=user&layout=proedit',$model->getError());
 			} else {
 				$app=Jfactory::getApplication();
 				$app->redirect('index.php?option=com_continued&view=user&layout=profile',"Profile Saved");

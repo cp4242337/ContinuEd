@@ -3,9 +3,10 @@
 defined('_JEXEC') or die('Restricted access');
 $cecfg = ContinuEdHelper::getConfig();
 	?>
-<div class="componentheading">User Profile Edit</div>
+<h2 class="componentheading">User Profile Edit</h2>
 <?php 
 echo '<form action="" method="post">';
+echo '<div class="continued-user-info-row"><div class="continued-user-info-label">User Group</div><div class="continued-user-info-value">'.$this->userinfo->userGroupName.'</div></div>';
 foreach($this->userfields as $f) {
 	echo '<div class="continued-user-info-row">';
 	echo '<div class="continued-user-info-label">';
@@ -100,7 +101,7 @@ echo '<div class="continued-user-info-row">';
 echo '<div class="continued-user-info-label">';
 echo '</div>';
 echo '<div class="continued-user-info-value">';
-echo '<input type="submit" value="Save" name="subform">';
+echo '<input name="saveprofile" id="saveprofile" value="Save Profile" type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.'btn_save.png">';
 echo '</div></div>';
 echo '<input type="hidden" name="option" value="com_continued">';
 echo '<input type="hidden" name="view" value="user">';

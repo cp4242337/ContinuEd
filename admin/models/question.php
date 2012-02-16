@@ -79,6 +79,7 @@ class ContinuEdModelQuestion extends JModelAdmin
 				$app = JFactory::getApplication();
 				$data->set('q_course', JRequest::getInt('q_course', $app->getUserState('com_continued.questions.filter.course')));
 				$data->set('q_area', JRequest::getString('q_area', $app->getUserState('com_continued.questions.filter.area')));
+				$data->set('q_group', JRequest::getString('q_group', $app->getUserState('com_continued.questions.filter.qgroup')));
 			}
 		}
 		return $data;

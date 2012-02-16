@@ -31,6 +31,8 @@ class ContinuEdModelQuestions extends JModelList
 		$this->setState('filter.course', $courseId);
 		$area = $this->getUserStateFromRequest($this->context.'.filter.area', 'filter_area', '');
 		$this->setState('filter.area', $area);	
+		$qgroup = $this->getUserStateFromRequest($this->context.'.filter.qgroup', 'filter_qgroup', '');
+		$this->setState('filter.qgroup', $qgroup);	
 		
 		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '', 'string');
 		$this->setState('filter.published', $published);
@@ -54,20 +56,34 @@ class ContinuEdModelQuestions extends JModelList
 
 		// From the hello table
 		$query->from('#__ce_questions as q');
+		
 		// Join over the users.
 		$query->select('u.username AS username');
 		$query->join('LEFT', '#__users AS u ON u.id = q.q_addedby');
 		
+		// Join over the question group.
+		$query->select('qg.qg_name');
+		$query->join('LEFT', '#__ce_questions_groups AS qg ON qg.qg_id = q.q_group');
+				
 		// Filter by course.
 		$courseId = $this->getState('filter.course');
 		if (is_numeric($courseId)) {
 			$query->where('q.q_course = '.(int) $courseId);
 		}
+		
+		// Filter by group.
+		$qgroupId = $this->getState('filter.qgroup');
+		if (is_numeric($qgroupId)) {
+			$query->where('q.q_group = '.(int) $qgroupId);
+		}
+		
+		
 		// Filter by area.
 		$area = $this->getState('filter.area');
 		if ($area) {
 			$query->where('q.q_area = "'.$area.'" ');
 		}
+		
 		// Filter by published state
 		$published = $this->getState('filter.published');
 		if (is_numeric($published)) {
@@ -90,6 +106,14 @@ class ContinuEdModelQuestions extends JModelList
 		$query = 'SELECT course_id AS value, course_name AS text' .
 				' FROM #__ce_courses' .
 				' ORDER BY course_name';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
+	}
+	
+	public function getQGroups() {
+		$query = 'SELECT qg_id AS value, qg_name AS text' .
+				' FROM #__ce_questions_groups' .
+				' ORDER BY qg_name';
 		$this->_db->setQuery($query);
 		return $this->_db->loadObjectList();
 	}
