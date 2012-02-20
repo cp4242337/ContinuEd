@@ -17,6 +17,8 @@ class ContinuEdModelUserReg extends JModel
 	/**
 	* Get User Groups 
 	*
+	* @param int $id Group id for user
+	*
 	* @return object array of user groups.
 	*
 	* @since 1.20
@@ -35,6 +37,7 @@ class ContinuEdModelUserReg extends JModel
 	* Get User Fields 
 	*
 	* @param int $group Group id for user
+	* @param boolean $all t/f to get options for fields
 	*
 	* @return object of user data.
 	*
@@ -68,8 +71,7 @@ class ContinuEdModelUserReg extends JModel
 	
 	
 	/**
-	* Save User 
-	*
+	* Add New User 
 	*
 	* @return bollean of success.
 	*
@@ -83,6 +85,7 @@ class ContinuEdModelUserReg extends JModel
 		$isNew = true;
 		$db		= $this->getDbo();
 		$app=Jfactory::getApplication();
+		$cecfg = ContinuEdHelper::getConfig();
 		
 		// Include the content plugins for the on save events.
 		JPluginHelper::importPlugin('content');
@@ -126,6 +129,19 @@ class ContinuEdModelUserReg extends JModel
 				return false;
 			}
 			
+			//Setup Welcome email
+			$groupinfo = $this->getUserGroups($data['userGroupID']);
+			$emailtoaddress = $item->email;
+			$emailtoname = $item->fname." ".$item->lname;
+			$emailfromaddress = $cecfg->FROM_EMAIL;
+			$emailfromname = $cecfg->FROM_NAME;
+			$emailsubject = $cecfg->WELCOME_SUBJECT;
+			
+			$emailmsg = $groupinfo->ug_welcome_email;
+			$emailmsg = str_replace("{fullname}",$item->fname." ".$item->lname,$emailmsg);
+			$emailmsg = str_replace("{username}",$item->username,$emailmsg);
+			
+			
 			//remove joomla user info from item
 			unset($item->password);
 			unset($item->cpassword);
@@ -146,16 +162,23 @@ class ContinuEdModelUserReg extends JModel
 						$this->setError($db->getErrorMsg());
 						return false;
 					}
+					//welcome email fields
+					$emailmsg = str_replace("{".$fieldname."}",$item->$fieldname,$emailmsg);
 				}
 			}
+			
+			//Send Welcome Email
+			$mail = &JFactory::getMailer();
+			$mail->IsHTML(true);
+			$mail->addRecipient($emailtoaddress,$emailtoname);
+			$mail->setSender($emailfromaddress,$emailfromname);
+			$mail->setSubject($emailsubject);
+			$mail->setBody( $emailmsg );
+			$sent = $mail->Send();
 			
 			//Login User
 			$options = array();
 			$options['remember'] = true;
-	
-			
-	
-			//preform the login action
 			$error = $app->login($credentials, $options);
 			
 			
