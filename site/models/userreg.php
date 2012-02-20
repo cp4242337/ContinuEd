@@ -82,6 +82,7 @@ class ContinuEdModelUserReg extends JModel
 		$dispatcher = JDispatcher::getInstance();
 		$isNew = true;
 		$db		= $this->getDbo();
+		$app=Jfactory::getApplication();
 		
 		// Include the content plugins for the on save events.
 		JPluginHelper::importPlugin('content');
@@ -113,6 +114,10 @@ class ContinuEdModelUserReg extends JModel
 				return false;
 			}
 			
+			$credentials = array();
+			$credentials['username'] = $item->username;
+			$credentials['password'] = $item->password;
+			
 			//Update update date
 			$qud = 'INSERT INTO #__ce_usergroup (userg_user,userg_group,userg_update) VALUES ('.$user->id.','.$data['userGroupID'].',NOW())';
 			$db->setQuery($qud);
@@ -143,6 +148,15 @@ class ContinuEdModelUserReg extends JModel
 					}
 				}
 			}
+			
+			//Login User
+			$options = array();
+			$options['remember'] = true;
+	
+			
+	
+			//preform the login action
+			$error = $app->login($credentials, $options);
 			
 			
 		}
