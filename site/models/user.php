@@ -80,6 +80,7 @@ class ContinuEdModelUser extends JModel
 		$dispatcher = JDispatcher::getInstance();
 		$isNew = true;
 		$db		= $this->getDbo();
+		$ugroup = $data['userGroupID'];
 		
 		// Include the content plugins for the on save events.
 		JPluginHelper::importPlugin('content');
@@ -89,7 +90,7 @@ class ContinuEdModelUser extends JModel
 		{
 			//setup item and bind data
 			$fids = array();
-			$flist = $this->getUserFields($data['userGroupID'],false,false,true);
+			$flist = $this->getUserFields($ugroup,false,false,true);
 			foreach ($flist as $d) {
 				$fieldname = $d->uf_sname;
 				$item->$fieldname = $data[$fieldname];
@@ -122,19 +123,22 @@ class ContinuEdModelUser extends JModel
 			$db->setQuery((string)$query);
 			$db->query();
 			
-			$flist = $this->getUserFields($data['userGroupID'],false,false,true);
+			$flist = $this->getUserFields($ugroup,false,false,true);
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
-				if (isset($item->$fieldname)) {
+				//if (isset($item->$fieldname)) {
 					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
-					if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
+					if ($fl->uf_type=='cbox') { 
+						if ($item->$fieldname=='on') $item->$fieldname = 1;
+						else $item->$fieldname = 0;
+					}
 					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$user->id.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
 					$db->setQuery($qf);
 					if (!$db->query()) {
 						$this->setError($db->getErrorMsg());
 						return false;
 					}
-				}
+				//}
 			}
 			
 			//Update update date

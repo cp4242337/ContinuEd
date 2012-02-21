@@ -109,9 +109,12 @@ class ContinuEdModelUser extends JModelAdmin
 		}
 				
 		//get users group
-		$qg = 'SELECT userg_group FROM #__ce_usergroup WHERE userg_user = '.$item->usr_user;
+		$qg = 'SELECT * FROM #__ce_usergroup WHERE userg_user = '.$item->usr_user;
 		$this->_db->setQuery($qg);
-		$item->usergroup=$this->_db->loadResult();
+		$uginfo = $this->_db->loadObject();
+		$item->usergroup=$uginfo->userg_group;
+		$item->lastupdate=$uginfo->userg_updtae;
+		$item->usernotes=$uginfo->userg_notes;
 		
 		return $item;
 	}
@@ -122,6 +125,7 @@ class ContinuEdModelUser extends JModelAdmin
 		$dispatcher = JDispatcher::getInstance();
 		$isNew = true;
 		$userId=(int)$data['usr_user'];
+		$usernotes=$data['usernotes'];
 		$db		= $this->getDbo();
 		
 		// Include the content plugins for the on save events.
@@ -168,7 +172,7 @@ class ContinuEdModelUser extends JModelAdmin
 			$flist = $this->getFields(false);
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
-				if (isset($item->$fieldname)) {
+				//if (isset($item->$fieldname)) {
 					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
 					//if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
 					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$userId.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
@@ -177,8 +181,10 @@ class ContinuEdModelUser extends JModelAdmin
 						$this->setError($db->getErrorMsg());
 						return false;
 					}
-				}
+				//}
 			}
+			
+			
 			
 		}
 		catch (Exception $e)
@@ -205,7 +211,7 @@ class ContinuEdModelUser extends JModelAdmin
 		$db->query();
 		
 		if (!empty($data['usergroup'])) {
-			$qc = 'INSERT INTO #__ce_usergroup (userg_user,userg_group) VALUES ('.$userId.','.(int)$data['usergroup'].')';
+			$qc = 'INSERT INTO #__ce_usergroup (userg_user,userg_group,userg_notes) VALUES ('.$userId.','.(int)$data['usergroup'].',"'.$usernotes.'")';
 			$db->setQuery($qc);
 			if (!$db->query()) {
 				$this->setError($db->getErrorMsg());

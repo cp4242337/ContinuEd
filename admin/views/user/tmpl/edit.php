@@ -86,7 +86,12 @@ JHtml::_('behavior.formvalidation');
 	<div class="width-30 fltlft">
 		<fieldset class="adminform">
 			<legend>Other User Info</legend>
-			Pending...
+			<?php 
+				//text area
+				echo 'User Notes: <br /><textarea name="jform[usernotes]" id="jform_usernotes" cols="70" rows="4" class="inputbox">'.$this->item->usernotes.'</textarea>';
+				
+					
+			?>
 		</fieldset>
 	</div>
 	<div>
