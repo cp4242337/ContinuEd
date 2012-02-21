@@ -380,24 +380,25 @@ class ContinuEdHelper {
 		$db->setQuery( $qd ); 
 		$udata = $db->loadObjectList();
 		foreach ($udata as $u) {
-			$fn=$u->uf_sname;
-			if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox') {
-				if ($useids && $u->uf_change) {
-					$user->$fn=explode(" ",$u->usr_data);
-				} else { 
-					$ansarr=explode(" ",$u->usr_data);
-					$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
-					$db->setQuery($q);
-					$user->$fn = implode(", ",$db->loadResultArray());
+			if (!$u->uf_cms) {
+				$fn=$u->uf_sname;
+				if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox') {
+					if ($useids && $u->uf_change) {
+						$user->$fn=explode(" ",$u->usr_data);
+					} else { 
+						$ansarr=explode(" ",$u->usr_data);
+						$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
+						$db->setQuery($q);
+						$user->$fn = implode(", ",$db->loadResultArray());
+					}
+				} else if ($u->uf_type == 'cbox' || $u->uf_type == 'yesno') {
+					if ($useids && $u->uf_change) $user->$fn=$u->usr_data;
+					else $user->$fn = ($u->usr_data == "1") ? "Yes" : "No";
+				} else {
+					$user->$fn=$u->usr_data;
 				}
-			} else if ($u->uf_type == 'cbox' || $u->uf_type == 'yesno') {
-				if ($useids && $u->uf_change) $user->$fn=$u->usr_data;
-				else $user->$fn = ($u->usr_data == "1") ? "Yes" : "No";
-			} else {
-				$user->$fn=$u->usr_data;
 			}
 		}
-		
 		return $user;
 	}
 }

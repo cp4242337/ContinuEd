@@ -105,7 +105,7 @@ class ContinuEdModelUser extends JModel
 			$udata['block']=$user->block;
 			$user->bind($udata);
 			if (!$user->save(true)) {
-				$this->setError('Save Error');
+				$this->setError($user->getError());
 				return false;
 			}
 			
@@ -126,7 +126,7 @@ class ContinuEdModelUser extends JModel
 			$flist = $this->getUserFields($ugroup,false,false,true);
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
-				//if (isset($item->$fieldname)) {
+				if (!$fl->uf_cms) {
 					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
 					if ($fl->uf_type=='cbox') { 
 						if ($item->$fieldname=='on') $item->$fieldname = 1;
@@ -138,7 +138,7 @@ class ContinuEdModelUser extends JModel
 						$this->setError($db->getErrorMsg());
 						return false;
 					}
-				//}
+				}
 			}
 			
 			//Update update date

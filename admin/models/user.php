@@ -172,7 +172,7 @@ class ContinuEdModelUser extends JModelAdmin
 			$flist = $this->getFields(false);
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
-				//if (isset($item->$fieldname)) {
+				if (!$fl->uf_cms) {
 					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
 					//if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
 					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$userId.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
@@ -181,7 +181,7 @@ class ContinuEdModelUser extends JModelAdmin
 						$this->setError($db->getErrorMsg());
 						return false;
 					}
-				//}
+				}
 			}
 			
 			

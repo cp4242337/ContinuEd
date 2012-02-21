@@ -153,7 +153,7 @@ class ContinuEdModelUserReg extends JModel
 			$flist = $this->getUserFields($data['userGroupID'],false);
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
-				//if (isset($item->$fieldname)) {
+				if (!$fl->uf_cms) {
 					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
 					if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
 					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$user->id.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
@@ -164,7 +164,7 @@ class ContinuEdModelUserReg extends JModel
 					}
 					//welcome email fields
 					$emailmsg = str_replace("{".$fieldname."}",$item->$fieldname,$emailmsg);
-				//}
+				}
 			}
 			
 			//Send Welcome Email
