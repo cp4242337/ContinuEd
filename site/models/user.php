@@ -55,6 +55,7 @@ class ContinuEdModelUser extends JModel
 					case 'multi':
 					case 'dropdown':
 					case 'mcbox':
+					case 'mlist':
 						$qo = 'SELECT opt_id as value, opt_text as text FROM #__ce_ufields_opts WHERE opt_field='.$f->uf_id.' && published > 0 ORDER BY ordering';
 						$this->_db->setQuery($qo);
 						$f->options = $this->_db->loadObjectList();
@@ -75,6 +76,7 @@ class ContinuEdModelUser extends JModel
 	*/
 	public function save()
 	{
+		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		// Initialise variables;
 		$data		= JRequest::getVar('jform', array(), 'post', 'array'); 
 		$dispatcher = JDispatcher::getInstance();
@@ -127,7 +129,7 @@ class ContinuEdModelUser extends JModel
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
 				if (!$fl->uf_cms) {
-					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
+					if ($fl->uf_type=="mcbox" || $fl->uf_type=="mlist") $item->$fieldname = implode(" ",$item->$fieldname);
 					if ($fl->uf_type=='cbox') { 
 						if ($item->$fieldname=='on') $item->$fieldname = 1;
 						else $item->$fieldname = 0;

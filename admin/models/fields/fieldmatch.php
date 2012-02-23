@@ -52,7 +52,7 @@ class JFormFieldFieldMatch extends JFormField
 		$html[] = '<select name="'.$this->name.'" class="inputbox" '.$attr.'>';
 		$html[] = '<option value="">None</option>';
 		// Build the query for the ordering list.
-		$query = 'SELECT uf_id AS value, uf_sname AS text' .
+		$query = 'SELECT uf_sname AS value, uf_name AS text' .
 				' FROM #__ce_ufields' .
 				' WHERE uf_type IN("textbox","email","username","phone","password") ' .
 				' ORDER BY ordering';

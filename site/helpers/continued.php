@@ -382,14 +382,18 @@ class ContinuEdHelper {
 		foreach ($udata as $u) {
 			if (!$u->uf_cms) {
 				$fn=$u->uf_sname;
-				if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox') {
+				if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox' || $u->uf_type == 'mlist') {
 					if ($useids && $u->uf_change) {
 						$user->$fn=explode(" ",$u->usr_data);
 					} else { 
-						$ansarr=explode(" ",$u->usr_data);
-						$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
-						$db->setQuery($q);
-						$user->$fn = implode(", ",$db->loadResultArray());
+						if ($u->usr_data) {
+							$ansarr=explode(" ",$u->usr_data);
+							$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
+							$db->setQuery($q);
+							$user->$fn = implode(", ",$db->loadResultArray());
+						} else {
+							$user->$fn = "";
+						}
 					}
 				} else if ($u->uf_type == 'cbox' || $u->uf_type == 'yesno') {
 					if ($useids && $u->uf_change) $user->$fn=$u->usr_data;

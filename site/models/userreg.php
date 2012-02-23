@@ -58,6 +58,7 @@ class ContinuEdModelUserReg extends JModel
 				switch ($f->uf_type) {
 					case 'multi':
 					case 'dropdown':
+					case 'mlist':
 					case 'mcbox':
 						$qo = 'SELECT opt_id as value, opt_text as text FROM #__ce_ufields_opts WHERE opt_field='.$f->uf_id.' && published > 0 ORDER BY ordering';
 						$this->_db->setQuery($qo);
@@ -79,6 +80,7 @@ class ContinuEdModelUserReg extends JModel
 	*/
 	public function save()
 	{
+		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		// Initialise variables;
 		$data		= JRequest::getVar('jform', array(), 'post', 'array'); 
 		$dispatcher = JDispatcher::getInstance();
@@ -154,7 +156,7 @@ class ContinuEdModelUserReg extends JModel
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
 				if (!$fl->uf_cms) {
-					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
+					if ($fl->uf_type=="mcbox" || $fl->uf_type=="mlist") $item->$fieldname = implode(" ",$item->$fieldname);
 					if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
 					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$user->id.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
 					$db->setQuery($qf);

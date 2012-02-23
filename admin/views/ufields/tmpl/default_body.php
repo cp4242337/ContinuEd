@@ -45,6 +45,7 @@ defined('_JEXEC') or die('Restricted Access');
 				case "email": echo "Email"; break;
 				case "username": echo "Username"; break;
 				case "multi": echo "Radio Select"; break;
+				case "mlist": echo "MultiSelect List"; break;
 				case "cbox": echo "Check Box"; break;
 				case "mcbox": echo "Multi Checkbox"; break;
 				case "yesno": echo "Yes / No"; break;
@@ -87,7 +88,7 @@ defined('_JEXEC') or die('Restricted Access');
 		</td>
 		<td>
 		<?php 
-			if ($item->uf_type=='multi' || $item->uf_type=='mcbox' || $item->uf_type=='dropdown') {
+			if ($item->uf_type=='mlist' || $item->uf_type=='multi' || $item->uf_type=='mcbox' || $item->uf_type=='dropdown') {
 				echo '<a href="'.JRoute::_('index.php?option=com_continued&view=uopts&filter_field='.$item->uf_id).'">Options'; 
 				$db =& JFactory::getDBO();
 				$query = 'SELECT count(*) FROM #__ce_ufields_opts WHERE opt_field="'.$item->uf_id.'"';

@@ -60,6 +60,7 @@
 			<option value="mcbox">Multi Checkbox</option>
 			<option value="yesno">Yes / No</option>
 			<option value="dropdown">Drop Down</option>
+			<option value="mlist">MultiSelect List</option>
 			<option value="message">Message</option>
 			<option value="email">EMail</option>
 			<option value="username">UserName</option>

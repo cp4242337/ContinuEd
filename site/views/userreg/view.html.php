@@ -46,6 +46,7 @@ class ContinuEdViewUserReg extends JView
 	}
 	
 	protected function showForm() {
+		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		$model =& $this->getModel();
 		$groupid = JRequest::getInt('groupid');
 		$groupinfo = $model->getUserGroups($groupid);
