@@ -12,7 +12,11 @@ class ContinuEdModelUGroups extends JModelList
 	
 	public function __construct($config = array())
 	{
-		
+	if (empty($config['filter_fields'])) {
+			$config['filter_fields'] = array(
+				'ordering', 'ug.ordering',
+			);
+		}
 		parent::__construct($config);
 	}
 	
@@ -32,7 +36,7 @@ class ContinuEdModelUGroups extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('ug.ug_name', 'asc');
+		parent::populateState('ug.ordering', 'asc');
 	}
 	
 	protected function getListQuery() 

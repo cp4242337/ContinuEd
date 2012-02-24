@@ -398,7 +398,10 @@ class ContinuEdHelper {
 				} else if ($u->uf_type == 'cbox' || $u->uf_type == 'yesno') {
 					if ($useids && $u->uf_change) $user->$fn=$u->usr_data;
 					else $user->$fn = ($u->usr_data == "1") ? "Yes" : "No";
-				} else {
+				} else if ($u->uf_type == 'birthday') {
+					if ($useids && $u->uf_change) $user->$fn=$u->usr_data;
+					else $user->$fn = date("F j",strtotime('2000-'.substr($u->usr_data,0,2)."-".substr($u->usr_data,2,2).''));
+				} else{
 					$user->$fn=$u->usr_data;
 				}
 			}

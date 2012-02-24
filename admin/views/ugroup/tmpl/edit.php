@@ -16,7 +16,15 @@ $params = $this->form->getFieldsets('params');
 <?php endforeach; ?>
 			</ul>
 		</fieldset>
-
+	</div>
+	<div class="width-40 fltlft">
+		<fieldset class="adminform">
+			<legend><?php echo JText::_( 'COM_CONTINUED_UGROUP_SETTINGS' ); ?></legend>
+<?php foreach($this->form->getFieldset('settings') as $field): ?>
+				<?php echo '<div>'.$field->label.'<div class="clr"></div>'.$field->input.'</div>';?>
+				<div class="clr"></div>
+<?php endforeach; ?>
+		</fieldset>
 	</div>
 	<div>
 		<input type="hidden" name="task" value="ugroup.edit" />

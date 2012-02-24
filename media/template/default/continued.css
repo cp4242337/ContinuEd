@@ -1,6 +1,5 @@
 @CHARSET "UTF-8";
 
-
 #continued-fm-text { height: 240px; overflow: auto; padding: 2px; border: 1px solid rgb(0, 0, 0);}
 #continued-fm-agree { border: medium none; padding: 5px; }
 #continued-fm-error { color: rgb(136, 0, 0); font-size: 10pt; font-weight: bold; display: none; position: relative; }
@@ -37,7 +36,6 @@ input.continued-user-pick-radio {top: -9999px; position:absolute;}
 .continued-user-reg-submit {float:left; width: 360px; text-align:left; border-top: 1px solid #999999; padding: 3px 3px 3px 5px; min-height:20px;font-size:12px;}
 .continued-user-reg-error { font-weight:bold; float:left; width:140px; text-align:left; padding: 3px 5px 3px 3px; min-height:20px; font-size:10px;}
 
-
 #qabox-outer { margin: 10px auto; padding: 0; text-align:center; }
 #qabox-inner { margin: 0 auto; width: 450px; background: url(qabox-mid.png) repeat-y; text-align:left; color:#000; }
 #qabox-top { margin: 0 auto; width: 450px; background: url(qabox-top.png) no-repeat; text-align:left; color:#000; height: 10px; overflow:hidden; }
@@ -57,3 +55,6 @@ label.uf_pickerror { text-align: left; display: none; color: #800000; font-size:
 .uf_field { font-size:12px; padding:2px; width: 350px; border: solid 1px #888888;}
 .uf_select { }
 .uf_mselect { height:100px; }
+.uf_note { display: block; width:100%; font-size:10px; color: #555555;}
+.uf_bday_month { font-size:12px; padding:2px; width: 120px; border: solid 1px #888888; }
+.uf_bday_day { font-size:12px; padding:2px; width: 50px; border: solid 1px #888888; }

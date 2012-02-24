@@ -95,7 +95,14 @@ class ContinuEdModelUser extends JModel
 			$flist = $this->getUserFields($ugroup,false,false,true);
 			foreach ($flist as $d) {
 				$fieldname = $d->uf_sname;
-				$item->$fieldname = $data[$fieldname];
+				if ($d->uf_type=='birthday') {
+					$fmonth = (int)$data[$fieldname.'_month'];
+					$fday = (int)$data[$fieldname.'_day'];
+					if ($fmonth < 10) $fmonth = "0".$fmonth;
+					if ($fday < 10) $fday = "0".$fday;
+					$item->$fieldname = $fmonth.$fday;
+				}
+				else $item->$fieldname = $data[$fieldname];
 				$fids[]=$d->uf_id;
 			}
 			

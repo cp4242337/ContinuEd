@@ -27,7 +27,7 @@ class ContinuEdModelUserReg extends JModel
 		$db =& JFactory::getDBO();
 		$qd = 'SELECT ug.* FROM #__ce_ugroups as ug';
 		if ($id) $qd .= " WHERE ug.ug_id = ".$id;
-		$qd.= ' ORDER BY ug.ug_name';
+		$qd.= ' ORDER BY ug.ordering';
 		$db->setQuery( $qd ); 
 		$ugroups = $db->loadObjectList();
 		return $ugroups;
@@ -100,15 +100,22 @@ class ContinuEdModelUserReg extends JModel
 			$flist = $this->getUserFields($data['userGroupID'],false);
 			foreach ($flist as $d) {
 				$fieldname = $d->uf_sname;
-				$item->$fieldname = $data[$fieldname];
+				if ($d->uf_type=='birthday') {
+					$fmonth = (int)$data[$fieldname.'_month'];
+					$fday = (int)$data[$fieldname.'_day'];
+					if ($fmonth < 10) $fmonth = "0".$fmonth;
+					if ($fday < 10) $fday = "0".$fday;
+					$item->$fieldname = $fmonth.$fday;
+				}
+				else $item->$fieldname = $data[$fieldname];
 				$fids[]=$d->uf_id;
 			}
 			
 			//Update Joomla User Info
 			$user= new JUser;
 			$udata['name']=$item->fname." ".$item->lname;
-			$udata['email']=$item->email;
-			$udata['username']=$item->username;
+			$udata['email']=strtolower($item->email);
+			$udata['username']=strtolower($item->username);
 			$udata['password']=$item->password;
 			$udata['password2']=$item->cpassword;
 			$udata['block']=0;
@@ -120,7 +127,7 @@ class ContinuEdModelUserReg extends JModel
 			}
 			
 			$credentials = array();
-			$credentials['username'] = $item->username;
+			$credentials['username'] = strtolower($item->username);
 			$credentials['password'] = $item->password;
 			
 			//Update update date

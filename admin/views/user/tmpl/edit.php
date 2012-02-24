@@ -22,7 +22,7 @@ JHtml::_('behavior.formvalidation');
 					echo '<label id="jform_'.$sname.'-lbl" for="jform_'.$sname.'" class="hasTip" title="'.$f->uf_name.'::">'.$f->uf_name.'</label>';
 					
 					//multi checkbox
-					if ($f->uf_type=="mcbox") {
+					if ($f->uf_type=="mcbox" || $f->uf_type=="mlist") {
 						echo '<fieldset id="jform_'.$sname.'" class="radio inputbox">';
 						foreach ($f->options as $o) {
 							if (!empty($this->item->$sname)) $checked = in_array($o->value,$this->item->$sname) ? ' checked="checked"' : '';
@@ -47,8 +47,8 @@ JHtml::_('behavior.formvalidation');
 						echo '</select>';
 					}
 					
-					//text field, phone #, email, username
-					if ($f->uf_type=="textbox" || $f->uf_type=="email" || $f->uf_type=="username" || $f->uf_type=="phone") {
+					//text field, phone #, email, username, birthday
+					if ($f->uf_type=="textbox" || $f->uf_type=="email" || $f->uf_type=="username" || $f->uf_type=="phone" || $f->uf_type=="birthday") {
 						echo '<input name="jform['.$sname.']" id="jform_'.$sname.'" value="'.$this->item->$sname.'" class="inputbox" size="70" type="text">';
 					}
 					

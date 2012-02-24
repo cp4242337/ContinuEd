@@ -53,8 +53,8 @@
 			label="COM_CONTINUED_UFIELD_FIELD_TYPE_LABEL"
 			description="COM_CONTINUED_UFIELD_FIELD_TYPE_DESC"
 			required="true">
-			<option value="textar">Text Box</option>
 			<option value="textbox">Text Field</option>
+			<option value="textar">Text Box</option>
 			<option value="multi">Radio Select</option>
 			<option value="cbox">Check Box</option>
 			<option value="mcbox">Multi Checkbox</option>
@@ -66,6 +66,7 @@
 			<option value="username">UserName</option>
 			<option value="phone">Phone</option>
 			<option value="password">Password</option>
+			<option value="birthday">Birthday</option>
 		</field>
 		<field
 			name="uf_req"
@@ -79,6 +80,26 @@
 			<option	value="1">Yes</option>
 			<option	value="0">No</option>
 		</field>
+		<field
+			name="uf_min"
+			type="text"
+			extension="com_continued"
+			class="inputbox"
+			size="6"
+			label="COM_CONTINUED_UFIELD_FIELD_MIN_LABEL"
+			description="COM_CONTINUED_UFIELD_FIELD_MIN_DESC"
+			required="true"
+			default="0" />
+		<field
+			name="uf_max"
+			type="text"
+			extension="com_continued"
+			class="inputbox"
+			size="6"
+			label="COM_CONTINUED_UFIELD_FIELD_MAX_LABEL"
+			description="COM_CONTINUED_UFIELD_FIELD_MAX_DESC"
+			required="true"
+			default="0" />
 		<field
 			name="uf_change"
 			type="radio"

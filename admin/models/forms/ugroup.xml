@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: question.xml 62 2010-11-28 16:08:16Z chdemko $ -->
 <form>
-	<fieldset name="details">
+	<fieldset name="settings">
 		<field
 			name="ug_id"
 			type="hidden"
@@ -30,6 +30,15 @@
 			description="JFIELD_ACCESS_DESC"
 			default="1"
 			filter="integer"/>
+		<field 
+			name="ordering" 
+			type="OrderUGroup" 
+			class="inputbox"
+			label="JFIELD_ORDERING_LABEL"
+			description="JFIELD_ORDERING_DESC" 
+		/>
+	</fieldset>	
+	<fieldset name="details">
 		<field
 			name="ug_name"
 			type="text"
@@ -39,6 +48,27 @@
 			class="inputbox"
 			required="true"
 			default=""
+		/>
+		<field
+			name="ug_desc"
+			type="textarea"
+			label="COM_CONTINUED_UGROUP_FIELD_DESC_LABEL"
+			description="COM_CONTINUED_UGROUP_FIELD_DESC_DESC"
+			rows="4"
+			cols="70"
+			class="inputbox"
+			required="true"
+			filter="safehtml"
+			buttons="false"
+		/>
+		<field
+			name="ug_welcome_email"
+			type="editor"
+			label="COM_CONTINUED_UGROUP_FIELD_WELCOMEEML_LABEL"
+			description="COM_CONTINUED_UGROUP_FIELD_WELCOMEEML_DESC"
+			class="inputbox"
+			filter="safehtml"
+			buttons="false"
 		/>
 
 	</fieldset>
