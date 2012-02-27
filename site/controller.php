@@ -35,7 +35,7 @@ class ContinuEdController extends JController {
 					// Check if user registration is enabled
             		if(JComponentHelper::getParams('com_users')->get('allowUserRegistration') == 0) {
             			// Registration is disabled - Redirect to login page.
-						$this->setRedirect(JRoute::_('index.php?option=com_users&view=login', false));
+						$this->setRedirect(JRoute::_('index.php?option=com_continued&view=login', false));
 						return;
             		}
 
@@ -50,9 +50,21 @@ class ContinuEdController extends JController {
 					$user = JFactory::getUser();
 					if ($user->get('guest') == 1) {
 						// Redirect to login page.
-						$this->setRedirect(JRoute::_('index.php?option=com_users&view=login', false));
+						$this->setRedirect(JRoute::_('index.php?option=com_continued&view=login&layout=login', false));
 						return;
 					}
+					$model = $this->getModel($vName);
+					break;
+
+				case 'login':
+
+					// If the user is a guest, redirect to the login page.
+					$user = JFactory::getUser();
+					if ($lName == 'login' && $user->id) {
+						// Redirect to login page.
+						$this->setRedirect(JRoute::_('index.php?option=com_continued&view=user&layout=profile', false));
+						return;
+					} 
 					$model = $this->getModel($vName);
 					break;
 
