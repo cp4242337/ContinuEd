@@ -50,7 +50,7 @@ class JFormFieldOrderUGroup extends JFormField
 		$attr .= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
 
 		// Get some field values from the form.
-		$optionId	= (int) $this->form->getValue('uf_id');
+		$optionId	= (int) $this->form->getValue('ug_id');
 		
 		// Build the query for the ordering list.
 		$query = 'SELECT ordering AS value, ug_name AS text' .

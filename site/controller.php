@@ -43,7 +43,19 @@ class ContinuEdController extends JController {
 					$model = $this->getModel($vName);
 					break;
 
-				// Handle view specific models.
+				case 'lost':
+					// If the user is already logged in, redirect to the profile page.
+					$user = JFactory::getUser();
+					if ($user->get('guest') != 1) {
+						// Redirect to profile page.
+						$this->setRedirect(JRoute::_('index.php?option=com_continued&view=user&layout=profile', false));
+						return;
+					}
+
+					// The user is a guest, load the lost password model and show the lost password page.
+					$model = $this->getModel($vName);
+					break;
+
 				case 'user':
 
 					// If the user is a guest, redirect to the login page.

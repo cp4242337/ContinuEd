@@ -32,7 +32,7 @@ class ContinuEdViewLogin extends JView
 	public function display($tpl = null) {
 		// Get the view data.
 		$this->user		= JFactory::getUser();
-		$this->params	= JFactory::getApplication()->getParams('com_users');
+		$this->params	= JFactory::getApplication()->getParams('com_continued');
 		$layout = $this->getLayout();
 		
 		switch($layout) {

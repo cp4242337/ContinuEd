@@ -408,4 +408,25 @@ class ContinuEdHelper {
 		}
 		return $user;
 	}
+	
+	/**
+	* User Group 
+	*
+	* @return object of users group.
+	*
+	* @since 1.20
+	*/
+	function getUserGroup($userid = 0) {
+		if (!$userid) {
+			$user =& JFactory::getUser();
+			$userid = $user->id;
+		}
+		$db =& JFactory::getDBO();
+		$query = 'SELECT ug.userg_group AS userGroupID, ug.userg_update AS lastUpdated, g.* FROM #__ce_usergroup as ug ';
+		$query.= 'RIGHT JOIN #__ce_ugroups AS g ON ug.userg_group = g.ug_id ';
+		$query.= 'WHERE ug.userg_user="'.$userid.'"';
+		$db->setQuery($query);
+		$usergroup = $db->loadObject();
+		return $usergroup;
+	}
 }

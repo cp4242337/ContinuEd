@@ -70,6 +70,15 @@
 			filter="safehtml"
 			buttons="false"
 		/>
+		<field
+			name="ug_lostinfo_email"
+			type="editor"
+			label="COM_CONTINUED_UGROUP_FIELD_LOSTEML_LABEL"
+			description="COM_CONTINUED_UGROUP_FIELD_LOSTEML_DESC"
+			class="inputbox"
+			filter="safehtml"
+			buttons="false"
+		/>
 
 	</fieldset>
 	
