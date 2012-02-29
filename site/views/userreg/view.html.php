@@ -28,6 +28,9 @@ class ContinuEdViewUserReg extends JView
 			case "default": 
 				$this->pickGroup();
 				break;
+			case "groupuser": 
+				$this->setGroup();
+				break;
 			case "regform": 
 				$this->showForm();
 				break;
@@ -42,18 +45,29 @@ class ContinuEdViewUserReg extends JView
 		$model =& $this->getModel();
 		$groups=$model->getUserGroups();
 		$this->assignRef('groups',$groups);
+	}
+	
+	protected function setGroup() {
+		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		$app=Jfactory::getApplication();
+		$app->setUserState('continued.userreg.groupid',JRequest::getInt('groupid')); 
+		$app->redirect('index.php?option=com_continued&view=userreg&layout=regform');
 		
 	}
 	
 	protected function showForm() {
-		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		$model =& $this->getModel();
-		$groupid = JRequest::getInt('groupid');
-		$groupinfo = $model->getUserGroups($groupid);
-		$userfields=$model->getUserFields($groupid);
-		$this->assignRef('groupinfo',$groupinfo);
-		$this->assignRef('groupid',$groupid);
-		$this->assignRef('userfields',$userfields);
+		$app=Jfactory::getApplication();
+		$groupid = $app->getUserState('continued.userreg.groupid');
+		if ($groupid) {
+			$groupinfo = $model->getUserGroups($groupid);
+			$userfields=$model->getUserFields($groupid);
+			$this->assignRef('groupinfo',$groupinfo);
+			$this->assignRef('groupid',$groupid);
+			$this->assignRef('userfields',$userfields);
+		} else {
+			$app->redirect('index.php?option=com_continued&view=userreg');
+		}
 	}
 	
 	protected function addUser() {
@@ -62,11 +76,9 @@ class ContinuEdViewUserReg extends JView
 		
 		$groupid = JRequest::getInt('jform[userGroupID]');
 		if (!$model->save()) {
-			$app->redirect('index.php?option=com_continued&view=userreg&layout=regform&groupid='.$groupid,$model->getError());
+			$app->redirect('index.php?option=com_continued&view=userreg&layout=regform&groupid='.$groupid,$model->getError(),'error');
 		} else {
-			
-			//redir to profile
-			$app->redirect('index.php?option=com_continued&view=user&layout=profile',"Registration Complete");
+			$app->redirect('index.php?option=com_continued&view=user&layout=profile');
 		}		
 	}
 }

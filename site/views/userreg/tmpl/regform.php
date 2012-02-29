@@ -40,7 +40,7 @@ foreach($this->userfields as $f) {
 		
 	//checkbox
 	if ($f->uf_type=="cbox") {
-		if (!empty($this->userinfo->$sname)) $checked = ($this->userinfo->$sname == '1') ? ' checked="checked"' : '';
+		if (!empty($f->value)) $checked = ($f->value == '1') ? ' checked="checked"' : '';
 		else $checked = '';
 		echo '<input type="checkbox" name="jform['.$sname.']" id="jform_'.$sname.'" class="uf_radio"';
 		if ($f->uf_req) { echo ' validate="{required:true, messages:{required:\'This Field is required\'}}"'; }
@@ -53,7 +53,7 @@ foreach($this->userfields as $f) {
 	if ($f->uf_type=="mcbox") {
 		$first = true;
 		foreach ($f->options as $o) {
-			if (!empty($this->userinfo->$sname)) $checked = in_array($o->value,$this->userinfo->$sname) ? ' checked="checked"' : '';
+			if (!empty($f->value)) $checked = in_array($o->value,$f->value) ? ' checked="checked"' : '';
 			else $checked = '';
 			echo '<input type="checkbox" name="jform['.$sname.'][]" value="'.$o->value.'" class="uf_radio" id="jform_'.$sname.$o->value.'"';
 			if ($f->uf_req && $first) {
@@ -77,7 +77,7 @@ foreach($this->userfields as $f) {
 	if ($f->uf_type=="multi") {
 		$first=true;
 		foreach ($f->options as $o) {
-			if (!empty($this->userinfo->$sname)) $checked = in_array($o->value,$this->userinfo->$sname) ? ' checked="checked"' : '';
+			if (!empty($f->value)) $checked = in_array($o->value,$f->value) ? ' checked="checked"' : '';
 			else $checked = '';
 			echo '<input type="radio" name="jform['.$sname.']" value="'.$o->value.'" id="jform_'.$sname.$o->value.'" class="uf_radio"';
 			if ($f->uf_req && $first) { echo ' validate="{required:true, messages:{required:\'This Field is required\'}}"'; $first=false;}
@@ -94,7 +94,7 @@ foreach($this->userfields as $f) {
 		if ($f->uf_req) { echo ' validate="{required:true, messages:{required:\'This Field is required\'}}"'; }
 		echo '>';
 		foreach ($f->options as $o) {
-			if (!empty($this->userinfo->$sname)) $selected = in_array($o->value,$this->userinfo->$sname) ? ' selected="selected"' : '';
+			if (!empty($f->value)) $selected = in_array($o->value,$f->value) ? ' selected="selected"' : '';
 			else $selected = '';
 			echo '<option value="'.$o->value.'"'.$selected.'>';
 			echo ' '.$o->text.'</option>';
@@ -117,7 +117,7 @@ foreach($this->userfields as $f) {
 		}
 		echo '>';
 		foreach ($f->options as $o) {
-			if (!empty($this->userinfo->$sname)) $selected = in_array($o->value,$this->userinfo->$sname) ? ' selected="selected"' : '';
+			if (!empty($f->value)) $selected = in_array($o->value,$f->value) ? ' selected="selected"' : '';
 			else $selected = '';
 			echo '<option value="'.$o->value.'"'.$selected.'>';
 			echo ' '.$o->text.'</option>';
@@ -128,7 +128,7 @@ foreach($this->userfields as $f) {
 	
 	//text field, phone #, email, username
 	if ($f->uf_type=="textbox" || $f->uf_type=="email" || $f->uf_type=="username" || $f->uf_type=="phone") {
-		echo '<input name="jform['.$sname.']" id="jform_'.$sname.'" value="'.$this->userinfo->$sname.'" class="uf_field" type="text"';
+		echo '<input name="jform['.$sname.']" id="jform_'.$sname.'" value="'.$f->value.'" class="uf_field" type="text"';
 		if ($f->uf_req) { 
 			echo ' validate="{required:true';
 			if ($f->uf_min) echo ', minlength:'.$f->uf_min;
@@ -163,7 +163,7 @@ foreach($this->userfields as $f) {
 	if ($f->uf_type=="textar") {
 		echo '<textarea name="jform['.$sname.']" id="jform_'.$sname.'" cols="70" rows="4" class="uf_field"';
 		if ($f->uf_req) { echo ' validate="{required:true, messages:{required:\'This Field is required\'}}"'; }
-		echo '>'.$this->userinfo->$sname.'</textarea>';
+		echo '>'.$f->value.'</textarea>';
 	}
 	
 	//Yes no
@@ -171,10 +171,10 @@ foreach($this->userfields as $f) {
 		echo '<select id="jform_'.$sname.'" name="jform['.$sname.']" class="uf_field" size="1">';
 		$selected = ' selected="selected"';
 		echo '<option value="1"';
-		echo ($this->userinfo->$sname == "1") ? $selected : '';
+		echo ($f->value == "1") ? $selected : '';
 		echo '>Yes</option>';
 		echo '<option value="0"';
-		echo ($this->userinfo->$sname == "0") ? $selected : '';
+		echo ($f->value == "0") ? $selected : '';
 		echo '>No</option>';
 		
 		echo '</select>';
@@ -186,31 +186,49 @@ foreach($this->userfields as $f) {
 	if ($f->uf_type=="birthday") {
 		$selected = ' selected="selected"';
 		echo '<select id="jform_'.$sname.'_month" name="jform['.$sname.'_month]" class="uf_bday_month">';
-		echo '<option value="01"'; echo (substr($this->userinfo->$sname,0,2) == "01") ? $selected : ''; echo '>01 - January</option>';
-		echo '<option value="02"'; echo (substr($this->userinfo->$sname,0,2) == "02") ? $selected : ''; echo '>02 - February</option>';
-		echo '<option value="03"'; echo (substr($this->userinfo->$sname,0,2) == "03") ? $selected : ''; echo '>03 - March</option>';
-		echo '<option value="04"'; echo (substr($this->userinfo->$sname,0,2) == "04") ? $selected : ''; echo '>04 - April</option>';
-		echo '<option value="05"'; echo (substr($this->userinfo->$sname,0,2) == "05") ? $selected : ''; echo '>05 - May</option>';
-		echo '<option value="06"'; echo (substr($this->userinfo->$sname,0,2) == "06") ? $selected : ''; echo '>06 - June</option>';
-		echo '<option value="07"'; echo (substr($this->userinfo->$sname,0,2) == "07") ? $selected : ''; echo '>07 - July</option>';
-		echo '<option value="08"'; echo (substr($this->userinfo->$sname,0,2) == "08") ? $selected : ''; echo '>08 - August</option>';
-		echo '<option value="09"'; echo (substr($this->userinfo->$sname,0,2) == "09") ? $selected : ''; echo '>09 - September</option>';
-		echo '<option value="10"'; echo (substr($this->userinfo->$sname,0,2) == "10") ? $selected : ''; echo '>10 - October</option>';
-		echo '<option value="11"'; echo (substr($this->userinfo->$sname,0,2) == "11") ? $selected : ''; echo '>11 - November</option>';
-		echo '<option value="12"'; echo (substr($this->userinfo->$sname,0,2) == "12") ? $selected : ''; echo '>12 - December</option>';
+		echo '<option value="01"'; echo (substr($f->value,0,2) == "01") ? $selected : ''; echo '>01 - January</option>';
+		echo '<option value="02"'; echo (substr($f->value,0,2) == "02") ? $selected : ''; echo '>02 - February</option>';
+		echo '<option value="03"'; echo (substr($f->value,0,2) == "03") ? $selected : ''; echo '>03 - March</option>';
+		echo '<option value="04"'; echo (substr($f->value,0,2) == "04") ? $selected : ''; echo '>04 - April</option>';
+		echo '<option value="05"'; echo (substr($f->value,0,2) == "05") ? $selected : ''; echo '>05 - May</option>';
+		echo '<option value="06"'; echo (substr($f->value,0,2) == "06") ? $selected : ''; echo '>06 - June</option>';
+		echo '<option value="07"'; echo (substr($f->value,0,2) == "07") ? $selected : ''; echo '>07 - July</option>';
+		echo '<option value="08"'; echo (substr($f->value,0,2) == "08") ? $selected : ''; echo '>08 - August</option>';
+		echo '<option value="09"'; echo (substr($f->value,0,2) == "09") ? $selected : ''; echo '>09 - September</option>';
+		echo '<option value="10"'; echo (substr($f->value,0,2) == "10") ? $selected : ''; echo '>10 - October</option>';
+		echo '<option value="11"'; echo (substr($f->value,0,2) == "11") ? $selected : ''; echo '>11 - November</option>';
+		echo '<option value="12"'; echo (substr($f->value,0,2) == "12") ? $selected : ''; echo '>12 - December</option>';
 		echo '</select>';
 		echo '<select id="jform_'.$sname.'_day" name="jform['.$sname.'_day]" class="uf_bday_day">';
 		for ($i=1;$i<=31;$i++) {
 			if ($i<10) $val = "0".$i;
 			else $val=$i;
 			echo '<option value="'.$val.'"';
-			echo (substr($this->userinfo->$sname,2,2) == $val) ? $selected : '';
+			echo (substr($f->value,2,2) == $val) ? $selected : '';
 			echo '>'.$val.'</option>';
 		}
 		echo '</select>';	
 	}
 	
-	if ($f->uf_note) echo '<span class="uf_note">'.$f->uf_note.'</span>';
+
+	//captcha
+	if ($f->uf_type=="captcha") {
+		echo '<img id="captcha_img" src="'.JURI::base(true).'/components/com_continued/lib/securimage/securimage_show.php" alt="CAPTCHA Image" />';
+		echo '<input name="jform['.$sname.']" id="jform_'.$sname.'" value="" class="uf_field" type="text"';
+		if ($f->uf_req) { 
+			echo ' validate="{required:true';
+			//echo ',remote: { url: \''.JURI::base( true ).'/components/com_continued/helpers/chkcaptcha.php\', type: \'post\'}';
+			echo ', messages:{required:\'This Field is required\'';
+			//echo ', remote:\'The security code entered is incorrect\'';
+			echo '}}"'; 
+		}
+		echo '>';
+		echo '<span class="uf_note">';
+		echo '<a href="#" onclick="document.getElementById(\'captcha_img\').src = \''.JURI::base(true).'/components/com_continued/lib/securimage/securimage_show.php?\' + Math.random(); return false">Reload Image</a>';
+		echo '</span>';
+	}
+	
+	if ($f->uf_note && $f->uf_type!="captcha") echo '<span class="uf_note">'.$f->uf_note.'</span>';
 
 	echo '</div>';
 	echo '<div class="continued-user-reg-error">';

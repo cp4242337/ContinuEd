@@ -44,6 +44,7 @@ class ContinuEdModelUserReg extends JModel
 	* @since 1.20
 	*/
 	function getUserFields($group,$all=true) {
+		$app=Jfactory::getApplication();
 		$db =& JFactory::getDBO();
 		$qd = 'SELECT f.* FROM #__ce_uguf as g';
 		$qd.= ' RIGHT JOIN #__ce_ufields as f ON g.uguf_field = f.uf_id';
@@ -64,6 +65,19 @@ class ContinuEdModelUserReg extends JModel
 						$this->_db->setQuery($qo);
 						$f->options = $this->_db->loadObjectList();
 						break;
+				}
+			}
+		
+			foreach ($ufields as &$u) {
+				$fn=$u->uf_sname;
+				if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox' || $u->uf_type == 'mlist') {
+					$u->value=explode(" ",$app->getUserState('continued.userreg.'.$fn)); 
+				} else if ($u->uf_type == 'cbox' || $u->uf_type == 'yesno') {
+					$u->value=$app->getUserState('continued.userreg.'.$fn);
+				} else if ($u->uf_type == 'birthday') {
+					$u->value=$app->getUserState('continued.userreg.'.$fn);
+				} else if ($u->uf_type != 'captcha') {
+					$u->value=$app->getUserState('continued.userreg.'.$fn);
 				}
 			}
 		}
@@ -87,6 +101,7 @@ class ContinuEdModelUserReg extends JModel
 		$isNew = true;
 		$db		= $this->getDbo();
 		$app=Jfactory::getApplication();
+		$session=JFactory::getSession();
 		$cecfg = ContinuEdHelper::getConfig();
 		
 		// Include the content plugins for the on save events.
@@ -100,15 +115,30 @@ class ContinuEdModelUserReg extends JModel
 			$flist = $this->getUserFields($data['userGroupID'],false);
 			foreach ($flist as $d) {
 				$fieldname = $d->uf_sname;
-				if ($d->uf_type=='birthday') {
+				if ($d->uf_type == 'captcha') {
+					include_once 'components/com_continued/lib/securimage/securimage.php';
+					$securimage = new Securimage();
+					$securimage->session_name = $session->getName();
+					$securimage->case_sensitive  = false; 
+					if ($securimage->check($data[$fieldname]) == false) {
+						$this->setError('Security Code Incorrect');
+						return false;
+					} 
+				} else if ($d->uf_type=="mcbox" || $d->uf_type=="mlist") {
+					$item->$fieldname = implode(" ",$data[$fieldname]);
+				} else if ($d->uf_type=='cbox') {
+					$item->$fieldname = ($data[$fieldname]=='on') ? "1" : "0";
+				} else if ($d->uf_type=='birthday') {
 					$fmonth = (int)$data[$fieldname.'_month'];
 					$fday = (int)$data[$fieldname.'_day'];
 					if ($fmonth < 10) $fmonth = "0".$fmonth;
 					if ($fday < 10) $fday = "0".$fday;
 					$item->$fieldname = $fmonth.$fday;
+				} else {
+					$item->$fieldname = $data[$fieldname];
 				}
-				else $item->$fieldname = $data[$fieldname];
-				$fids[]=$d->uf_id;
+				if ($d->uf_type != 'captcha') $fids[]=$d->uf_id;
+				if ($d->uf_type != 'captcha' || $d->uf_type != 'password') $app->setUserState('continued.userreg.'.$fieldname, $item->$fieldname);
 			}
 			
 			//Update Joomla User Info
@@ -120,9 +150,12 @@ class ContinuEdModelUserReg extends JModel
 			$udata['password2']=$item->cpassword;
 			$udata['block']=0;
 			$udata['groups'][]=2;
-			$user->bind($udata);
+			if (!$user->bind($udata)) {
+				$this->setError('Bind Error: '.$user->getError());
+				return false;
+			}
 			if (!$user->save()) {
-				$this->setError('Save Error');
+				$this->setError('Save Error:'.$user->getError());
 				return false;
 			}
 			
@@ -130,11 +163,11 @@ class ContinuEdModelUserReg extends JModel
 			$credentials['username'] = strtolower($item->username);
 			$credentials['password'] = $item->password;
 			
-			//Update update date
+			//Set user group info
 			$qud = 'INSERT INTO #__ce_usergroup (userg_user,userg_group,userg_update) VALUES ('.$user->id.','.$data['userGroupID'].',NOW())';
 			$db->setQuery($qud);
 			if (!$db->query()) {
-				$this->setError($db->getErrorMsg());
+				$this->setError('Could not update user group');
 				return false;
 			}
 			
@@ -152,27 +185,26 @@ class ContinuEdModelUserReg extends JModel
 			
 			
 			//remove joomla user info from item
-			unset($item->password);
+			unset($item->password); 
 			unset($item->cpassword);
-			unset($item->email);
-			unset($item->username);
+			unset($item->email); $app->setUserState('continued.userreg.email', "");
+			unset($item->username); $app->setUserState('continued.userreg.username', "");
 			
 			
 			// Save ContinuED user info
 			$flist = $this->getUserFields($data['userGroupID'],false);
 			foreach ($flist as $fl) {
 				$fieldname = $fl->uf_sname;
-				if (!$fl->uf_cms) {
-					if ($fl->uf_type=="mcbox" || $fl->uf_type=="mlist") $item->$fieldname = implode(" ",$item->$fieldname);
-					if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
+				if (!$fl->uf_cms && $fl->uf_type != "captcha") {
 					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$user->id.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
 					$db->setQuery($qf);
 					if (!$db->query()) {
-						$this->setError($db->getErrorMsg());
+						$this->setError("Error saving additional information");
 						return false;
 					}
 					//welcome email fields
 					$emailmsg = str_replace("{".$fieldname."}",$item->$fieldname,$emailmsg);
+					if ($d->uf_type!='captcha' || $d->uf_type!='password') $app->setUserState('continued.userreg.'.$fieldname, "");
 				}
 			}
 			

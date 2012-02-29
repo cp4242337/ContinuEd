@@ -49,10 +49,6 @@ class ContinuEdViewLogin extends JView
 		parent::display($tpl);
 	}
 
-	/**
-	 * Prepares the document
-	 * @since	1.20
-	 */
 	protected function userLogIn() {
 		$this->redir = $this->params->get('login_redirect_url');
 	}
@@ -61,7 +57,10 @@ class ContinuEdViewLogin extends JView
 	protected function userLogOut() {
 		$app=Jfactory::getApplication();
 		$app->logout();
-		$this->redir = $this->params->get('login_redirect_url','index.php');
+		
+		$redir = base64_decode(JRequest::getVar('return', '', 'POST', 'BASE64'));
+		if (!$redir) $redir=JURI::base( true );
+		
 		$app->redirect($redir);
 	}
 	
@@ -70,8 +69,11 @@ class ContinuEdViewLogin extends JView
 		$model =& $this->getModel();
 		$app=Jfactory::getApplication();
 		
+		$redir = base64_decode(JRequest::getVar('return', '', 'POST', 'BASE64'));
+		if (!$redir) $redir='index.php?option=com_continued&view=user&layout=profile';
+		
 		if ($model->loginUser()) {
-			$app->redirect('index.php?option=com_continued&view=user&layout=profile',"Login Complete");
+			$app->redirect($redir);
 		} else {
 			$app->redirect('index.php?option=com_continued&view=login&layout=login',$model->getError());
 		}

@@ -46,7 +46,7 @@ echo '<input type="image" value="Begin Registration" src="media/com_continued/te
 echo '</div>';
 echo '<input type="hidden" name="option" value="com_continued">';
 echo '<input type="hidden" name="view" value="userreg">';
-echo '<input type="hidden" name="layout" value="regform">';
+echo '<input type="hidden" name="layout" value="groupuser">';
 echo JHtml::_('form.token');
 echo '</form>';
 echo '<div style="clear:both;"></div>';

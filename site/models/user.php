@@ -46,6 +46,7 @@ class ContinuEdModelUser extends JModel
 		$qd.= ' WHERE f.published = 1 && g.uguf_group='.$group;
 		if (!$showhidden) $qd.=" && f.uf_hidden = 0";
 		if ($changable) $qd.=" && f.uf_change = 1";
+		$qd .= ' && f.uf_type != "captcha"';
 		$qd.= ' ORDER BY f.ordering';
 		$db->setQuery( $qd ); 
 		$ufields = $db->loadObjectList();
@@ -112,7 +113,10 @@ class ContinuEdModelUser extends JModel
 			$udata['password']=$item->password;
 			$udata['password2']=$item->cpassword;
 			$udata['block']=$user->block;
-			$user->bind($udata);
+			if (!$user->bind($udata)) {
+				$this->setError($user->getError());
+				return false;
+			};
 			if (!$user->save(true)) {
 				$this->setError($user->getError());
 				return false;

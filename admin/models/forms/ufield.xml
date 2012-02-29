@@ -67,6 +67,7 @@
 			<option value="phone">Phone</option>
 			<option value="password">Password</option>
 			<option value="birthday">Birthday</option>
+			<option value="captcha">Captcha</option>
 		</field>
 		<field
 			name="uf_req"

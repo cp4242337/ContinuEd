@@ -10,38 +10,38 @@
 defined('_JEXEC') or die;
 JHtml::_('behavior.keepalive');
 echo '<div id="continued-loginmod">';
-if ($type == 'logout') { ?>
-<form action="<?php echo JRoute::_('index.php', true, $params->get('usesecure')); ?>" method="post" id="login-form">
-<?php if ($params->get('greeting')) : ?>
-	<div class="login-greeting">
-	<?php if($params->get('name') == 0) : {
-		echo JText::sprintf('MOD_CELOGIN_HINAME', $user->get('name'));
-	} else : {
-		echo JText::sprintf('MOD_CELOGIN_HINAME', $user->get('username'));
-	} endif; ?>
-	</div>
-<?php endif; ?>
-	<div class="logout-button">
-		<input type="submit" name="Submit" class="button" value="<?php echo JText::_('JLOGOUT'); ?>" />
-		<input type="hidden" name="option" value="com_continued" />
-		<input type="hidden" name="view" value="login" />
-		<input type="hidden" name="layout" value="logout" />
-		<input type="hidden" name="return" value="<?php echo $return; ?>" />
-		<?php echo JHtml::_('form.token'); ?>
-	</div>
-	<ul>
-		<li>
-			<a href="<?php echo JRoute::_('index.php?option=com_continued&view=user&layout=profile'); ?>">
-			<?php echo JText::_('MOD_CELOGIN_PROFILE'); ?></a>
-		</li>
-		<li>
-			<a href="<?php echo JRoute::_('index.php?option=com_continued&view=user&layout=userce'); ?>">
-			<?php echo JText::_('MOD_CELOGIN_CERECORDS'); ?></a>
-		</li>
-	</ul>
+if ($type == 'logout') { 
+	echo '<form action="" method="post" id="login-form">';
+	if ($params->get('greeting')) {
+		echo '<div class="continued-loginmod-row">';
+		echo '<div class="continued-loginmod-hdr">';
+	if($params->get('name') == 0)  {
+			echo JText::sprintf('MOD_CELOGIN_HINAME', $user->get('name'));
+		} else  {
+			echo JText::sprintf('MOD_CELOGIN_HINAME', $user->get('username'));
+		} 
+	echo '</div></div>';
+	}
+	echo '<div class="continued-loginmod-row">';
+	echo '<div class="continued-loginmod-submit">';
+	echo '<input type="submit" name="Submit" class="uf_button" value="'.JText::_('JLOGOUT').'" />';
+	echo '<input type="hidden" name="option" value="com_continued" />';
+	echo '<input type="hidden" name="view" value="login" />';
+	echo '<input type="hidden" name="layout" value="logout" />';
+	echo '<input type="hidden" name="return" value="'.$return.'" />';
+	echo JHtml::_('form.token');
+	echo '</div>';
+	echo '</div>';
 	
-</form>
-<?php } else { 
+	echo '<div class="continued-loginmod-row">';
+	echo '<div class="continued-loginmod-footer">';
+	echo '<a href="'.JRoute::_('index.php?option=com_continued&view=user&layout=profile').'">'.JText::_('MOD_CELOGIN_PROFILE').'</a><br />';
+	echo '<a href="'.JRoute::_('index.php?option=com_continued&view=user&layout=cerecords').'">'.JText::_('MOD_CELOGIN_CERECORDS').'</a>';
+	echo '</div>';
+	echo '</div>';
+	
+	echo '</form>';
+ } else { 
 	?>
 	<script type="text/javascript">
 	jceq(document).ready(function() {
