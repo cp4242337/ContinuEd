@@ -21,6 +21,7 @@
 		<filename>index.html</filename>
 		<filename>interq.php</filename>
 		<filename>qanda.php</filename>
+		<filename>router.php</filename>
 		<filename>continued.php</filename>
 		<filename>controller.php</filename>
 		<filename>metadata.xml</filename>
@@ -45,7 +46,6 @@
 		<!-- Administration Menu Section -->
 		<menu img="../media/com_continued/images/continued-16x16.png">COM_CONTINUED_MENU</menu>
 		<submenu>
-			<menu view="config">COM_CONTINUED_SUBMENU_CONFIG</menu>
 			<menu view="courses">COM_CONTINUED_SUBMENU_COURSES</menu>
 			<menu view="coursereport">COM_CONTINUED_SUBMENU_REPORTS</menu>
 			<menu view="cats">COM_CONTINUED_SUBMENU_CATEGORIES</menu>

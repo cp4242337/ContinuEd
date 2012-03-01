@@ -1,8 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access');
 ?>
 <ul>
-	<li><a href="index.php?option=com_continued&amp;view=config">Config</a>
-	- Change global settings for all courese</li>
 	<li><a href="index.php?option=com_continued&amp;view=courses">Courses</a>
 	- Edit courses, questions & answers, get reports for entire course</li>
 	<li><a href="index.php?option=com_continued&amp;view=reports">Reports</a>

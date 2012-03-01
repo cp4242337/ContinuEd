@@ -8,7 +8,6 @@ abstract class ContinuEdHelper
 	public static function addSubmenu($submenu) 
 	{
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_COURSES'), 'index.php?option=com_continued&view=courses', $submenu == 'courses');
-		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_CONFIG'), 'index.php?option=com_continued&view=config', $submenu == 'config');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_CATEGORIES'), 'index.php?option=com_continued&view=cats', $submenu == 'cats');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_PROVIDERS'), 'index.php?option=com_continued&view=provs', $submenu == 'provs');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_REPORTS'), 'index.php?option=com_continued&view=coursereport', $submenu == 'coursereport');

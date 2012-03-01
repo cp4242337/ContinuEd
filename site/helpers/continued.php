@@ -74,11 +74,14 @@ class ContinuEdHelper {
 	* @since 1.20
 	*/
 	function getConfig() {
-		$db =& JFactory::getDBO();
+		/*$db =& JFactory::getDBO();
 		$q = 'SELECT * FROM #__ce_config';
 		$db->setQuery($q);
 		global $cecfg;
 		$cecfg = $db->loadObject();
+		*/
+		$ceConfig = JComponentHelper::getParams('com_continued'); 
+		$cecfg = $ceConfig->toObject();
 		return $cecfg;
 	}
 	

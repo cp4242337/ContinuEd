@@ -1,8 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <config>
-        <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
-        	<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_continued" section="component" />
-        </fieldset>
+	<fieldset name="component" label="COM_CONTINUED_CONFIG_PRIMARY_SETTINGS_LABEL" description="COM_CONTINUED_CONFIG_PRIMARY_SETTINGS_DESC">
+		<field name="FM_TEXT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_FM_TEXT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FM_TEXT_DESC" rows="4" cols="70" class="inputbox" required="true" filter="safehtml" buttons="false" />
+		<field name="FM_AGREE_ERROR" type="text" label="COM_CONTINUED_CONFIG_FIELD_FM_AGREE_ERROR_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FM_AGREE_ERROR_DESC" size="120" class="inputbox" required="false" default="" />
+		<field name="EV_TEXT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_EV_TEXT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EV_TEXT_DESC" rows="4" cols="70" class="inputbox" required="true" filter="safehtml" buttons="false" />
+		<field name="EVAL_PERCENT" type="text" label="COM_CONTINUED_CONFIG_FIELD_EVAL_PERCENT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_PERCENT_DESC" size="10" class="inputbox" required="false" default="" />
+		<field name="EVAL_EXPL" type="radio" label="COM_CONTINUED_CONFIG_FIELD_EVAL_EXPL_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_EXPL_DESC" default="0">
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
+		<field name="EVAL_REQD" type="radio" label="COM_CONTINUED_CONFIG_FIELD_EVAL_REQD_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_REQD_DESC" default="0">
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
+		<field name="EVAL_ASSD" type="radio" label="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSD_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSD_DESC" default="0">
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
+		<field name="EVAL_REQI" type="text" label="COM_CONTINUED_CONFIG_FIELD_EVAL_REQI_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_REQI_DESC" size="120" class="inputbox" required="false" default="" />
+		<field name="EVAL_ASSI" type="text" label="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSI_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSI_DESC" size="120" class="inputbox" required="false" default="" />
+		<field name="CAT_PROV" type="radio" label="COM_CONTINUED_CONFIG_FIELD_CAT_PROV_LABEL" description="COM_CONTINUED_CONFIG_FIELD_CAT_PROV_DESC" default="0">
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
+		<field name="CAT_GUEST" type="radio" label="COM_CONTINUED_CONFIG_FIELD_CAT_GUEST_LABEL" description="COM_CONTINUED_CONFIG_FIELD_CAT_GUEST_DESC" default="1">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="NODEG_MSG" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_NODEG_MSG_LABEL" description="COM_CONTINUED_CONFIG_FIELD_NODEG_MSG_DESC" rows="4" cols="70" class="inputbox" required="true" filter="safehtml" buttons="false" />
+		<field name="EVAL_ANSRPT" type="radio" label="COM_CONTINUED_CONFIG_FIELD_EVAL_ANSRPT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_ANSRPT_DESC" default="1">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="REC_TIT" type="text" label="COM_CONTINUED_CONFIG_FIELD_REC_TIT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_REC_TIT_DESC" size="120" class="inputbox" required="false" default="" />
+		<field name="REC_PRETXT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_REC_PRETXT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_REC_PRETXT_DESC" rows="4" cols="70" class="inputbox" required="false" filter="safehtml" buttons="false" />
+		<field name="REC_POSTTXT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_REC_POSTTXT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_REC_POSTTXT_DESC" rows="4" cols="70" class="inputbox" required="false" filter="safehtml" buttons="false" />
+		<field name="SHOW_FAC" type="radio" label="COM_CONTINUED_CONFIG_FIELD_SHOW_FAC_LABEL" description="COM_CONTINUED_CONFIG_FIELD_SHOW_FAC_DESC" default="0">
+			<option value="0">JHIDE</option>
+			<option value="1">JSHOW</option>
+		</field>
+		<field name="LOGIN_MSG" type="text" label="COM_CONTINUED_CONFIG_FIELD_LOGIN_MSG_LABEL" description="COM_CONTINUED_CONFIG_FIELD_LOGIN_MSG_DESC" size="120" class="inputbox" required="false" default="" />
+		<field name="NEEDS_DEGREE" type="radio" label="COM_CONTINUED_CONFIG_FIELD_NEEDS_DEGREE_LABEL" description="COM_CONTINUED_CONFIG_FIELD_NEEDS_DEGREE_DESC" default="1">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
+		<field name="TEMPLATE" type="list" label="COM_CONTINUED_CONFIG_FIELD_TEMPLATE_LABEL" description="COM_CONTINUED_CONFIG_FIELD_TEMPLATE_DESC" default="0">
+			<option value="esp">ESP</option>
+			<option value="default">MM/Default</option>
+			<option value="iapcd">IAPCD</option>
+			<option value="iaps">IAPS</option>
+			<option value="medicaled">MedicalEd</option>
+			<option value="mrn">MRN</option>
+			<option value="naadac">NAADAC</option>
+			<option value="tpo">Practical Oncologist</option>
+		</field>
+		<field name="INTER_REQMSG" type="text" label="COM_CONTINUED_CONFIG_FIELD_INTER_REQMSG_LABEL" description="COM_CONTINUED_CONFIG_FIELD_INTER_REQMSG_DESC" size="120" class="inputbox" required="false" default="" />
+		<field name="REG_PAGE_CONTENT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_REG_PAGE_CONTENT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_REG_PAGE_CONTENT_DESC" rows="4" cols="70" class="inputbox" required="true" filter="safehtml" buttons="false" />
+		<field name="FROM_EMAIL" type="text" label="COM_CONTINUED_CONFIG_FIELD_FROM_EMAIL_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FROM_EMAIL_DESC" size="70" class="inputbox" required="false" default="" />
+		<field name="FROM_NAME" type="text" label="COM_CONTINUED_CONFIG_FIELD_FROM_NAME_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FROM_NAME_DESC" size="70" class="inputbox" required="false" default="" />
+		<field name="WELCOME_SUBJECT" type="text" label="COM_CONTINUED_CONFIG_FIELD_WELCOME_SUBJECT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_WELCOME_SUBJECT_DESC" size="70" class="inputbox" required="false" default="" />
+		<field name="LOSTINFO_SUBJECT" type="text" label="COM_CONTINUED_CONFIG_FIELD_LOSTINFO_SUBJECT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_LOSTINFO_SUBJECT_DESC" size="70" class="inputbox" required="false" default="" />
+	</fieldset>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_continued" section="component" />
+	</fieldset>
 </config>
 
