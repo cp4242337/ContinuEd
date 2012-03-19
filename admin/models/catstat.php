@@ -21,6 +21,12 @@ class ContinuEdModelCatStat extends JModel
 
 		$limit			= $mainframe->getUserStateFromRequest( $context.'limit', 'limit', $mainframe->getCfg('list_limit'), 0);
 		$limitstart = $mainframe->getUserStateFromRequest( $context.'limitstart', 'limitstart', 0 );
+		$startdate		= $mainframe->getUserStateFromRequest( 'com_continued.catstat.startdate','startdate',date("Y-m-d",strtotime("-1 months") ));
+		$enddate		= $mainframe->getUserStateFromRequest( 'com_continued.catstat.enddate','enddate',date("Y-m-d") );
+		
+		
+		$this->setState('startdate', $startdate);
+		$this->setState('enddate', $enddate);
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
 
@@ -30,22 +36,20 @@ class ContinuEdModelCatStat extends JModel
 	{
 		$user = JRequest::getVar('filter_user');
 		$session = JRequest::getVar('filter_session');
-		$month = JRequest::getVar('filter_month');
-		$year = JRequest::getVar('filter_year');
 		$cat = JRequest::getVar('filter_cat');
 		$step = JRequest::getVar('filter_step');
+		$startdate = $this->getState('startdate');
+		$enddate = $this->getState('enddate');
 		$tand = 0;
 
-		$q  = 'SELECT s.*,u.username,ca.catname FROM #__ce_cattrack as s ';
-		$q .= 'LEFT JOIN #__users as u ON s.user = u.id ';
-		$q .= 'LEFT JOIN #__ce_cats as ca ON s.cat = ca.cid ';
-		if ($user || $session || $month || $year || $cat || $step) $q .= ' WHERE ';
+		$q  = 'SELECT s.*,ca.cat_name FROM #__ce_cattrack as s ';
+		$q .= 'LEFT JOIN #__ce_cats as ca ON s.cat = ca.cat_id ';
+		$q .= ' WHERE ';
 		if ($user) { $q .= 's.user = "'.$user.'"'; $tand = 1; }
 		if ($session) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.sessionid = "'.$session.'"'; $tand = 1; }
-		if ($month) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' MONTH(s.tdhit) = "'.$month.'"'; $tand = 1; }
-		if ($year) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' YEAR(s.tdhit) = "'.$year.'"'; $tand = 1; }
 		if ($cat) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.cat = "'.$cat.'"'; $tand = 1; }
 		if ($step) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.viewed = "'.$step.'"'; $tand = 1; }
+		if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' DATE(s.tdhit) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
 		$q .= ' ORDER BY s.tdhit DESC';
 
 		return $q;
@@ -97,15 +101,29 @@ class ContinuEdModelCatStat extends JModel
 	function getCatList() {
 		$db =& JFactory::getDBO();
 		$query  = ' SELECT * FROM #__ce_cats as c ';
-		$query .= 'ORDER BY c.catname ASC';
+		$query .= 'ORDER BY c.cat_name ASC';
 		$db->setQuery( $query );
 		$catlist = $db->loadObjectList();
 		$cats[]=JHTML::_('select.option','','--All--');
 		foreach ($catlist as $cl) {
-			$cats[]=JHTML::_('select.option',$cl->cid,$cl->catname);
+			$cats[]=JHTML::_('select.option',$cl->cat_id,$cl->cat_name);
 		}
 		return $cats;
 
+	}
+	
+	public function getUsers() {
+		$q  = 'SELECT u.*,ug.ug_name as usergroup FROM #__users as u';
+		$q .= ' LEFT JOIN #__ce_usergroup as g ON u.id = g.userg_user';
+		$q .= ' RIGHT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
+		$this->_db->setQuery($q);
+		$ulist = $this->_db->loadObjectList();
+		foreach ($ulist as $u) {
+			$uarray[$u->id]=$u;
+		}
+		$uarray[0]->name="Guest User";
+		$uarray[0]->usergroup="Guests";
+		return $uarray;
 	}
 
 }

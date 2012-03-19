@@ -24,9 +24,6 @@ $stepsl[14] = JHTML::_('select.option','fme','Front Matter - Exp');
 	<thead>
 		<tr>
 			<th align="left" width="50%"><?php
-			echo '<div class="button2-left"><div class="page">';
-			echo '<a href="javascript:void(0);" onclick="javascript: document.adminForm.format.value=\'raw\'; submitbutton(\'csvme\'); return false;">';
-			echo 'Generate CSV</a></div></div>';
 			if ($this->user) {
 				echo '<div class="button2-left"><div class="page">';
 				echo '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_user.value=\'\'; submitform(); return false;">';
@@ -56,7 +53,9 @@ $stepsl[14] = JHTML::_('select.option','fme','Front Matter - Exp');
 			<th><?php echo JText::_( 'Course' ); ?></th>
 			<th><?php echo JText::_( 'Category' ); ?></th>
 			<th><?php echo JText::_( 'When' ); ?></th>
-			<th><?php echo JText::_( 'Who' ); ?></th>
+			<th><?php echo JText::_( 'Name' ); ?></th>
+			<th><?php echo JText::_( 'Email' ); ?></th>
+			<th><?php echo JText::_( 'Group' ); ?></th>
 			<th><?php echo JText::_( 'What' ); ?></th>
 			<th width="70"><?php echo JText::_( 'Session' ); ?></th>
 			<th width="70"><?php echo JText::_( 'IP Address' ); ?></th>
@@ -67,21 +66,26 @@ $stepsl[14] = JHTML::_('select.option','fme','Front Matter - Exp');
 	for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 	{
 		$row = &$this->items[$i];
-		if ($row->user == 0) $row->username='Guest';
+		
 
 
-		$userlink = '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_user.value='.$row->user.'; submitform(); return false;">'.$row->username.'</a>';
+	
 		$sessionlink = '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_session.value=\''.$row->sessionid.'\'; submitform(); return false;">'.$row->sessionid.'</a>';
 
 		?>
 	<tr class="<?php echo "row$k"; ?>">
 		<td><?php echo $i + 1 + $this->pagination->limitstart; ?></td>
-		<td><?php echo $row->cname; ?></td>
-		<td><?php echo $row->catname; ?></td>
+		<td><?php echo $row->course_name; ?></td>
+		<td><?php echo $row->cat_name; ?></td>
 		<td><?php echo $row->tdhit; ?></td>
 		<td><?php 
-		if ($row->user != 0) echo $userlink;
-		else echo $row->username;
+		echo '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_user.value='.$row->user.'; submitform(); return false;">'.$this->users[$row->user]->name.'</a>';
+		?></td>
+		<td><?php 
+		echo $this->users[$row->user]->email;
+		?></td>
+		<td><?php 
+		echo $this->users[$row->user]->usergroup;
 		?></td>
 		<td><?php 
 		switch ($row->step) {

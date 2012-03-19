@@ -64,15 +64,15 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 			if ($this->course) {
 				//pretest
 				foreach ($this->qpre as $qu) {
-					echo '<th>#'.$qu->ordering.' '.$qu->q_text.'</th>';
+					echo '<th>Pre #'.$qu->ordering.' '.$qu->q_text.'</th>';
 				}
 				//inter
 				foreach ($this->qinter as $qu) {
-					echo '<th>#'.$qu->ordering.' '.$qu->q_text.'</th>';
+					echo '<th>Inter #'.$qu->ordering.' '.$qu->q_text.'</th>';
 				}
 				//posttest
 				foreach ($this->qpost as $qu) {
-					echo '<th>#'.$qu->ordering.' '.$qu->q_text.'</th>';
+					echo '<th>Post #'.$qu->ordering.' '.$qu->q_text.'</th>';
 				}
 			}
 			?>

@@ -84,13 +84,14 @@ class ContinuEdModelCourseReport extends JModel
 	function getData($csv=false)
 	{
 		// Lets load the data if it doesn't already exist
+		$cid = $this->getState('course');
 		if (empty( $this->_data ))
 		{
 			$query = $this->_buildQuery();
 			if (!$csv) $this->_data = $this->_getList($query, $this->getState('limitstart'), $this->getState('limit'));
 			else $this->_data = $this->_getList($query);
 		}
-		if ($this->getState('course')) $this->_data = $this->applyAns($this->_data);
+		if ($cid) $this->_data = $this->applyAns($this->_data);
 		return $this->_data;
 	}
 

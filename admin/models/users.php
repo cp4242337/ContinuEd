@@ -67,5 +67,57 @@ class ContinuEdModelUsers extends JModelList
 				
 		return $query;
 	}
+	
+	public function getItemsCSV() {
+		$query=$this->getListQuery();
+		$db = JFactory::getDBO();
+		$db->setQuery($query);
+		return $db->loadObjectLIst();
+		
+	}
+	
+	public function getFields() {
+		$db =& JFactory::getDBO();
+		$q2  = 'SELECT * FROM #__ce_ufields ';
+		$q2 .= 'WHERE uf_cms = 0 && published >= 1  ';
+		$q2 .= 'ORDER BY ordering';
+		$db->setQuery($q2);
+		$fields = $db->loadObjectList();
+		return $fields;
+	}
+	
+	public function applyData($records) {
+		$db =& JFactory::getDBO();
+		foreach ($records as $r) {
+			$q2  = 'SELECT q.*,a.* FROM #__ce_users as a ';
+			$q2 .= 'LEFT JOIN #__ce_ufields as q ON q.uf_id=a.usr_field ';
+			$q2 .= 'WHERE q.published >= 1 && a.usr_user = "'.$r->id.'"  ';
+			$q2 .= 'ORDER BY q.ordering';
+			$db->setQuery($q2);
+			$rdata = $db->loadObjectList();
+			foreach ($rdata as $d) {
+				$title = $d->uf_sname;
+				$r->$title = $d->usr_data;
+			}
+		}
+		return $records;	
+	}
+	
+	public function getAnswers($fdata) {
+		$db =& JFactory::getDBO();
+		$fids = Array();
+		foreach ($fdata as $f) {
+			if (!$f->uf_cms) $fids[]=$f->uf_id;
+		}
+		$q2  = 'SELECT * FROM #__ce_ufields_opts ';
+		$q2 .= 'WHERE opt_field IN ('.implode(",",$fids).') && published >= 1  ';
+		$db->setQuery($q2);
+		$opts = $db->loadObjectList();
+		$fod = Array();
+		foreach ($opts as $o) {
+			$fod[$o->opt_id] = $o->opt_text;
+		}
+		return $fod;
+	}
 
 }

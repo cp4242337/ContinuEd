@@ -42,6 +42,8 @@ class ContinuEdViewUsers extends JView
 		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_USERS'), 'continued');
 		//JToolBarHelper::addNew('user.add', 'JTOOLBAR_NEW');
 		JToolBarHelper::editList('user.edit', 'JTOOLBAR_EDIT');		
+		$tbar =& JToolBar::getInstance('toolbar');
+		$tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&view=users&format=csv" target="_blank');
 	}
 	/**
 	 * Method to set up the document properties

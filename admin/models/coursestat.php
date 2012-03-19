@@ -46,17 +46,14 @@ function __construct()
 		$enddate = $this->getState('enddate');
 		$tand = 0;
 
-		$q  = 'SELECT s.*,c.cname,u.username,ca.catname';
-		if ($cecfg['NEEDS_DEGREE']) $q .= ',cb.cb_degree';
+		$q  = 'SELECT s.*,c.course_name,ca.cat_name';
 		$q .= ' FROM #__ce_track as s ';
-		$q .= 'LEFT JOIN #__ce_courses as c ON s.course = c.id ';
-		$q .= 'LEFT JOIN #__users as u ON s.user = u.id ';
-		$q .= 'LEFT JOIN #__ce_cats as ca ON c.ccat = ca.cid ';
-		if ($cecfg['NEEDS_DEGREE']) $q .= 'LEFT JOIN #__comprofiler as cb ON u.id = cb.user_id ';
+		$q .= 'LEFT JOIN #__ce_courses as c ON s.course = c.course_id ';
+		$q .= 'LEFT JOIN #__ce_cats as ca ON c.course_cat = ca.cat_id ';
 		$q .= ' WHERE ';
 		if ($user) { $q .= 's.user = "'.$user.'"'; $tand = 1; }
 		if ($session) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.sessionid = "'.$session.'"'; $tand = 1; }
-		if ($cat) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' c.ccat = "'.$cat.'"'; $tand = 1; }
+		if ($cat) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' c.course_cat = "'.$cat.'"'; $tand = 1; }
 		if ($course) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.course = "'.$course.'"'; $tand = 1; }
 		if ($step) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.step = "'.$step.'"'; $tand = 1; }
 		if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' DATE(s.tdhit) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
@@ -111,12 +108,12 @@ function __construct()
 	function getCatList() {
 		$db =& JFactory::getDBO();
 		$query  = ' SELECT * FROM #__ce_cats as c ';
-		$query .= 'ORDER BY c.catname ASC';
+		$query .= 'ORDER BY c.cat_name ASC';
 		$db->setQuery( $query );
 		$catlist = $db->loadObjectList();
 		$cats[]=JHTML::_('select.option','','--All--');
 		foreach ($catlist as $cl) {
-			$cats[]=JHTML::_('select.option',$cl->cid,$cl->catname);
+			$cats[]=JHTML::_('select.option',$cl->cat_id,$cl->cat_name);
 		}
 		return $cats;
 
@@ -124,16 +121,30 @@ function __construct()
 	function getCourseList($cat) {
 		$db =& JFactory::getDBO();
 		$query  = ' SELECT * FROM #__ce_courses as c WHERE c.course_catlink = 0 ';
-		if ($cat) $query .= '&& ccat = '.$cat.' ';
-		$query .= 'ORDER BY c.cname ASC';
+		if ($cat) $query .= '&& course_cat = '.$cat.' ';
+		$query .= 'ORDER BY c.course_name ASC';
 		$db->setQuery( $query );
 		$catlist = $db->loadObjectList();
 		$cats[]=JHTML::_('select.option','','--All--');
 		foreach ($catlist as $cl) {
-			$cats[]=JHTML::_('select.option',$cl->id,$cl->cname);
+			$cats[]=JHTML::_('select.option',$cl->course_id,$cl->course_name);
 		}
 		return $cats;
 
+	}
+	
+	public function getUsers() {
+		$q  = 'SELECT u.*,ug.ug_name as usergroup FROM #__users as u';
+		$q .= ' LEFT JOIN #__ce_usergroup as g ON u.id = g.userg_user';
+		$q .= ' RIGHT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
+		$this->_db->setQuery($q);
+		$ulist = $this->_db->loadObjectList();
+		foreach ($ulist as $u) {
+			$uarray[$u->id]=$u;
+		}
+		$uarray[0]->name="Guest User";
+		$uarray[0]->usergroup="Guests";
+		return $uarray;
 	}
 
 }

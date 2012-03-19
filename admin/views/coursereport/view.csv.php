@@ -6,19 +6,14 @@ jimport( 'joomla.application.component.view' );
 
 class ContinuEdViewCourseReport extends JView
 {
-	function display($tpl = null)
+	function display($tpl = 'csv')
 	{
-		JToolBarHelper::title(   JText::_( 'ContinuEd Course Report' ), 'generic.png' );
 		$model = $this->getModel('coursereport');
 		$cid = $model->getState('course');
 		$cat = $model->getState('cat');
 		$usergroup = $model->getState('usergroup');
 		$qgroup = $model->getState('qgroup');
 		$qarea = $model->getState('qarea');
-		$tbar =& JToolBar::getInstance('toolbar');
-		if ($cid) $tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&view=coursereport&format=csv&course='.$cid.'" target="_blank');
-		else $tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&view=coursereport&format=csv" target="_blank');
-		if ($cid) JToolBarHelper::back('Courses','index.php?option=com_continued&view=courses');
 		if ($cid) {
 			$qpre = $model->getQuestions($cid,'pre');
 			$qpost = $model->getQuestions($cid,'post');
@@ -30,7 +25,7 @@ class ContinuEdViewCourseReport extends JView
 			$this->assignRef('qpost',$qpost);
 		}
 		
-		$items		= & $this->get( 'Data');
+		$items		= & $model->getData(true);
 		$pagination = & $this->get( 'Pagination' );
 		$courselist = & $this->get( 'Courses' );
 		$catlist = & $this->get( 'Cats' );

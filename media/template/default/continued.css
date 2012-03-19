@@ -1,5 +1,7 @@
 @CHARSET "UTF-8";
 
+.continued-error { color: #800000; border: 2px solid #800000; padding: 20px 0 20px 0; width: 100%; text-align: center;}
+
 #continued-fm-text { height: 240px; overflow: auto; padding: 2px; border: 1px solid rgb(0, 0, 0);}
 #continued-fm-agree { border: medium none; padding: 5px; }
 #continued-fm-error { color: rgb(136, 0, 0); font-size: 10pt; font-weight: bold; display: none; position: relative; }

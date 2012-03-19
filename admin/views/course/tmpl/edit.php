@@ -55,7 +55,7 @@ $params = $this->form->getFieldsets('params');
 				?>
 				<input type="checkbox" name="jform[coursecerts][]" value="<?php echo (int) $ct->crt_id;?>" id="jform_coursecert<?php echo (int) $ct->crt_id;?>"<?php echo $checked;?>/>
 				<label for="jform_coursecert<?php echo $ct->crt_id; ?>">
-				<?php echo ' '.$ct->crt_name; ?></label><br />
+				<?php echo ' '.$ct->crt_name; ?></label><br /><br />
 				<?php 
 			}
 			?></fieldset></li>
