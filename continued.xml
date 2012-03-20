@@ -34,10 +34,7 @@
 	</files>
     <media destination="com_continued" folder="media">
             <filename>index.html</filename>
-            <filename>bar_1.jpg</filename>
-            <filename>bar_2.jpg</filename>
-            <filename>bar_3.jpg</filename>
-            <filename>bar_4.jpg</filename>
+            <filename>admin.css</filename>
             <folder>template</folder>
             <folder>scripts</folder>
 			<folder>images</folder>

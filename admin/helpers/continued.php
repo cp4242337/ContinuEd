@@ -21,4 +21,20 @@ abstract class ContinuEdHelper
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_USERS'), 'index.php?option=com_continued&view=users', $submenu == 'Users');
 	}
 	
+	/**
+	* Get a list of filter options for the blocked state of a user.
+	*
+	* @return array An array of JHtmlOption elements.
+	*
+	* @since 1.20
+	*/
+	static function getStateOptions()
+	{
+		// Build the filter options.
+		$options = array();
+		$options[] = JHtml::_('select.option', '0', JText::_('JENABLED'));
+		$options[] = JHtml::_('select.option', '1', JText::_('JDISABLED'));
+		
+		return $options;
+	}
 }

@@ -48,8 +48,6 @@ class ContinuEdViewUser extends JView
 	protected function addToolBar() 
 	{
 		JRequest::setVar('hidemainmenu', true);
-		$user = JFactory::getUser();
-		$userId = $user->id;
 		$isNew = $this->item->usr_user == 0;
 		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_USER_NEW') : JText::_('COM_CONTINUED_MANAGER_USER_EDIT'), 'user');
 		// Built the actions for new and existing records.

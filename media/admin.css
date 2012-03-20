@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+.continued-question {width:100%;padding-bottom:40px; clear:both;}
+.continued-question-text { width:100%;font-weight:bold;padding-bottom:12px;}
+.continued-opt { float:left; clear: both;width:100%; padding-bottom:12px;}
+.continued-opt-text { float:left; width:80%; }
+.continued-opt-count { float:right; width: 18%; text-align:right; }
+.continued-answer { width:90%; margin:0 auto;}
+.continued-error_msg { font-size: 10px; display: none;}
+.continued-opt-correct { font-weight: bold; }
+
+.continued-opt-bar-box { background-color: #cccccc; width: 100%; height: 14px; float:left;}
+.continued-opt-bar-bar { height: 14px; }
+
+.bc1 { background-color: #800000; }
+.bc2 { background-color: #008000; }
+.bc3 { background-color: #000080; }

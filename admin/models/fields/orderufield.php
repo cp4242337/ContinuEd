@@ -50,7 +50,7 @@ class JFormFieldOrderUField extends JFormField
 		$attr .= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
 
 		// Get some field values from the form.
-		$optionId	= (int) $this->form->getValue('uf_id');
+		$fId	= (int) $this->form->getValue('uf_id');
 		
 		// Build the query for the ordering list.
 		$query = 'SELECT ordering AS value, uf_sname AS text' .
@@ -59,12 +59,12 @@ class JFormFieldOrderUField extends JFormField
 
 		// Create a read-only list (no name) with a hidden input to store the value.
 		if ((string) $this->element['readonly'] == 'true') {
-			$html[] = JHtml::_('list.ordering', '', $query, trim($attr), $this->value, $optonId ? 0 : 1);
+			$html[] = JHtml::_('list.ordering', '', $query, trim($attr), $this->value, $fId ? 0 : 1);
 			$html[] = '<input type="hidden" name="'.$this->name.'" value="'.$this->value.'"/>';
 		}
 		// Create a regular list.
 		else {
-			$html[] = JHtml::_('list.ordering', $this->name, $query, trim($attr), $this->value, $optonId ? 0 : 1);
+			$html[] = JHtml::_('list.ordering', $this->name, $query, trim($attr), $this->value, $fId ? 0 : 1);
 		}
 
 		return implode($html);

@@ -14,6 +14,7 @@ class ContinuEdViewUsers extends JView
 		$items = $this->get('Items');
 		$pagination = $this->get('Pagination');
 		$this->state		= $this->get('State');
+		$ugroups = $this->get('UGroups');
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -23,6 +24,7 @@ class ContinuEdViewUsers extends JView
 		// Assign data to the view
 		$this->items = $items;
 		$this->pagination = $pagination;
+		$this->ugroups = $ugroups;
 		// Set the toolbar
 		$this->addToolBar();
 
@@ -40,10 +42,15 @@ class ContinuEdViewUsers extends JView
 	{
 		$state	= $this->get('State');
 		JToolBarHelper::title(JText::_('COM_CONTINUED_MANAGER_USERS'), 'continued');
-		//JToolBarHelper::addNew('user.add', 'JTOOLBAR_NEW');
-		JToolBarHelper::editList('user.edit', 'JTOOLBAR_EDIT');		
+		JToolBarHelper::addNew('user.add', 'JTOOLBAR_NEW');
+		JToolBarHelper::editList('user.edit', 'JTOOLBAR_EDIT');	
+		JToolBarHelper::divider();	
+		JToolBarHelper::unpublish('users.block', 'COM_CONTINUED_TOOLBAR_BLOCK', true);
+		JToolBarHelper::custom('users.unblock', 'unblock.png', 'unblock_f2.png', 'COM_CONTINUED_TOOLBAR_UNBLOCK', true);
+		JToolBarHelper::divider();
 		$tbar =& JToolBar::getInstance('toolbar');
-		$tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&view=users&format=csv" target="_blank');
+		$tbar->appendButton('Link','export','Export CSV','index.php?option=com_continued&view=users&format=csv" target="_blank');
+		$tbar->appendButton('Link','send','Email List','index.php?option=com_continued&view=users&format=csveml" target="_blank');
 	}
 	/**
 	 * Method to set up the document properties

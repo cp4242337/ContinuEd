@@ -37,7 +37,7 @@ class ContinuEdModelTally extends JModel
 		$db =& JFactory::getDBO();
 		$query  = 'SELECT q.*,p.part_name FROM #__ce_questions as q ';
 		$query .= 'LEFT JOIN #__ce_parts as p ON q.q_part = p.part_part && p.part_course = '.$courseid.' && p.part_area = "'.$area.'" ';
-		$query .= 'WHERE q.q_area = "'.$area.'" && q.q_course = '.$courseid.' ORDER BY q.ordering ASC'; 
+		$query .= 'WHERE q_type IN ("multi","dropdown","mcbox","yesno") && q.q_area = "'.$area.'" && q.q_course = '.$courseid.' ORDER BY q.ordering ASC'; 
 		$db->setQuery( $query );
 		$qdata = $db->loadAssocList();
 		return $qdata;

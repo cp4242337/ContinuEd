@@ -12,7 +12,20 @@ class ContinuEdModelUsers extends JModelList
 	
 	public function __construct($config = array())
 	{
-		
+		if (empty($config['filter_fields']))
+		{
+			$config['filter_fields'] = array(
+			'id', 'a.id',
+			'name', 'u.name',
+			'username', 'u.username',
+			'email', 'u.email',
+			'block', 'u.block',
+			'ug_name', 'g.ug_name',
+			'registerDate', 'u.registerDate',
+			'lastvisitDate', 'u.lastvisitDate',
+			'lastUpdate', 'ug.lastUpdate',
+			);
+		}
 		parent::__construct($config);
 	}
 	
@@ -23,8 +36,14 @@ class ContinuEdModelUsers extends JModelList
 
 		
 		// Load the filter state.
-		$groupId = $this->getUserStateFromRequest($this->context.'.filter.group', 'filter_group','');
-		$this->setState('filter.group', $groupId);
+		$groupId = $this->getUserStateFromRequest($this->context.'.filter.ugroup', 'filter_ugroup','');
+		$this->setState('filter.ugroup', $groupId);
+		
+		$search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
+		$this->setState('filter.search', $search);
+		
+		$state = $this->getUserStateFromRequest($this->context.'.filter.state', 'filter_state');
+		$this->setState('filter.state', $state);
 		
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
@@ -52,11 +71,23 @@ class ContinuEdModelUsers extends JModelList
 		$query->join('LEFT', '#__ce_ugroups AS g ON ug.userg_group = g.ug_id');
 		
 		// Filter by group.
-		$groupId = $this->getState('filter.course');
+		$groupId = $this->getState('filter.ugroup');
 		if (is_numeric($groupId)) {
 			$query->where('g.ug_id = '.(int) $groupId);
 		}
 		
+		// Filter by state.
+		$state = $this->getState('filter.state');
+		if (is_numeric($state)) {
+			$query->where('u.block = '.(int) $state);
+		}
+		
+		// Filter by search in title
+		$search = $this->getState('filter.search');
+		if (!empty($search)) {
+			$search = $db->Quote('%'.$db->escape($search, true).'%');
+			$query->where('(u.username LIKE '.$search.' OR u.name LIKE '.$search.' OR u.email LIKE '.$search.')');
+		}
 		
 		$orderCol	= $this->state->get('list.ordering');
 		$orderDirn	= $this->state->get('list.direction');
@@ -66,6 +97,14 @@ class ContinuEdModelUsers extends JModelList
 		$query->order($db->getEscaped($orderCol.' '.$orderDirn));
 				
 		return $query;
+	}
+	
+	public function getUGroups() {
+		$query = 'SELECT ug_id AS value, ug_name AS text' .
+				' FROM #__ce_ugroups' .
+				' ORDER BY ug_name';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
 	}
 	
 	public function getItemsCSV() {

@@ -28,6 +28,9 @@ defined('_JEXEC') or die('Restricted Access');
 			<?php echo $item->ug_name; ?>
 		</td>
 		<td class="center">
+		<?php echo JHtml::_('grid.boolean', $i, !$item->block, 'users.unblock', 'users.block'); ?>
+		</td>
+		<td class="center">
 			<?php echo $item->lastvisitDate; ?>
 		</td>
 		<td class="center">

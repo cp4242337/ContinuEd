@@ -21,7 +21,7 @@ JLoader::register('ContinuedHelper', dirname(__FILE__) . DS . 'helpers' . DS . '
 $document = JFactory::getDocument();
 $document->addStyleDeclaration('.icon-48-ContinuEd {background-image: url(../media/com_continued/images/continued-48x48.png);}');
 $document->addStyleDeclaration('.icon-48-continued {background-image: url(../media/com_continued/images/continued-48x48.png);}');
-
+$document->addStyleSheet('../media/com_continued/admin.css');
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

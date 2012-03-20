@@ -142,15 +142,26 @@ class ContinuEdModelUser extends JModelAdmin
 			}
 			
 			//Update Joomla User Info
-			$user=JFactory::getUser($userId);
+			if ($userId != 0) {
+				$user=JFactory::getUser($userId);
+			} else {
+				$user = new JUser;
+				$udata['groups'][]=2;
+			}
 			$udata['name']=$item->fname." ".$item->lname;
 			$udata['email']=$item->email;
 			$udata['username']=$item->username;
 			$udata['password']=$item->password;
 			$udata['password2']=$item->cpassword;
 			$udata['block']=$item->block;
-			$user->bind($udata);
-			$user->save(true);
+			if (!$user->bind($udata)) {
+				$this->setError('Bind Error: '.$user->getError());
+				return false;
+			}
+			if (!$user->save()) {
+				$this->setError('Save Error:'.$user->getError());
+				return false;
+			}
 			
 			//remove joomla user info from item
 			unset($item->email);
@@ -165,7 +176,7 @@ class ContinuEdModelUser extends JModelAdmin
 			$query	= $db->getQuery(true);
 			$query->delete();
 			$query->from('#__ce_users');
-			$query->where('usr_user = '.$userId);
+			$query->where('usr_user = '.$user->id);
 			$db->setQuery((string)$query);
 			$db->query();
 			
@@ -175,7 +186,7 @@ class ContinuEdModelUser extends JModelAdmin
 				if (!$fl->uf_cms) {
 					if ($fl->uf_type=="mcbox") $item->$fieldname = implode(" ",$item->$fieldname);
 					//if ($fl->uf_type=='cbox') $item->$fieldname = ($item->$fieldname=='on') ? "1" : "0";
-					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$userId.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
+					$qf = 'INSERT INTO #__ce_users (usr_user,usr_field,usr_data) VALUES ("'.$user->id.'","'.$fl->uf_id.'","'.$item->$fieldname.'")';
 					$db->setQuery($qf);
 					if (!$db->query()) {
 						$this->setError($db->getErrorMsg());
@@ -196,9 +207,9 @@ class ContinuEdModelUser extends JModelAdmin
 		
 		
 		
-		if (isset($userId))
+		if (isset($user->id))
 		{
-			$this->setState($this->getName() . '.id', $userId);
+			$this->setState($this->getName() . '.id', $user->id);
 		}
 		$this->setState($this->getName() . '.new', $isNew);
 		
@@ -206,12 +217,12 @@ class ContinuEdModelUser extends JModelAdmin
 		$query	= $db->getQuery(true);
 		$query->delete();
 		$query->from('#__ce_usergroup');
-		$query->where('userg_user = '.$userId);
+		$query->where('userg_user = '.$user->id);
 		$db->setQuery((string)$query);
 		$db->query();
 		
 		if (!empty($data['usergroup'])) {
-			$qc = 'INSERT INTO #__ce_usergroup (userg_user,userg_group,userg_notes) VALUES ('.$userId.','.(int)$data['usergroup'].',"'.$usernotes.'")';
+			$qc = 'INSERT INTO #__ce_usergroup (userg_user,userg_group,userg_notes) VALUES ('.$user->id.','.(int)$data['usergroup'].',"'.$usernotes.'")';
 			$db->setQuery($qc);
 			if (!$db->query()) {
 				$this->setError($db->getErrorMsg());
@@ -289,4 +300,63 @@ class ContinuEdModelUser extends JModelAdmin
 		return $data;
 	}
 	
+	/**
+	 * Method to block user records.
+	 *
+	 * @param   array    &$pks   The ids of the items to publish.
+	 * @param   integer  $value  The value of the published state
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   1.20
+	 */
+	function block(&$pks, $value = 1)
+	{
+		// Initialise variables.
+		$app		= JFactory::getApplication();
+		$user		= JFactory::getUser();
+		// Check if I am a Super Admin
+		$iAmSuperAdmin	= $user->authorise('core.admin');
+		
+		$pks		= (array) $pks;
+
+		JPluginHelper::importPlugin('user');
+
+		// Access checks.
+		foreach ($pks as $i => $pk)
+		{
+			if ($value == 1 && $pk == $user->get('id'))
+			{
+				// Cannot block yourself.
+				unset($pks[$i]);
+				JError::raiseWarning(403, JText::_('COM_USERS_USERS_ERROR_CANNOT_BLOCK_SELF'));
+
+			}
+			else 
+			{
+				$allow	= $user->authorise('core.edit.state', 'com_users');
+				// Don't allow non-super-admin to delete a super admin
+				$allow = (!$iAmSuperAdmin && JAccess::check($pk, 'core.admin')) ? false : $allow;
+
+				
+
+				if ($allow)
+				{
+					$sql = 'UPDATE #__users SET block = '.$value.' WHERE id = '.$pk;
+					$this->_db->setQuery($sql);
+					if (!$this->_db->query()) {
+						return false;
+					}
+				}
+				else
+				{
+					// Prune items that you can't change.
+					unset($pks[$i]);
+					JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+				}
+			}
+		}
+
+		return true;
+	}
 }
