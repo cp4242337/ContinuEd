@@ -102,6 +102,15 @@
 			required="true"
 			default="0" />
 		<field
+			name="uf_default"
+			type="text"
+			extension="com_continued"
+			class="inputbox"
+			size="40"
+			label="COM_CONTINUED_UFIELD_FIELD_DEFAULT_LABEL"
+			description="COM_CONTINUED_UFIELD_FIELD_DEFAULT_DESC"
+			required="false" />
+		<field
 			name="uf_change"
 			type="radio"
 			label="COM_CONTINUED_UFIELD_FIELD_CHANGE_LABEL"

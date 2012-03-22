@@ -285,6 +285,34 @@ class ContinuEdModelCourse extends JModelAdmin
 					$newcourse = $table->course_id;
 					$oldcourse = $pk;
 					
+					//PreReqs
+					$q='SELECT * FROM #__ce_prereqs WHERE pr_course = '.$oldcourse;
+					$this->_db->setQuery($q);
+					$qprs = $this->_db->loadObjectList();
+					foreach($qprs as $qpr) {
+						$q  = 'INSERT INTO #__ce_prereqs (pr_course,pr_reqcourse) ';
+						$q .= 'VALUES ("'.$newcourse.'","'.$qpr->pr_reqcourse.'")';
+						$this->_db->setQuery($q);
+						if (!$this->_db->query($q)) {
+							$this->setError($this->_db->getErrorMsg());
+							return false;
+						}
+					}
+		
+					//MatPages
+					$q='SELECT * FROM #__ce_material WHERE mat_course = '.$oldcourse;
+					$this->_db->setQuery($q);
+					$mtps = $this->_db->loadObjectList();
+					foreach($mtps as $mtp) {
+						$q  = 'INSERT INTO #__ce_material (mat_course,mat_title,mat_desc,mat_content,mat_type,access,ordering,published) ';
+						$q .= 'VALUES ("'.$newcourse.'","'.$mtp->mat_title.'","'.addslashes($mtp->mat_desc).'","'.addslashes($mtp->mat_content).'","'.$mtp->mat_type.'","'.$mtp->access.'","'.$mtp->ordering.'","'.$mtp->published.'")';
+						$this->_db->setQuery($q);
+						if (!$this->_db->query($q)) {
+							$this->setError($this->_db->getErrorMsg());
+							return false;
+						}
+					}
+		
 					//PArts
 					$q='SELECT * FROM #__ce_parts WHERE part_course = '.$oldcourse;
 					$this->_db->setQuery($q);
@@ -294,6 +322,7 @@ class ContinuEdModelCourse extends JModelAdmin
 						$q .= 'VALUES ("'.$newcourse.'","'.$qp->part_part.'","'.addslashes($qp->part_name).'","'.addslashes($qp->part_desc).'","'.$qp->part_area.'")';
 						$this->_db->setQuery($q);
 						if (!$this->_db->query($q)) {
+							$this->setError($this->_db->getErrorMsg());
 							return false;
 						}
 					}
@@ -307,6 +336,7 @@ class ContinuEdModelCourse extends JModelAdmin
 						$q .= 'VALUES ("'.$newcourse.'","'.$qc->qd_cert.'")';
 						$this->_db->setQuery($q);
 						if (!$this->_db->query($q)) {
+							$this->setError($this->_db->getErrorMsg());
 							return false;
 						}
 					}
@@ -323,6 +353,7 @@ class ContinuEdModelCourse extends JModelAdmin
 							$q .= 'VALUES ("'.$newcourse.'","'.$qu->ordering.'","'.addslashes($qu->q_text).'","'.$qu->q_type.'","'.$qu->q_cat.'","'.$qu->q_part.'","'.$qu->q_req.'","'.$qu->q_depq.'","'.$qu->q_area.'","'.$qu->published.'")';
 							$this->_db->setQuery($q);
 							if (!$this->_db->query($q)) {
+								$this->setError($this->_db->getErrorMsg());
 								return false;
 							}
 							if ($qu->q_type == 'multi' || $qu->q_type == 'mcbox' || $qu->q_type == 'dropdown') {
@@ -335,6 +366,7 @@ class ContinuEdModelCourse extends JModelAdmin
 									$q .= 'VALUES ("'.$newid.'","'.addslashes($qo->opt_text).'","'.$qo->opt_correct.'","'.addslashes($qo->opt_expl).'","'.$qo->ordering.'","'.$qo->published.'")';
 									$this->_db->setQuery($q);
 									if (!$this->_db->query($q)) {
+										$this->setError($this->_db->getErrorMsg());
 										return false;
 									}
 								}

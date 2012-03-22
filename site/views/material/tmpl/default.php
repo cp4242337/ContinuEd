@@ -18,7 +18,9 @@ if ($this->mtext->course_material) {
 	foreach ($this->matpages as $mp) {
 		echo '<b>'.$mp->mat_title.'</b><br />';
 		if ($mp->mat_desc) echo $mp->mat_desc.'<br /><br />'; 
-		echo '<a href="index.php?option=com_continued&view=matpage&token='.$this->token.'&Itemid='.JRequest::getVar('Itemid').'&matid='.$mp->mat_id.'&course='.$mp->mat_course.'">';
+		echo '<a href="index.php?option=com_continued&view=matpage&token='.$this->token;
+		if ($this->nocredit != 0) echo '&nocredit=1';
+		echo '&Itemid='.JRequest::getVar('Itemid').'&matid='.$mp->mat_id.'&course='.$mp->mat_course.'">';
 		if ($this->mpdata[$mp->mat_id]->mu_status == 'complete') echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" alt ="Review">';
 		else if ($this->mpdata[$mp->mat_id]->mu_status == 'incomplete') echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_resume.png" alt ="Resume">';
 		else echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" alt ="Begin">';
@@ -26,13 +28,14 @@ if ($this->mtext->course_material) {
 	}
 }
 
-//Expired or Passed/Completed, show return Button
-if ($this->expired || $this->passed) {
+//Expired or Passed/Completed or NoCredit, show return Button
+if ($this->expired || $this->passed || $this->nocredit != 0) {
 	echo '<div align="center">';
 	echo '<form name="continued_material" id="continued_material" method="post" action="">';
 	echo '<input type="hidden" name="gte" value="return">';
 	echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
 	echo '<input type="hidden" name="token" value="'.$this->token.'">';
+	if ($this->nocredit != 0) echo '<input type="hidden" name="nocredit" value="1">';
 	if ($this->mtext->course_hasinter) {
 		foreach ($this->reqids as $r) {
 			echo '<input type="hidden" name="req'.$r.'d" value="1">';

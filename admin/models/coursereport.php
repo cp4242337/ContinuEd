@@ -48,9 +48,9 @@ class ContinuEdModelCourseReport extends JModel
 
 	}
 	
-	function _buildQuery()
+	function _buildQuery($csv=false)
 	{
-		global $cecfg;
+		$cecfg = ContinuEdHelper::getConfig();
 		$startdate = $this->getState('startdate');
 		$enddate = $this->getState('enddate');
 		$pf = $this->getState('pf');
@@ -63,12 +63,19 @@ class ContinuEdModelCourseReport extends JModel
 		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,cat.cat_name';
 		//$q .= ,u.email,u.name as fullname';
 		//$q .= ',ug.ug_name';
+		if ($csv) {
+			$q.=',udpdob.usr_data as pharmdob, udpid.usr_data as pharmid';
+		}
 		$q .= ' FROM #__ce_records as r';
 		$q .= ' STRAIGHT_JOIN #__ce_courses as c ON r.rec_course = c.course_id';
 		$q .= ' RIGHT JOIN #__ce_cats as cat ON c.course_cat = cat.cat_id';
 		if ($usergroup) {
 			$q .= ' LEFT JOIN #__ce_usergroup as g ON r.rec_user = g.userg_user';
 			$q .= ' LEFT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
+		}
+		if ($csv) {
+			$q .= ' LEFT JOIN #__ce_users as udpid ON udpid.usr_user = r.rec_user && udpid.usr_field = '.$cecfg->pharm_id_field;
+			$q .= ' LEFT JOIN #__ce_users as udpdob ON udpdob.usr_user = r.rec_user && udpdob.usr_field = '.$cecfg->pharm_dob_field;
 		}
 		//$q .= ' LEFT JOIN #__users as u ON r.rec_user = u.id';
 		$q .= ' WHERE date(r.rec_start) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
@@ -77,7 +84,7 @@ class ContinuEdModelCourseReport extends JModel
 		if ($usergroup) $q .= ' && ug.ug_id = '.$usergroup.' '; 
 		if ($pf) $q .= ' && r.rec_pass = "'.$pf.'" ';
 		if ($type) $q .= ' && r.rec_type = "'.$type.'" ';
-		$q .= ' ORDER BY r.rec_start DESC';
+		$q .= ' ORDER BY r.rec_start DESC'; 
 		return $q;
 	}
 	
@@ -87,7 +94,7 @@ class ContinuEdModelCourseReport extends JModel
 		$cid = $this->getState('course');
 		if (empty( $this->_data ))
 		{
-			$query = $this->_buildQuery();
+			$query = $this->_buildQuery($csv);
 			if (!$csv) $this->_data = $this->_getList($query, $this->getState('limitstart'), $this->getState('limit'));
 			else $this->_data = $this->_getList($query);
 		}

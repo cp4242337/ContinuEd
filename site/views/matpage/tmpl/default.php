@@ -21,6 +21,7 @@ echo '<form name="continued_matpage" id="continued_matpage" method="post" action
 echo '<input type="hidden" name="ret" value="return">';
 echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
 echo '<input type="hidden" name="token" value="'.$this->token.'">';
+if ($this->nocredit != 0) echo '<input type="hidden" name="nocredit" value="1">';
 echo '</form></div>';
 
 ?>

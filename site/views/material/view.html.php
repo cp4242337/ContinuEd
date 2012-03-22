@@ -26,6 +26,7 @@ class ContinuEdViewMaterial extends JView
 		$model =& $this->getModel();
 		$courseid = JRequest::getVar( 'course' );
 		$token = JRequest::getVar( 'token' );
+		$nocredit = JRequest::getVar('nocredit','0');
 		$user =& JFactory::getUser();
 		
 		//Get material data
@@ -54,6 +55,7 @@ class ContinuEdViewMaterial extends JView
 		} else {
 			$what = "fm";
 		}
+		if ($nocredit != 0) { $what = "fmn"; }
 		
 		//Check Viewed
 		$viewed=ContinuedHelper::checkViewed($what,$courseid,$token);
@@ -122,6 +124,7 @@ class ContinuEdViewMaterial extends JView
 				$this->assignRef('reqids',$reqids);
 				$this->assignRef('reqans',$reqans);
 				$this->assignRef('jumpedover',$jumpedover);
+				$this->assignRef('nocredit',$nocredit);
 				parent::display($tpl);
 			}
 			//Valid course, can go to eval or course has no material, course has eval
@@ -147,6 +150,8 @@ class ContinuEdViewMaterial extends JView
 				} else {
 					$pass = 'complete';
 				} 
+				
+				if ($nocredit != 0) { $pass= 'audit'; ContinuedHelper::trackViewed('mtn',$courseid,$token); }
 				
 				$res = ContinuEdHelper::endSession($courseid,$token,0,0,$pass);
 				$redirurl = $mtext->course_cataloglink;

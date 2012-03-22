@@ -62,6 +62,29 @@
 		<field name="WELCOME_SUBJECT" type="text" label="COM_CONTINUED_CONFIG_FIELD_WELCOME_SUBJECT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_WELCOME_SUBJECT_DESC" size="70" class="inputbox" required="false" default="" />
 		<field name="LOSTINFO_SUBJECT" type="text" label="COM_CONTINUED_CONFIG_FIELD_LOSTINFO_SUBJECT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_LOSTINFO_SUBJECT_DESC" size="70" class="inputbox" required="false" default="" />
 	</fieldset>
+	<fieldset name="reports" label="COM_CONTINUED_CONFIG_REPORTS_LABEL" description="COM_CONTINUED_CONFIG_REPORTS_DESC" addfieldpath="/administrator/components/com_continued/models/fields">
+		<field 
+			name="on_list_field" 
+			type="FieldInclude" 
+			class="inputbox"
+			label="COM_CONTINUED_CONFIG_FIELD_ONLIST_LABEL"
+			description="COM_CONTINUED_CONFIG_FIELD_ONLIST_DESC" 
+		/>
+		<field 
+			name="pharm_id_field" 
+			type="FieldText" 
+			class="inputbox"
+			label="COM_CONTINUED_CONFIG_FIELD_PHARMID_LABEL"
+			description="COM_CONTINUED_CONFIG_FIELD_PHARMID_DESC" 
+		/>
+		<field 
+			name="pharm_dob_field" 
+			type="FieldBirthday" 
+			class="inputbox"
+			label="COM_CONTINUED_CONFIG_FIELD_PHARMDOB_LABEL"
+			description="COM_CONTINUED_CONFIG_FIELD_PHARMDOB_DESC" 
+		/>
+	</fieldset>
 	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" class="inputbox" validate="rules" filter="rules" component="com_continued" section="component" />
 	</fieldset>

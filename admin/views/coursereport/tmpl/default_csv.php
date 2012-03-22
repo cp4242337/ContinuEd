@@ -7,6 +7,9 @@ $contents = "";
 $contents .= '"'.JText::_( 'Name' ).'",'; 
 $contents .= '"'.JText::_( 'Group' ).'",'; 
 $contents .= '"'.JText::_( 'EMail' ).'",'; 
+$contents .= '"'.JText::_( 'NABP ID' ).'",'; 
+$contents .= '"'.JText::_( 'DOB' ).'",'; 
+$contents .= '"'.JText::_( 'EMail' ).'",'; 
 if (!$this->course) {
 	$contents .= '"'.JText::_( 'Course' ).'",';
 	$contents .= '"'.JText::_( 'Category' ).'",'; 
@@ -44,6 +47,8 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 	$contents .= '"'.$this->userlist[$row->rec_user]->name.'",'; 
 	$contents .= '"'.$this->userlist[$row->rec_user]->usergroup.'",'; 
 	$contents .= '"'.$this->userlist[$row->rec_user]->email.'",'; 
+	$contents .= '"'.$row->pharmid.'",';
+	$contents .= '"'.$row->pharmdob.'",';
 	if (!$this->course) {
 		$contents .= '"'.$row->course_name.'",';
 		$contents .= '"'.$row->cat_name.'",';
@@ -76,6 +81,8 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 		case 'pre': $contents .= '"PreTest",'; break;
 		case 'lnk': $contents .= '"Entry Link",'; break;
 		case 'fme': $contents .= '"Front Matter - Exp",'; break;
+		case 'fmn': $contents .= 'Front Matter - No CE'; break;
+		case 'mtn': $contents .= 'Material - No CE'; break;
 	}
 	$contents .= '"'.$row->rec_start.'",';
 	$contents .= '"'.$row->rec_end.'",'; 

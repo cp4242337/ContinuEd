@@ -32,6 +32,8 @@ foreach ($this->items as $row)
 		case 'pre': $contents .= 'PreTest'; break;
 		case 'lnk': $contents .= 'Entry Link'; break;
 		case 'fme': $contents .= 'Front Matter - Exp'; break;
+		case 'fmn': $contents .= 'Front Matter - No CE'; break;
+		case 'mtn': $contents .= 'Material - No CE'; break;
 	}
 	$contents .= '",';
 	$contents .= '"'.$row->sessionid."\"\n";

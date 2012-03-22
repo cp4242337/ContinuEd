@@ -30,6 +30,7 @@ class ContinuEdViewFrontMatter extends JView
 	var $redirurl = null;
 	var $incomplete = false;
 	var $fmagree = false;
+	var $nocredit = 0;
 	
 	function display($tpl = null)
 	{
@@ -37,6 +38,7 @@ class ContinuEdViewFrontMatter extends JView
 		$courseid = JRequest::getVar( 'course' );
 		$this->fmagree = JRequest::getVar( 'fmagree' );
 		$this->token = JRequest::getVar('token','');
+		$this->nocredit = JRequest::getVar('nocredit','0');
 		$user =& JFactory::getUser();
 		$model =& $this->getModel();
 				
@@ -94,7 +96,9 @@ class ContinuEdViewFrontMatter extends JView
 			if ($this->incomplete) $this->token = $this->incomplete;
 		}
 		
-		if ($this->fmagree) {
+		if ($this->nocredit != 0) {
+			$this->noCredit();
+		} else if ($this->fmagree) {
 			$this->moveOn();
 		} else if ($this->incomplete && !$this->expired && $this->eligable) {
 			$this->resume();
@@ -116,15 +120,16 @@ class ContinuEdViewFrontMatter extends JView
 	function resume() {
 		//Resume Session
 		ContinuedHelper::resumeSession($this->token);
-		$this->assignRef('cinfo',$this->cinfo);
+		/*$this->assignRef('cinfo',$this->cinfo);
 		$this->assignRef('token',$this->token);
 		$this->assignRef('paid',$this->paid);
 		$this->assignRef('expired',$this->expired);
 		$this->assignRef('haspassed',$this->passed);
-		parent::display($tpl);
+		parent::display($tpl);*/
+		$this->moveOn();
 	}
 	
-	//Eligable, Not Expired, Not Passed
+	//Eligable, Not Expired, Not Passed, Credit
 	function eligable() {
 		//Start Session
 		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"ce");
@@ -135,6 +140,22 @@ class ContinuEdViewFrontMatter extends JView
 		$this->assignRef('haspassed',$this->passed);
 		parent::display($tpl);
 	}
+	
+	//Eligable, Not Expired, Not Passed, No Credit
+	function noCredit() {
+		$app =& JFactory::getApplication();
+		
+		//Start Session
+		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"nonce");
+		$proceed=ContinuEdHelper::trackViewed('fmn',$this->cinfo->course_id,$this->token);
+		
+		$nextstep = 'material';
+		
+		//Proceed to next step
+		if ($proceed) $app->redirect('index.php?option=com_continued&view='.$nextstep.'&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->cinfo->course_id.'&nocredit=1&token='.$this->token);
+		else echo 'A database error has occured and you cannot continue. Please contact a site admin.';
+	}
+	
 	
 	//Eligable, Passed
 	function passed() {

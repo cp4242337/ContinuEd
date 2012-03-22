@@ -36,10 +36,8 @@ $controller->execute(JRequest::getCmd('task'));
 $controller->redirect();
 
 //Load Config
-$db =& JFactory::getDBO();
-$q = 'SELECT * FROM #__ce_config';
-$db->setQuery($q);
+
 global $cecfg;
-$cecfg = $db->loadAssoc();
+$cecfg = ContinuEdHelper::getConfig();
 
 ?>

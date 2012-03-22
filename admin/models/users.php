@@ -53,7 +53,7 @@ class ContinuEdModelUsers extends JModelList
 		parent::populateState('u.name', 'asc');
 	}
 	
-	protected function getListQuery() 
+	protected function getListQuery($ulist = Array()) 
 	{
 		// Create a new query object.
 		$db = JFactory::getDBO();
@@ -69,6 +69,11 @@ class ContinuEdModelUsers extends JModelList
 		$query->join('LEFT', '#__ce_usergroup AS ug ON u.id = ug.userg_user');
 		$query->select('g.ug_name');
 		$query->join('LEFT', '#__ce_ugroups AS g ON ug.userg_group = g.ug_id');
+		
+		// Filter by userids.
+		if (count($ulist)) {
+			$query->where('u.id IN ('.implode(',',$ulist).')');
+		}
 		
 		// Filter by group.
 		$groupId = $this->getState('filter.ugroup');
@@ -110,6 +115,18 @@ class ContinuEdModelUsers extends JModelList
 	public function getItemsCSV() {
 		$query=$this->getListQuery();
 		$db = JFactory::getDBO();
+		$db->setQuery($query);
+		return $db->loadObjectLIst();
+		
+	}
+	
+	public function getItemsCSVEml() {
+		$db = JFactory::getDBO();
+		$cecfg = ContinuEdHelper::getConfig();
+		$q = 'SELECT usr_user FROM #__ce_users WHERE usr_field = '.$cecfg->on_list_field.' && usr_data = "1"';
+		$db->setQuery($q);
+		$ulist = $db->loadResultArray();
+		$query=$this->getListQuery($ulist);
 		$db->setQuery($query);
 		return $db->loadObjectLIst();
 		

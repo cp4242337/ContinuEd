@@ -103,6 +103,8 @@ $stepsl[14] = JHTML::_('select.option','fme','Front Matter - Exp');
 			case 'pre': echo 'PreTest'; break;
 			case 'lnk': echo 'Entry Link'; break;
 			case 'fme': echo 'Front Matter - Exp'; break;
+			case 'fmn': echo 'Front Matter - No CE'; break;
+			case 'mtn': echo 'Material - No CE'; break;
 		}
 		?></td>
 		<td><?php echo $sessionlink; ?></td>

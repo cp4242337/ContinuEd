@@ -129,6 +129,8 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 				case 'pre': echo 'PreTest'; break;
 				case 'lnk': echo 'Entry Link'; break;
 				case 'fme': echo 'Front Matter - Exp'; break;
+				case 'fmn': echo 'Front Matter - No CE'; break;
+				case 'mtn': echo 'Material - No CE'; break;
 			}
 			?>
 		</td>

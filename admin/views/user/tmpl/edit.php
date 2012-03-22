@@ -6,7 +6,7 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_continued&layout=edit&usr_id='.(int) $this->item->usr_id); ?>" method="post" name="adminForm" id="continued-form" class="form-validate">
-	<div class="width-70 fltlft">
+	<div class="width-60 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'COM_CONTINUED_USER_DETAILS' ); ?></legend>
 			<ul class="adminformlist">
@@ -83,7 +83,7 @@ JHtml::_('behavior.formvalidation');
 		</fieldset>
 
 	</div>
-	<div class="width-30 fltlft">
+	<div class="width-40 fltlft">
 		<fieldset class="adminform">
 			<legend>Other User Info</legend>
 			<?php 

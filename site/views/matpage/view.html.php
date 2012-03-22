@@ -28,6 +28,7 @@ class ContinuEdViewMatpage extends JView
 		$courseid = JRequest::getVar( 'course' );
 		$token = JRequest::getVar( 'token' );
 		$ret = JRequest::getVar( 'ret',0 );
+		$nocredit = JRequest::getVar('nocredit','0');
 		
 		//Get page data
 		$matpage=$model->getMatPage($pageid);
@@ -46,6 +47,7 @@ class ContinuEdViewMatpage extends JView
 			//assign vars and show page
 			$this->assignRef('matpage',$matpage);
 			$this->assignRef('token',$token);
+			$this->assignRef('nocredit',$nocredit);
 			parent::display($tpl);
 			
 		} else if ($matpage && $token && $ret) {
@@ -55,7 +57,8 @@ class ContinuEdViewMatpage extends JView
 			if ($matpage->mat_type == "text") ContinuEdHelper::endMat($pageid);
 			
 			//return to material page
-			$app->redirect('index.php?option=com_continued&view=material&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
+			if ($nocredit == 0) $app->redirect('index.php?option=com_continued&view=material&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&token='.$token);
+			else  $app->redirect('index.php?option=com_continued&view=material&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$courseid.'&nocredit=1&token='.$token);
 			 
 		} else {
 		//return to course, not entered properly or no page exists

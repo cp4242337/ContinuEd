@@ -128,6 +128,10 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '</td></tr><tr><td>';
 		if (!empty($course->course_desc)) echo $course->course_desc;
 		echo '</td></tr><tr><td colspan="2">'.$clink;
+		if ($course->course_nocredit) {
+			echo '<a href="index.php?option=com_continued&view=nocredit&course='.$course->course_id.'">';
+			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocredit.png" border="0" alt="View Only, No Credit"></a>';
+		}
 		if ($this->user->id && $course->status == 'pass' && $course->course_hascertif) {
 			echo '<a href="index.php?option=com_continued&view=certif&course='.$course->course_id.'&tmpl=component" target="_blank">';
 			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_certif.png" border="0" alt="Get Certificate"></a>';

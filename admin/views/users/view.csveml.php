@@ -11,7 +11,7 @@ class ContinuEdViewUsers extends JView
 	function display($tpl = 'csveml') 
 	{
 		// Get data from the model
-		$items = $this->get('ItemsCSV');
+		$items = $this->get('ItemsCSVEml');
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
