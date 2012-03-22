@@ -52,8 +52,14 @@ class ContinuEdModelEval extends JModel
 		$userid = $user->id;
 		$query = 'SELECT * FROM #__ce_evalans WHERE ans_area = "post" && part="'.$part.'" && userid="'.$userid.'" && sessionid="'.$sessionid.'" && course="'.$courseid.'"';
 		$query .= ' && tokenid="'.$token.'"';
-		$db->setQuery($query);
+		$db->setQuery($query); 
 		$data = $db->loadObjectList();
+		if (!$data && $cecfg->EVAL_ANSRPT) {
+			$query = 'SELECT * FROM #__ce_evalans WHERE ans_area = "post" && part="'.$part.'" && userid="'.$userid.'" && course="'.$courseid.'"';
+			$query .= ' ORDER BY anstime DESC';
+			$db->setQuery($query); 
+			$data = $db->loadObjectList();
+		}
 		return $data;
 
 	}

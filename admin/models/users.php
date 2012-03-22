@@ -65,7 +65,7 @@ class ContinuEdModelUsers extends JModelList
 		// From the hello table
 		$query->from('#__users as u');
 		// Join over the users.
-		$query->select('ug.userg_update as lastUpdate');
+		$query->select('ug.userg_update as lastUpdate,ug.userg_notes');
 		$query->join('LEFT', '#__ce_usergroup AS ug ON u.id = ug.userg_user');
 		$query->select('g.ug_name');
 		$query->join('LEFT', '#__ce_ugroups AS g ON ug.userg_group = g.ug_id');
