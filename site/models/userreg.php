@@ -25,8 +25,10 @@ class ContinuEdModelUserReg extends JModel
 	*/
 	function getUserGroups($id=0) {
 		$db =& JFactory::getDBO();
-		$qd = 'SELECT ug.* FROM #__ce_ugroups as ug';
-		if ($id) $qd .= " WHERE ug.ug_id = ".$id;
+		$user =& JFactory::getUser();
+		$aid = $user->getAuthorisedViewLevels();
+		$qd = 'SELECT ug.* FROM #__ce_ugroups as ug WHERE ug.access IN ('.implode(",",$aid).')';
+		if ($id) $qd .= " && ug.ug_id = ".$id;
 		$qd.= ' ORDER BY ug.ordering';
 		$db->setQuery( $qd ); 
 		$ugroups = $db->loadObjectList();
