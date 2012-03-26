@@ -73,13 +73,13 @@ class ContinuEdModelUserReg extends JModel
 			foreach ($ufields as &$u) {
 				$fn=$u->uf_sname;
 				if ($u->uf_type == 'multi' || $u->uf_type == 'dropdown' || $u->uf_type == 'mcbox' || $u->uf_type == 'mlist') {
-					$u->value=explode(" ",$app->getUserState('continued.userreg.'.$fn)); 
+					$u->value=explode(" ",$app->getUserState('continued.userreg.'.$fn,$u->uf_default)); 
 				} else if ($u->uf_type == 'cbox' || $u->uf_type == 'yesno') {
-					$u->value=$app->getUserState('continued.userreg.'.$fn);
+					$u->value=$app->getUserState('continued.userreg.'.$fn,$u->uf_default);
 				} else if ($u->uf_type == 'birthday') {
-					$u->value=$app->getUserState('continued.userreg.'.$fn);
+					$u->value=$app->getUserState('continued.userreg.'.$fn,$u->uf_default);
 				} else if ($u->uf_type != 'captcha') {
-					$u->value=$app->getUserState('continued.userreg.'.$fn);
+					$u->value=$app->getUserState('continued.userreg.'.$fn,$u->uf_default);
 				}
 			}
 		}
@@ -118,14 +118,7 @@ class ContinuEdModelUserReg extends JModel
 			foreach ($flist as $d) {
 				$fieldname = $d->uf_sname;
 				if ($d->uf_type == 'captcha') {
-					include_once 'components/com_continued/lib/securimage/securimage.php';
-					$securimage = new Securimage();
-					$securimage->session_name = $session->getName();
-					$securimage->case_sensitive  = false; 
-					if ($securimage->check($data[$fieldname]) == false) {
-						$this->setError('Security Code Incorrect');
-						return false;
-					} 
+					$capfield=$fieldname;
 				} else if ($d->uf_type=="mcbox" || $d->uf_type=="mlist") {
 					$item->$fieldname = implode(" ",$data[$fieldname]);
 				} else if ($d->uf_type=='cbox') {
@@ -143,11 +136,22 @@ class ContinuEdModelUserReg extends JModel
 				if ($d->uf_type != 'captcha' || $d->uf_type != 'password') $app->setUserState('continued.userreg.'.$fieldname, $item->$fieldname);
 			}
 			
+			if ($capfield) {
+				include_once 'components/com_continued/lib/securimage/securimage.php';
+				$securimage = new Securimage();
+				$securimage->session_name = $session->getName();
+				$securimage->case_sensitive  = false; 
+				if ($securimage->check($data[$capfield]) == false) {
+					$this->setError('Security Code Incorrect');
+					return false;
+				} 
+			}
+			
 			//Update Joomla User Info
 			$user= new JUser;
 			$udata['name']=$item->fname." ".$item->lname;
 			$udata['email']=strtolower($item->email);
-			$udata['username']=strtolower($item->username);
+			$udata['username']=(strtolower($item->username)) ? strtolower($item->username) : strtolower($item->email);
 			$udata['password']=$item->password;
 			$udata['password2']=$item->cpassword;
 			$udata['block']=0;
@@ -162,7 +166,7 @@ class ContinuEdModelUserReg extends JModel
 			}
 			
 			$credentials = array();
-			$credentials['username'] = strtolower($item->username);
+			$credentials['username'] = (strtolower($item->username)) ? strtolower($item->username) : strtolower($item->email);
 			$credentials['password'] = $item->password;
 			
 			//Set user group info
@@ -183,7 +187,8 @@ class ContinuEdModelUserReg extends JModel
 			
 			$emailmsg = $groupinfo[0]->ug_welcome_email;
 			$emailmsg = str_replace("{fullname}",$item->fname." ".$item->lname,$emailmsg);
-			$emailmsg = str_replace("{username}",$item->username,$emailmsg);
+			$emailmsg = str_replace("{username}",(strtolower($item->username)) ? strtolower($item->username) : strtolower($item->email),$emailmsg);
+			$emailmsg = str_replace("{password}",$item->password,$emailmsg);
 			
 			
 			//remove joomla user info from item

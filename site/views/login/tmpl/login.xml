@@ -14,6 +14,10 @@
 				<option value="0">JHIDE</option>
 				<option value="1">JSHOW</option>
 			</field>
+			<field name="show_reg" type="list" label="Show Registration" description="Show quick registration box on page with login." default="0">
+				<option value="0">JHIDE</option>
+				<option value="1">JSHOW</option>
+			</field>
 			<field name="login_description" type="textarea" label="JFIELD_BASIS_LOGIN_DESCRIPTION_LABEL" description="JFIELD_BASIS_LOGIN_DESCRIPTION_DESC" rows="3" cols="40" />
 		</fieldset>
 	</fields>

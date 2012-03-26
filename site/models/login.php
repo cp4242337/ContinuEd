@@ -30,5 +30,25 @@ class ContinuEdModelLogin extends JModel
 		if ($app->login($credentials, $options)) return true;
 		else return false;
 	}
+	
+	/**
+	* Get User Groups 
+	*
+	* @param int $id Group id for user
+	*
+	* @return object array of user groups.
+	*
+	* @since 1.20
+	*/
+	function getUserGroups() {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$aid = $user->getAuthorisedViewLevels();
+		$qd = 'SELECT ug.* FROM #__ce_ugroups as ug WHERE ug.access IN ('.implode(",",$aid).')';
+		$qd.= ' ORDER BY ug.ordering';
+		$db->setQuery( $qd ); 
+		$ugroups = $db->loadObjectList();
+		return $ugroups;
+	}
 
 }

@@ -22,6 +22,7 @@ class ContinuEdViewLogin extends JView
 	protected $params;
 	protected $user;
 	protected $redirurl;
+	protected $glist;
 
 	/**
 	 * Method to display the view.
@@ -50,7 +51,12 @@ class ContinuEdViewLogin extends JView
 	}
 
 	protected function userLogIn() {
-		$this->redir = $this->params->get('login_redirect_url');
+		$cecfg = ContinuEdHelper::getConfig();
+		if ($cecfg->show_loginreg) {
+			$model =& $this->getModel();
+			$this->glist=$model->getUserGroups();
+		}
+		$this->redirurl = base64_decode(JRequest::getVar('return', $this->params->get('login_redirect_url')));
 	}
 	
 
@@ -77,5 +83,17 @@ class ContinuEdViewLogin extends JView
 		} else {
 			$app->redirect('index.php?option=com_continued&view=login&layout=login',$model->getError());
 		}
+	}
+	
+	public function gen_uuid($len=8) {
+		$hex = md5("in_the_beginning_users_had_no_passwords" . uniqid("", true));
+		$pack = pack('H*', $hex);
+		$uid = base64_encode($pack); // max 22 chars
+		$nuid = preg_replace("/[^a-zA-Z0-9]/", "",$uid); // uppercase only
+		if ($len<4) $len=4;
+		if ($len>128) $len=128; // prevent silliness, can remove
+		while (strlen($nuid)<$len)
+		$nuid = $nuid . gen_uuid(22); // append until length achieved
+		return substr($nuid, 0, $len);
 	}
 }

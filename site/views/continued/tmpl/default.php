@@ -129,8 +129,23 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		if (!empty($course->course_desc)) echo $course->course_desc;
 		echo '</td></tr><tr><td colspan="2">'.$clink;
 		if ($course->course_nocredit) {
-			echo '<a href="index.php?option=com_continued&view=nocredit&course='.$course->course_id.'">';
-			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocredit.png" border="0" alt="View Only, No Credit"></a>';
+			$urlnc = 'index.php?option=com_continued&view=nocredit&course='.$course->course_id;
+			if ($this->user->id) {
+				echo '<a href="'.$urlnc.'">';
+				echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocredit.png" border="0" alt="View Only, No Credit"></a>';
+			} else {
+				$urlnc='index.php?option=com_continued&view=login&layout=login&tmpl=component&return='.base64_encode($urlnc);
+				echo '<a href="#" onclick="open'.$course->course_id.'();">';
+				echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocredit.png" border="0" alt="View Only, No Credit"></a>';
+				echo '<script type="text/javascript">';
+				echo 'function open'.$course->course_id.'() {';
+				echo 'var src = "'.$urlnc.'"; ';
+				echo 'jceq.modal(\'<iframe src="\' + src + \'" height="400" width="680" style="border:0">\', {';
+				echo ' closeHTML:"",containerCss:{backgroundColor:"#fff",borderColor:"#fff",height:420,	padding:0,width:700},overlayClose:true,opacity:80,overlayCss: {backgroundColor:"#000"}});';
+				echo ' }';
+				echo '</script>';
+			}
+				
 		}
 		if ($this->user->id && $course->status == 'pass' && $course->course_hascertif) {
 			echo '<a href="index.php?option=com_continued&view=certif&course='.$course->course_id.'&tmpl=component" target="_blank">';

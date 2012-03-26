@@ -78,7 +78,9 @@ class ContinuEdViewUserReg extends JView
 		if (!$model->save()) {
 			$app->redirect('index.php?option=com_continued&view=userreg&layout=regform&groupid='.$groupid,$model->getError(),'error');
 		} else {
-			$app->redirect('index.php?option=com_continued&view=user&layout=profile');
+			$redir = base64_decode(JRequest::getVar('return', '', 'POST', 'BASE64'));
+			if (!$redir) $redir='index.php?option=com_continued&view=user&layout=profile';
+			$app->redirect($redir);
 		}		
 	}
 }

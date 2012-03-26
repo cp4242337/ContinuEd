@@ -56,6 +56,16 @@
 			<option value="tpo">Practical Oncologist</option>
 		</field>
 		<field name="INTER_REQMSG" type="text" label="COM_CONTINUED_CONFIG_FIELD_INTER_REQMSG_LABEL" description="COM_CONTINUED_CONFIG_FIELD_INTER_REQMSG_DESC" size="120" class="inputbox" required="false" default="" />
+		<field 
+			name="show_loginreg" 
+			type="radio" 
+			class="inputbox"
+			label="COM_CONTINUED_CONFIG_FIELD_LOGINREG_LABEL"
+			description="COM_CONTINUED_CONFIG_FIELD_LOGINREG_DESC" 
+		>
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</field>
 		<field name="REG_PAGE_CONTENT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_REG_PAGE_CONTENT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_REG_PAGE_CONTENT_DESC" rows="4" cols="70" class="inputbox" required="true" filter="safehtml" buttons="false" />
 		<field name="FROM_EMAIL" type="text" label="COM_CONTINUED_CONFIG_FIELD_FROM_EMAIL_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FROM_EMAIL_DESC" size="70" class="inputbox" required="false" default="" />
 		<field name="FROM_NAME" type="text" label="COM_CONTINUED_CONFIG_FIELD_FROM_NAME_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FROM_NAME_DESC" size="70" class="inputbox" required="false" default="" />

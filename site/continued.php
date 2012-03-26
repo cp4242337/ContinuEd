@@ -26,6 +26,7 @@ $doc->addScript('media/com_continued/scripts/jquery.js');
 $doc->addScript('media/com_continued/scripts/jquery.validate.js');
 $doc->addScript('media/com_continued/scripts/additional-methods.js');
 $doc->addScript('media/com_continued/scripts/jquery.metadata.js');
+$doc->addScript('media/com_continued/scripts/jquery.simplemodal.js');
 
 // Create the controller
 $classname	= 'ContinuEdController'.$controller;

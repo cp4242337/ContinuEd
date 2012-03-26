@@ -139,7 +139,8 @@ class ContinuEdModelContinuEd extends JModel
 				$ansarr=explode(" ",$u->usr_data);
 				$q = 'SELECT opt_text FROM #__ce_ufields_opts WHERE opt_id IN('.implode(",",$ansarr).')';
 				$db->setQuery($q);
-				$user->$fn = implode(", ",$db->loadResultArray());
+				if ($res = $db->loadResultArray()) $user->$fn = implode(", ",$res);
+				else $user->$fn = '';
 			} else {
 				$user->$fn=$u->usr_data;
 			}
