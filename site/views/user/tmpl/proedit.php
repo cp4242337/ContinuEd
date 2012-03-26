@@ -29,7 +29,7 @@ foreach($this->userfields as $f) {
 		echo '<div class="continued-user-edit-label">';
 		if ($f->uf_req) echo "*";
 		//field title
-		if ($f->uf_type != "cbox") echo $f->uf_name;
+		if ($f->uf_type != "cbox" && $f->uf_type != "message") echo $f->uf_name;
 		echo '</div>';
 		echo '<div class="continued-user-edit-value">';
 		if ($f->uf_type == "mcbox" || $f->uf_type == "mlist") {
@@ -39,6 +39,9 @@ foreach($this->userfields as $f) {
 			if ($f->uf_min && $f->uf_max) echo '<em>(Select at least '.$f->uf_min.' and at most '.$f->uf_max.')</em><br />';
 		}
 		
+		//Message
+		if ($f->uf_type == "message") echo '<strong>'.$f->uf_name.'</strong>';
+	
 		//checkbox
 		if ($f->uf_type=="cbox") {
 			if (!empty($this->userinfo->$sname)) $checked = ($this->userinfo->$sname == '1') ? ' checked="checked"' : '';
