@@ -31,6 +31,7 @@ class ContinuEdViewFrontMatter extends JView
 	var $incomplete = false;
 	var $fmagree = false;
 	var $nocredit = 0;
+	var $rectype = '';
 	
 	function display($tpl = null)
 	{
@@ -126,13 +127,12 @@ class ContinuEdViewFrontMatter extends JView
 		$this->assignRef('expired',$this->expired);
 		$this->assignRef('haspassed',$this->passed);
 		parent::display($tpl);*/
-		$this->moveOn();
+		$this->moveOn(true);
 	}
 	
 	//Eligable, Not Expired, Not Passed, Credit
 	function eligable() {
-		//Start Session
-		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"ce");
+		$this->rectype='ce';
 		$this->assignRef('cinfo',$this->cinfo);
 		$this->assignRef('token',$this->token);
 		$this->assignRef('paid',$this->paid);
@@ -160,7 +160,7 @@ class ContinuEdViewFrontMatter extends JView
 	//Eligable, Passed
 	function passed() {
 		//Start Session
-		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"review");
+		$this->rectype='review';
 		$this->assignRef('cinfo',$this->cinfo);
 		$this->assignRef('token',$this->token);
 		$this->assignRef('paid',$this->paid);
@@ -173,7 +173,7 @@ class ContinuEdViewFrontMatter extends JView
 	//Eligable, Expired, Not Passed
 	function expired() {
 		//Start Session
-		ContinuedHelper::startSession($this->cinfo->course_id,$this->token,"expired");
+		$this->rectype='expired';
 		$this->assignRef('cinfo',$this->cinfo);
 		$this->assignRef('token',$this->token);
 		$this->assignRef('paid',$this->paid);
@@ -184,16 +184,24 @@ class ContinuEdViewFrontMatter extends JView
 	}
 	
 	//Move to next Step
-	function moveOn() {
+	function moveOn($resume=false) {
 		$app =& JFactory::getApplication();
 		$user =& JFactory::getUser();
 		//Track FM Viewed
 		if ($this->passed) {
 			$what = "fmp";
+			$this->rectype='review';
 		} else if ($this->expired) {
 			$what = "fme";
+			$this->rectype='expired';
 		} else if ($this->eligable) {
 			$what = "fm";
+			$this->rectype='ce';
+		}
+		
+		if (!$resume) {
+			//Start Session
+			ContinuedHelper::startSession($this->cinfo->course_id,$this->token,$this->rectype);
 		}
 		$proceed=ContinuEdHelper::trackViewed($what,$this->cinfo->course_id,$this->token);
 		

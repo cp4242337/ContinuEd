@@ -8,6 +8,7 @@ $certhtml = str_replace('{Title}',$this->cinfo->course_certifname,$certhtml);
 $certhtml = str_replace('{Faculty}',$this->cinfo->course_faculty,$certhtml);
 $certhtml = str_replace('{Credits}',$this->cinfo->course_credits,$certhtml);
 $certhtml = str_replace('{ADate}',date("F d, Y", strtotime($this->cinfo->course_actdate)),$certhtml);
+$certhtml = str_replace('{IDate}',date("F d, Y"),$certhtml);
 $certhtml = str_replace('{Name}',$username,$certhtml);
 //$certhtml = str_replace('{Degree}',$this->uinfo->cb_degree,$certhtml);
 //$certhtml = str_replace('{Address1}',$this->uinfo->cb_address,$certhtml);

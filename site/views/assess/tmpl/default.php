@@ -64,7 +64,7 @@ if ($pass) {
 		else echo 'This program is ineligible for a: <b><em>'.$this->usercertif.'</em></b><br>however you may still receive a: <b><em>'.$this->defaultcertif.'</em></b><br>';
 	}
 	if ($this->cinfo->course_hascertif) {
-		echo '<a href="index2.php?option=com_continued&view=certif&course='.$this->courseid.'" target="_blank">';
+		echo '<a href="index.php?option=com_continued&view=certif&course='.$this->courseid.'&tmpl=component" target="_blank">';
 		echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_certif.png" border="0" alt="Get Certificate"></a>';
 	}
 	echo '<a href="'.$this->redirurl.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a></p>';

@@ -19,10 +19,7 @@ require_once('components'.DS.'com_continued'.DS.'helpers'.DS.'continued.php');
 $cecfg = ContinuEdHelper::getConfig();
 $doc = &JFactory::getDocument();
 $doc->addStyleSheet('media'.DS.'com_continued'.DS.'template'.DS.''.$cecfg->TEMPLATE.DS.'continued.css');
-$doc->addScript('media/com_continued/scripts/jquery.js');
-$doc->addScript('media/com_continued/scripts/jquery.validate.js');
-$doc->addScript('media/com_continued/scripts/additional-methods.js');
-$doc->addScript('media/com_continued/scripts/jquery.metadata.js');
+
 
 $params->def('greeting', 1);
 

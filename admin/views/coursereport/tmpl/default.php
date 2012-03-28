@@ -45,6 +45,10 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 <table class="adminlist">
 	<thead>
 		<tr>
+		
+	<th width="20">
+		<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
+	</th>	
 			<th><?php echo JText::_( 'Name' ); ?></th>
 			<th><?php echo JText::_( 'Group' ); ?></th>
 			<?php 
@@ -88,6 +92,10 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 
 		?>
 	<tr class="<?php echo "row$k"; ?>">
+	<td>
+			<?php echo JHtml::_('grid.id', $i, $row->rec_token); ?>
+		</td>
+		
 		<td><?php echo $this->userlist[$row->rec_user]->name; ?></td>
 		<td><?php echo $this->userlist[$row->rec_user]->usergroup; ?></td>
 		<?php 
@@ -232,7 +240,9 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 	</tfoot>
 </table>
 
-<input type="hidden" name="option" value="com_continued" /> <input
-	type="hidden" name="task" value="" /> <input type="hidden"
-	name="boxchecked" value="0" /> <input type="hidden" name="controller"
-	value="coursereport" /></div>
+<input type="hidden" name="option" value="com_continued" /> 
+<input type="hidden" name="task" value="" /> 
+<input type="hidden" name="boxchecked" value="0" /> 
+<input type="hidden" name="controller" value="coursereport" />
+<?php echo JHtml::_('form.token'); ?>
+</div>

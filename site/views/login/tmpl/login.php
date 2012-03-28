@@ -159,7 +159,7 @@ if ($cecfg->show_loginreg == 1) {
 	echo '<div class="continued-login-reg-label">Code</div>';
 	echo '<div class="continued-login-reg-value">';
 	echo '<img id="captcha_img" src="'.JURI::base(true).'/components/com_continued/lib/securimage/securimage_show.php" alt="CAPTCHA Image" />';
-	echo '<input name="jform[captcha]" id="jform_captcha" value="" class="uf_login" type="text"';
+	echo '<input name="jform['.$cecfg->quickreg_cap.']" id="jform_'.$cecfg->quickreg_cap.'" value="" class="uf_login" type="text"';
 	echo ' validate="{required:true, messages:{required:\'Required\'}}">';
 	echo '<span class="uf_note">';
 	echo '<a href="#" onclick="document.getElementById(\'captcha_img\').src = \''.JURI::base(true).'/components/com_continued/lib/securimage/securimage_show.php?\' + Math.random(); return false">Reload Image</a>';

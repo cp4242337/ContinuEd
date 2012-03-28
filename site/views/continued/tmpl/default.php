@@ -140,7 +140,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				echo '<script type="text/javascript">';
 				echo 'function open'.$course->course_id.'() {';
 				echo 'var src = "'.$urlnc.'"; ';
-				echo 'jceq.modal(\'<iframe src="\' + src + \'" height="400" width="680" style="border:0">\', {';
+				echo 'jceq.modal(\'<iframe src="\' + src + \'" height="400" width="680" frameBorder="0" style="border:0">\', {';
 				echo ' closeHTML:"",containerCss:{backgroundColor:"#fff",borderColor:"#fff",height:420,	padding:0,width:700},overlayClose:true,opacity:80,overlayCss: {backgroundColor:"#000"}});';
 				echo ' }';
 				echo '</script>';

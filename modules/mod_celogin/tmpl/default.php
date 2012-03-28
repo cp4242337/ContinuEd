@@ -42,19 +42,7 @@ if ($type == 'logout') {
 	
 	echo '</form>';
  } else { 
-	?>
-	<script type="text/javascript">
-	jceq(document).ready(function() {
-		jceq.metadata.setType("attr", "validate");
-		jceq("#login-form").validate({
-			errorClass:"uf_error",
-			errorPlacement: function(error, element) {
-		    	error.appendTo( element.parent("div").next("div") );
-		    }
-	    });	
-	});
-	</script>
-	<?php 
+	
 	echo '<form action="" method="post" id="login-form" name="login-form" >';
 	if ($params->get('pretext')) {
 		echo '<div class="pretext"><p>'.$params->get('pretext').'</p></div>';
@@ -62,16 +50,14 @@ if ($type == 'logout') {
 	
 	echo '<div class="continued-loginmod-row">';
 	echo '<div class="continued-loginmod-label">'.JText::_('MOD_CELOGIN_VALUE_USERNAME').'</div>';
-	echo '<div class="continued-loginmod-value"><input id="login_user" type="text" name="login_user" class="uf_modfield"';
-	echo ' validate="{required:true, messages:{required:\'Required\'}}">'; 
+	echo '<div class="continued-loginmod-value"><input id="login_user" type="text" name="login_user" class="uf_modfield">'; 
 	echo '</div>';
 	echo '<div class="continued-loginmod-error"></div>';
 	echo '</div>';
 	
 	echo '<div class="continued-loginmod-row">';
 	echo '<div class="continued-loginmod-label">'.JText::_('JGLOBAL_PASSWORD').'</div>';
-	echo '<div class="continued-loginmod-value"><input id="login_pass" type="password" name="login_pass" class="uf_modfield"';
-	echo ' validate="{required:true, messages:{required:\'Required\'}}">';
+	echo '<div class="continued-loginmod-value"><input id="login_pass" type="password" name="login_pass" class="uf_modfield">';
 	echo '</div>';
 	echo '<div class="continued-loginmod-error"></div>';
 	echo '</div>';

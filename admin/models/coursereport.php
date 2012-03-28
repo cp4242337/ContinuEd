@@ -235,5 +235,17 @@ class ContinuEdModelCourseReport extends JModel
 		$glist[]->text='-- All --';
 		return $glist;
 	}
+	
+	public function delete($cid) {
+		foreach ($cid as $t) {
+			$q = 'DELETE FROM #__ce_records WHERE rec_token = "'.$t.'"';
+			$this->_db->setQuery($q);
+			if (!$this->_db->query()) return false;
+			$q2 = 'DELETE FROM #__ce_evalans WHERE tokenid = "'.$t.'"';
+			$this->_db->setQuery($q2);
+			if (!$this->_db->query()) return false;
+		}
+		return true;
+	}
 
 }

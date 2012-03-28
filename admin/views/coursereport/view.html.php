@@ -15,6 +15,7 @@ class ContinuEdViewCourseReport extends JView
 		$usergroup = $model->getState('usergroup');
 		$qgroup = $model->getState('qgroup');
 		$qarea = $model->getState('qarea');
+		JToolBarHelper::deleteList('', 'coursereport.deleterec');
 		$tbar =& JToolBar::getInstance('toolbar');
 		if ($cid) $tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&view=coursereport&format=csv&course='.$cid.'" target="_blank');
 		else $tbar->appendButton('Link','archive','Export CSV','index.php?option=com_continued&view=coursereport&format=csv" target="_blank');

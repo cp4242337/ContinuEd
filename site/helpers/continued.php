@@ -209,6 +209,7 @@ class ContinuEdHelper {
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
+		if (!$userid) return 0;
 		$recent=0;
 		if ($type=='ce' || $type=='viewed') {
 			$q1 = 'UPDATE #__ce_records SET rec_recent = 0 WHERE rec_user ="'.$userid.'" && rec_course = "'.$course.'"';
@@ -301,7 +302,7 @@ class ContinuEdHelper {
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query = 'SELECT rec_token FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass IN ("incomplete") && rec_course = '.$course.' ORDER BY rec_start DESC';
+		$query = 'SELECT rec_token FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass IN ("incomplete") && rec_course = '.$course.' && rec_type IN ("ce")  ORDER BY rec_start DESC';
 		$db =& JFactory::getDBO();
 		$db->setQuery( $query );
 		$token = $db->loadResult();
@@ -322,7 +323,7 @@ class ContinuEdHelper {
 		$userid = $user->id;
 		$query  = 'SELECT rec_course,rec_pass ';
 		$query .= 'FROM #__ce_records';
-		$query .= ' WHERE rec_recent = 1 && rec_user = '.$userid;
+		$query .= ' WHERE rec_type IN ("ce") && rec_recent = 1 && rec_user = '.$userid;
 		$db->setQuery( $query );
 		$reclist = $db->loadObjectList();
 		$rlist = array();

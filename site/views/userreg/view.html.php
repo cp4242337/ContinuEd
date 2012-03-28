@@ -73,9 +73,10 @@ class ContinuEdViewUserReg extends JView
 	protected function addUser() {
 		$model =& $this->getModel();
 		$app=Jfactory::getApplication();
-		
-		$groupid = JRequest::getInt('jform[userGroupID]');
+		$data = JRequest::getVar('jform', array(), 'post', 'array');
+		$groupid = $data['userGroupID'];
 		if (!$model->save()) {
+			$app->setUserState('continued.userreg.groupid',$groupid); 
 			$app->redirect('index.php?option=com_continued&view=userreg&layout=regform&groupid='.$groupid,$model->getError(),'error');
 		} else {
 			$redir = base64_decode(JRequest::getVar('return', '', 'POST', 'BASE64'));
