@@ -32,7 +32,7 @@ class ContinuEdModelFrontMatter extends JModel
 		$prm=true;
 		foreach ($prlist as $p) {
 			if ($cmpllist[$p]) {
-				if ($cmpllist[$p] == 'incomplete' || $cmpllist[$p] == 'fail') $prm=false;
+				if ($cmpllist[$p]->rec_pass == 'incomplete' || $cmpllist[$p]->rec_pass == 'fail') $prm=false;
 			} else {
 				$prm=false;
 			}

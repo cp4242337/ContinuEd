@@ -128,7 +128,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '</td></tr><tr><td>';
 		if (!empty($course->course_desc)) echo $course->course_desc;
 		echo '</td></tr><tr><td colspan="2">'.$clink;
-		if ($course->course_nocredit) {
+		if ($course->course_nocredit && $course->type != "ce") {
 			$urlnc = 'index.php?option=com_continued&view=nocredit&course='.$course->course_id;
 			if ($this->user->id) {
 				echo '<a href="'.$urlnc.'">';

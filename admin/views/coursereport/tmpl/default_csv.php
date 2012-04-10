@@ -14,9 +14,9 @@ if (!$this->course) {
 	$contents .= '"'.JText::_( 'Course' ).'",';
 	$contents .= '"'.JText::_( 'Category' ).'",'; 
 } 
-$contents .= '"'.JText::_( 'Status' ).'",'; 
-$contents .= '"'.JText::_( 'View Type' ).'",'; 
-$contents .= '"'.JText::_( 'Last Step' ).'",';
+$contents .= '"'.JText::_( 'Completition Status' ).'",'; 
+$contents .= '"'.JText::_( 'Record Type' ).'",'; 
+$contents .= '"'.JText::_( 'Last Step Completed' ).'",';
 $contents .= '"'.JText::_( 'Start' ).'",'; 
 $contents .= '"'.JText::_( 'End' ).'",'; 
 $contents .= '"'.JText::_( 'Pre Score' ).'",'; 
@@ -54,14 +54,14 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 		$contents .= '"'.$row->cat_name.'",';
 	} 
 	switch ($row->rec_pass) {
-		case 'pass': $contents .= '"Pass",'; break;
-		case 'fail': $contents .= '"Fail",'; break;
+		case 'pass': $contents .= '"Completed - Pass",'; break;
+		case 'fail': $contents .= '"Completed - Fail",'; break;
 		case 'incomplete': $contents .= '"Incomplete",'; break;
-		case 'audit': $contents .= '"Audit",'; break;
+		case 'audit': $contents .= '"Completed - No Credit",'; break;
 		case 'complete': $contents .= '"Completed",'; break;
 	}
 	switch ($row->rec_type) {
-		case 'nonce': $contents .= '"Non-CE",'; break;
+		case 'nonce': $contents .= '"No Credit",'; break;
 		case 'ce': $contents .= '"CE",'; break;
 		case 'review': $contents .= '"Review",'; break;
 		case 'expired': $contents .= '"Expired",'; break;

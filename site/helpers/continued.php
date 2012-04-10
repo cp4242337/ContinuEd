@@ -321,14 +321,14 @@ class ContinuEdHelper {
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query  = 'SELECT rec_course,rec_pass ';
+		$query  = 'SELECT * ';
 		$query .= 'FROM #__ce_records';
 		$query .= ' WHERE rec_type IN ("ce") && rec_recent = 1 && rec_user = '.$userid;
 		$db->setQuery( $query );
 		$reclist = $db->loadObjectList();
 		$rlist = array();
 		foreach ($reclist as $r) {
-			$rlist[$r->rec_course]=$r->rec_pass;
+			$rlist[$r->rec_course]=$r;
 		}
 		return $rlist;
 	}

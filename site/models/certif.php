@@ -34,7 +34,7 @@ class ContinuEdModelCertif extends JModel
 	*/
 	function statusCheck($course) {
 		$cmpllist =ContinuEdHelper::completedList();
-		$status=$cmpllist[$course];
+		$status=$cmpllist[$course]->rec_pass;
 		return $status;
 	}
 		

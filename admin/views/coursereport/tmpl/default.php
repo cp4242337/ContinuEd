@@ -1,14 +1,14 @@
 <?php defined('_JEXEC') or die('Restricted access');
-$pf[0]=JHTML::_('select.option','pass','Pass');
-$pf[1]=JHTML::_('select.option','fail','Fail');
+$pf[0]=JHTML::_('select.option','pass','Completed - Pass');
+$pf[1]=JHTML::_('select.option','fail','Completed - Fail');
 $pf[2]=JHTML::_('select.option','incomplete','Incomplete');
-$pf[3]=JHTML::_('select.option','audit','Audit');
+$pf[3]=JHTML::_('select.option','audit','Completed - No Credit');
 $pf[4]=JHTML::_('select.option','complete','Complete');
 $pf[5]=JHTML::_('select.option','','- All -');
 
 
 $type[0]=JHTML::_('select.option','','- All -');
-$type[1]=JHTML::_('select.option','nonce','Non CE');
+$type[1]=JHTML::_('select.option','nonce','No Credit');
 $type[2]=JHTML::_('select.option','ce','CE');
 $type[3]=JHTML::_('select.option','review','Review');
 $type[4]=JHTML::_('select.option','expired','Expired');
@@ -35,8 +35,8 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 			echo JText::_(' Question Area:').JHTML::_('select.genericlist',$area,'qarea','onchange="submitform();"','value','text',$this->qarea,'area');
 		}
 		echo JText::_(' User Group:').JHTML::_('select.genericlist',$this->grouplist,'usergroup','onchange="submitform();"','value','text',$this->usergroup,'grouplist');
-		echo JText::_(' Status:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
-		echo JText::_(' View Type:').JHTML::_('select.genericlist',$type,'type','onchange="submitform();"','value','text',$this->type,'type');
+		echo JText::_(' Completition Status:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
+		echo JText::_(' Record Type:').JHTML::_('select.genericlist',$type,'type','onchange="submitform();"','value','text',$this->type,'type');
 		?></td>
 	</tr>
 </table>
@@ -56,9 +56,9 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 				echo '<th>'.JText::_( 'Course' ).'</th>';
 				echo '<th>'.JText::_( 'Category' ).'</th>'; 
 			} ?>
-			<th><?php echo JText::_( 'Status' ); ?></th>
-			<th><?php echo JText::_( 'View Type' ); ?></th>
-			<th><?php echo JText::_( 'Last Step' ); ?></th>
+			<th><?php echo JText::_( 'Completition<br />Status' ); ?></th>
+			<th><?php echo JText::_( 'Record<br />Type' ); ?></th>
+			<th><?php echo JText::_( 'Last Step<br />Completed' ); ?></th>
 			<th><?php echo JText::_( 'Start' ); ?></th>
 			<th><?php echo JText::_( 'End' ); ?></th>
 			<th><?php echo JText::_( 'Pre Score' ); ?></th>
@@ -105,16 +105,16 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 		} ?>
 		<td><?php 
 			switch ($row->rec_pass) {
-				case 'pass': echo 'Pass'; break;
-				case 'fail': echo 'Fail'; break;
+				case 'pass': echo 'Completed - Pass'; break;
+				case 'fail': echo 'Completed - Fail'; break;
 				case 'incomplete': echo 'Incomplete'; break;
-				case 'audit': echo 'Audit'; break;
+				case 'audit': echo 'Completed - No Credit'; break;
 				case 'complete': echo 'Completed'; break;
 			} ?>
 		</td>
 		<td><?php 
 			switch ($row->rec_type) {
-				case 'nonce': echo 'Non-CE'; break;
+				case 'nonce': echo 'No Credit'; break;
 				case 'ce': echo 'CE'; break;
 				case 'review': echo 'Review'; break;
 				case 'expired': echo 'Expired'; break;

@@ -37,7 +37,7 @@ class ContinuEdModelCourse extends JModel
 			$courseinfo->expired=false;
 		}
 		// status
-		$courseinfo->status=$cmpllist[$courseinfo->course_id];
+		$courseinfo->status=$cmpllist[$courseinfo->course_id]->rec_pass;
 		// can take
 		if (!$courseinfo->course_prereq || $courseinfo->expired) $courseinfo->cantake = true;
 		else {
@@ -47,7 +47,7 @@ class ContinuEdModelCourse extends JModel
 			$prm=true;
 			foreach ($prlist as $p) {
 				if ($cmpllist[$p]) {
-					if ($cmpllist[$p] == 'incomplete' || $cmpllist[$p] == 'fail') $prm=false;
+					if ($cmpllist[$p]->rec_pass == 'incomplete' || $cmpllist[$p]->rec_pass == 'fail') $prm=false;
 				} else {
 					$prm=false;
 				}

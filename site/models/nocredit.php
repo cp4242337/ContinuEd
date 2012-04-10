@@ -37,7 +37,7 @@ class ContinuEdModelNoCredit extends JModel
 			$courseinfo->expired=false;
 		}
 		// status
-		$courseinfo->status=$cmpllist[$courseinfo->course_id];
+		$courseinfo->status=$cmpllist[$courseinfo->course_id]->rec_pass;
 		// can take
 		if (!$courseinfo->course_prereq || $courseinfo->expired) $courseinfo->cantake = true;
 		else {
