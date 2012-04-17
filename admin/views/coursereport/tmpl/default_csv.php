@@ -14,7 +14,7 @@ if (!$this->course) {
 	$contents .= '"'.JText::_( 'Course' ).'",';
 	$contents .= '"'.JText::_( 'Category' ).'",'; 
 } 
-$contents .= '"'.JText::_( 'Completition Status' ).'",'; 
+$contents .= '"'.JText::_( 'Completion Status' ).'",'; 
 $contents .= '"'.JText::_( 'Record Type' ).'",'; 
 $contents .= '"'.JText::_( 'Last Step Completed' ).'",';
 $contents .= '"'.JText::_( 'Start' ).'",'; 
@@ -81,8 +81,8 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 		case 'pre': $contents .= '"PreTest",'; break;
 		case 'lnk': $contents .= '"Entry Link",'; break;
 		case 'fme': $contents .= '"Front Matter - Exp",'; break;
-		case 'fmn': $contents .= 'Front Matter - No CE'; break;
-		case 'mtn': $contents .= 'Material - No CE'; break;
+		case 'fmn': $contents .= 'Entry Link - No Credit'; break;
+		case 'mtn': $contents .= 'Material - No Credit'; break;
 	}
 	$contents .= '"'.$row->rec_start.'",';
 	$contents .= '"'.$row->rec_end.'",'; 

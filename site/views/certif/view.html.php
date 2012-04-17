@@ -23,6 +23,7 @@ class ContinuEdViewCertif extends JView
 	{
 		$app = JFactory::getApplication();
 		$courseid = JRequest::getVar( 'course' );
+		$userid = JRequest::getInt( 'userid' );
 		$model =& $this->getModel('certif');
 		
 		//Get Users status for course
@@ -36,7 +37,7 @@ class ContinuEdViewCertif extends JView
 			$cinfo=$model->getCourseInfo($courseid);
 			
 			//Get User Information
-			$uinfo=$model->getUserInfo();
+			$uinfo=$model->getUserInfo($userid); 
 			
 			//Get Certificate Info
 			$cert=$model->getCertif($uinfo->group,$cinfo->course_provider,$courseid,$cinfo->course_defaultcertif);

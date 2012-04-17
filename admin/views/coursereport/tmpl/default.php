@@ -35,7 +35,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 			echo JText::_(' Question Area:').JHTML::_('select.genericlist',$area,'qarea','onchange="submitform();"','value','text',$this->qarea,'area');
 		}
 		echo JText::_(' User Group:').JHTML::_('select.genericlist',$this->grouplist,'usergroup','onchange="submitform();"','value','text',$this->usergroup,'grouplist');
-		echo JText::_(' Completition Status:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
+		echo JText::_(' Completion Status:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
 		echo JText::_(' Record Type:').JHTML::_('select.genericlist',$type,'type','onchange="submitform();"','value','text',$this->type,'type');
 		?></td>
 	</tr>
@@ -56,7 +56,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 				echo '<th>'.JText::_( 'Course' ).'</th>';
 				echo '<th>'.JText::_( 'Category' ).'</th>'; 
 			} ?>
-			<th><?php echo JText::_( 'Completition<br />Status' ); ?></th>
+			<th><?php echo JText::_( 'Completion<br />Status' ); ?></th>
 			<th><?php echo JText::_( 'Record<br />Type' ); ?></th>
 			<th><?php echo JText::_( 'Last Step<br />Completed' ); ?></th>
 			<th><?php echo JText::_( 'Start' ); ?></th>
@@ -137,8 +137,8 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 				case 'pre': echo 'PreTest'; break;
 				case 'lnk': echo 'Entry Link'; break;
 				case 'fme': echo 'Front Matter - Exp'; break;
-				case 'fmn': echo 'Front Matter - No CE'; break;
-				case 'mtn': echo 'Material - No CE'; break;
+				case 'fmn': echo 'Entry Link - No Credit'; break;
+				case 'mtn': echo 'Material - No Credit'; break;
 			}
 			?>
 		</td>

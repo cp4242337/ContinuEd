@@ -67,7 +67,7 @@ class ContinuEdModelAssess extends JModel
 			$query .= 'GROUP BY q.q_id ';
 			$query .= 'ORDER BY q.q_part ASC , q.ordering ASC ';
 			$db->setQuery( $query );
-			$qdatap = $db->loadAssocList();
+			$qdatap = $db->loadObjectList();
 			$numcorrect=0; $totq=0;
 			foreach ($qdatap as $qanda) {
 				if ($qanda->q_type == 'multi') {

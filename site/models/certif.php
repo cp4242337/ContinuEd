@@ -45,12 +45,14 @@ class ContinuEdModelCertif extends JModel
 	*
 	* @since 1.20
 	*/
-	function getUserInfo() {
-		$user =& JFactory::getUser();
-		$userid = $user->id;
+	function getUserInfo($userid=0) {
+		if (!$userid) {
+			$user =& JFactory::getUser();
+			$userid = $user->id;
+		} 
 		$db =& JFactory::getDBO();
 		$query = 'SELECT userg_group FROM #__ce_usergroup WHERE userg_user="'.$userid.'"';
-		$db->setQuery($query); $groupid=$db->loadResult();
+		$db->setQuery($query); $groupid=$db->loadResult(); 
 		$user->group = $groupid;
 		$qd = 'SELECT f.uf_sname,f.uf_type,u.usr_data FROM #__ce_uguf as g';
 		$qd.= ' RIGHT JOIN #__ce_ufields as f ON g.uguf_field = f.uf_id';
@@ -80,7 +82,7 @@ class ContinuEdModelCertif extends JModel
 		$q='SELECT gc_cert FROM #__ce_groupcerts WHERE gc_group = "'.$group.'"';
 		$db->setQuery($q); 
 		$usercert = $db->loadResult();
-		if (!$this->checkDegree($courseid,$cn)) $usercert = $defcert;
+		if (!$this->checkDegree($courseid,$usercert)) $usercert = $defcert;
 		//get that certificate
 		$query = 'SELECT * FROM #__ce_certiftempl WHERE ctmpl_cert = '.$usercert.' && ctmpl_prov = '.$provider;
 		$db->setQuery( $query ); 
@@ -88,7 +90,7 @@ class ContinuEdModelCertif extends JModel
 		return $fmtext;
 	}
 
-	function checkDegree($courseid,$usercert) {
+	function checkDegree($courseid,$usercert) { 
 		$coursecerts=$this->getCourseGroups($courseid);
 		$cando = in_array($usercert,$coursecerts);
 		return $cando;
@@ -99,7 +101,7 @@ class ContinuEdModelCertif extends JModel
 		$db =& JFactory::getDBO();
 		$q='SELECT cd_cert FROM #__ce_coursecerts WHERE cd_course = "'.$courseid.'"';
 		$db->setQuery($q);
-		$cn = $db->loadResultArray();
+		$cn = $db->loadResultArray(); 
 		return $cn;
 	}
 	
