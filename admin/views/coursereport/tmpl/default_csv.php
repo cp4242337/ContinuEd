@@ -9,7 +9,6 @@ $contents .= '"'.JText::_( 'Group' ).'",';
 $contents .= '"'.JText::_( 'EMail' ).'",'; 
 $contents .= '"'.JText::_( 'NABP ID' ).'",'; 
 $contents .= '"'.JText::_( 'DOB' ).'",'; 
-$contents .= '"'.JText::_( 'EMail' ).'",'; 
 if (!$this->course) {
 	$contents .= '"'.JText::_( 'Course' ).'",';
 	$contents .= '"'.JText::_( 'Category' ).'",'; 
@@ -59,6 +58,7 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 		case 'incomplete': $contents .= '"Incomplete",'; break;
 		case 'audit': $contents .= '"Completed - No Credit",'; break;
 		case 'complete': $contents .= '"Completed",'; break;
+		default: $contents .= '"",'; break;
 	}
 	switch ($row->rec_type) {
 		case 'nonce': $contents .= '"No Credit",'; break;
@@ -66,6 +66,7 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 		case 'review': $contents .= '"Review",'; break;
 		case 'expired': $contents .= '"Expired",'; break;
 		case 'viewed'	: $contents .= '"Viewed",'; break;
+		default: $contents .= '"",'; break;
 	} 
 	switch ($row->rec_laststep) {
 		case 'fm': $contents .= '"Front Matter",'; break;
@@ -81,8 +82,9 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 		case 'pre': $contents .= '"PreTest",'; break;
 		case 'lnk': $contents .= '"Entry Link",'; break;
 		case 'fme': $contents .= '"Front Matter - Exp",'; break;
-		case 'fmn': $contents .= 'Entry Link - No Credit'; break;
-		case 'mtn': $contents .= 'Material - No Credit'; break;
+		case 'fmn': $contents .= '"Entry Link - No Credit",'; break;
+		case 'mtn': $contents .= '"Material - No Credit",'; break;
+		default: $contents .= '"",'; break;
 	}
 	$contents .= '"'.$row->rec_start.'",';
 	$contents .= '"'.$row->rec_end.'",'; 
