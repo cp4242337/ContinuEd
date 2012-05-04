@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `#__ce_cattrack` (
   `tdhit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `viewed` enum('fm','menu','det') NOT NULL,
   `sessionid` varchar(32) NOT NULL,
+  `ct_ipaddr` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

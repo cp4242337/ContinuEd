@@ -161,7 +161,7 @@ class ContinuEdModelContinuEd extends JModel
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
 		$db =& JFactory::getDBO();
-		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid) VALUES ("'.$userid.'","'.$catid.'","fm","'.$sessionid.'")';
+		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid,ct_ipaddr) VALUES ("'.$userid.'","'.$catid.'","fm","'.$sessionid.'","'.$_SERVER['REMOTE_ADDR'].'")';
 		$db->setQuery( $query ); $db->query();
 	}
 	
@@ -177,7 +177,7 @@ class ContinuEdModelContinuEd extends JModel
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
 		$db =& JFactory::getDBO();
-		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid) VALUES ("'.$userid.'","'.$catid.'","menu","'.$sessionid.'")';
+		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid,ct_ipaddr) VALUES ("'.$userid.'","'.$catid.'","menu","'.$sessionid.'","'.$_SERVER['REMOTE_ADDR'].'")';
 		$db->setQuery( $query ); $db->query();
 	}
 	
@@ -193,7 +193,7 @@ class ContinuEdModelContinuEd extends JModel
 		$sewn = JFactory::getSession();
 		$sessionid = $sewn->getId();
 		$db =& JFactory::getDBO();
-		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid) VALUES ("'.$userid.'","'.$catid.'","det","'.$sessionid.'")';
+		$query = 'INSERT INTO #__ce_cattrack (user,cat,viewed,sessionid,ct_ipaddr) VALUES ("'.$userid.'","'.$catid.'","det","'.$sessionid.'","'.$_SERVER['REMOTE_ADDR'].'")';
 		$db->setQuery( $query ); $db->query();
 	}
 	

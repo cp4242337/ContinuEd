@@ -4,7 +4,7 @@ $filename = 'ContinuEd_Course_Stats' . '-' . date("Y-m-d").'.csv';
 $contents = "";
 
 
-$contents .= "\"Course\",\"Category\",\"When\",\"Name\",\"Email\",\"Group\",\"What\",\"Session\"\n";
+$contents .= "\"Course\",\"Category\",\"When\",\"Name\",\"Email\",\"Group\",\"What\",\"Session\",\"IP Address\"\n";
 foreach ($this->items as $row)
 {
 	if ($row->user == 0) $row->username='Guest';
@@ -36,7 +36,8 @@ foreach ($this->items as $row)
 		case 'mtn': $contents .= 'Material - No CE'; break;
 	}
 	$contents .= '",';
-	$contents .= '"'.$row->sessionid."\"\n";
+	$contents .= '"'.$row->sessionid."\",";
+	$contents .= '"'.$row->track_ipaddr."\"\n";
 }
 JFile::write($path.$filename,$contents);
 
