@@ -10,11 +10,11 @@ foreach ($this->qanda as $qanda) {
 }
 echo '<p align="center">';
 //Refresh Button
-echo '<a href="index.php?option=com_continued&course='.$this->cinfo->id.'&view=qanda&Itemid='.JRequest::getVar('Itemid').'">';
-echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_refresh.png" border="0" alt="Refresh"></a>';
+echo '<a href="index.php?option=com_continued&course='.$this->cinfo->id.'&view=qanda&Itemid='.JRequest::getVar('Itemid').'" class="cebutton">';
+echo 'Refresh</a>';
 //Return Button
-echo '<a href="'.$this->redirurl.'">';
-echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a>';
+echo '<a href="'.$this->redirurl.'" class="cebutton">';
+echo 'Return</a>';
 echo '</p>';
 ?>
 </div>

@@ -42,7 +42,7 @@ echo '</div>';
 echo '<div class="continued-user-pick-submit">';
 echo '</div>';
 echo '<div class="continued-user-pick-submit">';
-echo '<input type="image" value="Begin Registration" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.'btn_beginreg.png" border="0" name="submit">';
+echo '<input type="submit" value="Begin Registration" class="cebutton" border="0" name="submit">';
 echo '</div>';
 echo '<input type="hidden" name="option" value="com_continued">';
 echo '<input type="hidden" name="view" value="userreg">';

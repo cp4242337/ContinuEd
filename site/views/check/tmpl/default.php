@@ -22,7 +22,7 @@ if ($this->haspre) { foreach ($this->preqa as $preqa) {
 			echo '<input type="hidden" name="token" value="'.$this->token.'">';
 			echo '<input type="hidden" name="editpart" value="'.$cpart.'">';
 			echo '<input type="hidden" name="editarea" value="pre">';
-			echo '<input type="image" name="edit" value="Edit" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_change.png">';
+			echo '<input type="submit" name="edit" value="Edit" class="cebutton_edit">';
 			echo '</form>';
 		}
 		echo '</td></tr>';
@@ -68,7 +68,7 @@ if ($this->haseval) { foreach ($this->qanda as $qanda) {
 		echo '<input type="hidden" name="token" value="'.$this->token.'">';
 		echo '<input type="hidden" name="editpart" value="'.$cpart.'">';
 		echo '<input type="hidden" name="editarea" value="post">';
-		echo '<input type="image" name="edit" value="Edit" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_change.png">';
+		echo '<input type="submit" name="edit" value="Edit" class="cebutton_edit">';
 		echo '</form></td></tr>';
 	}
 	echo '<tr><td valign="top" align="left">';
@@ -137,8 +137,7 @@ if ($this->haseval) { foreach ($this->qanda as $qanda) {
 		</tr>
 		<tr>
 			<td colspan="2" align="center"><br>
-			<input name="certifme" id="certifme" value="Continue" type="image"
-				src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_continue.png"></td>
+			<input name="certifme" id="certifme" value="Continue" type="submit" class="cebutton"></td>
 		</tr>
 
 	</tbody>

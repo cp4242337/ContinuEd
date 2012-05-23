@@ -75,7 +75,7 @@ echo '</div>';
 echo '<div class="continued-login-login-row">';
 echo '<div class="continued-login-login-label"></div>';
 echo '<div class="continued-login-login-submit">';
-echo '<input type="image" value="Login" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.'btn_login.png" border="0" name="submit">';
+echo '<input type="submit" value="Login" class="cebutton" border="0" name="submit">';
 echo '</div>';
 echo '</div>';
 
@@ -172,7 +172,7 @@ if ($cecfg->show_loginreg == 1) {
 	echo '<div class="continued-login-reg-row">';
 	echo '<div class="continued-login-reg-label"></div>';
 	echo '<div class="continued-login-reg-submit">';
-	echo '<input type="image" value="Register" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.'btn_register.png" border="0" name="register">';
+	echo '<input type="submit" value="Register" class="cebutton" border="0" name="register">';
 	echo '</div>';
 	echo '</div>';
 	

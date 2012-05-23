@@ -43,8 +43,8 @@ switch ($qdata->qtype) {
 		break;
 	}
 if ($user->id) {
-	$output .= '<br /><div id="sb_'.$qdata->id.'"><a href="javascript:CEQ_'.$qid.'()" id="qf'.$qid.'sub">';
-	$output .= '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_eval.png" alt="Submit" border="0" /></a></div>';
+	$output .= '<br /><div id="sb_'.$qdata->id.'"><a href="javascript:CEQ_'.$qid.'()" id="qf'.$qid.'sub" class="cebutton">';
+	$output .= 'Submit</a></div>';
 } else {
 	$output .= '<br /><span style="color:#800000"><b>Please log in to answer</b></span>';
 }

@@ -120,30 +120,16 @@ if ($this->part != $this->mtext->course_postparts) {
 <input type="hidden" name="addans"
 	value="true">
 	<?php if ($this->part !=1) { ?>
-<input name="evalstep"
-	id="evalstep" value="prev" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_prev.png"
-	onclick="document.evalf.stepnext.value='prev'">
+<input name="evalstep" id="evalstep" value="Previous Page" type="submit" onclick="document.evalf.stepnext.value='prev'" class="cebutton">
 	<?php } ?>
-<input name="evalstep"
-	id="evalstep" value="next" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_next.png"
-	onclick="document.evalf.stepnext.value='next'">
+<input name="evalstep" id="evalstep" value="Next Page" type="submit"	onclick="document.evalf.stepnext.value='next'" class="cebutton">
 	<?php } else { ?>
-<input
-	type="hidden" name="part" value="<?php echo $this->part; ?>">
-<input type="hidden" name="addans"
-	value="true">
+<input type="hidden" name="part" value="<?php echo $this->part; ?>">
+<input type="hidden" name="addans" value="true">
 	<?php if ($this->part !=1) { ?>
-<input name="evalstep"
-	id="evalstep" value="prev" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_prev.png"
-	onclick="document.evalf.stepnext.value='prev'">
+<input name="evalstep" id="evalstep" value="Previous Page" type="submit" onclick="document.evalf.stepnext.value='prev'" class="cebutton">
 	<?php } ?>
-<input name="evalstep"
-	id="evalstep" value="eval" type="image"
-	src="<?php echo 'media/com_continued/template/'.$cecfg->TEMPLATE.'/'; ?>btn_eval.png"
-	onclick="document.evalf.stepnext.value='eval'">
+<input name="evalstep" id="evalstep" value="Submit" type="submit" onclick="document.evalf.stepnext.value='eval'" class="cebutton">
 
 	<?php } ?>
 

@@ -35,8 +35,9 @@ class ContinuEdViewPreTest extends JView
 		// Logged in, token present, has viewed fm, not completed
 		if ($user->id && $token && $should && !$already) {
 			$part = JRequest::getVar( 'part' );
-			$evalstep = JRequest::getVar( 'evalstep' );
-			if (!$evalstep) $evalstep = JRequest::getVar( 'stepnext' );
+			//$evalstep = JRequest::getVar( 'evalstep' );
+			//if (!$evalstep) 
+			$evalstep = JRequest::getVar( 'stepnext' );
 			$addans = JRequest::getVar( 'addans' );
 			$hasans = JRequest::getVar( 'hasans' );
 			

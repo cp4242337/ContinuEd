@@ -59,7 +59,7 @@ foreach ($this->qanda as $qanda) {
 </table>
 </div>
 <?php
-echo '<p align="center"><a href="'.$this->cinfo['cataloglink'].'">';
-echo '<img src="media/com_continued/template/'.$cecfg['TEMPLATE'].'/btn_return.png" border="0" alt="Return"></a></p>';
+echo '<p align="center"><a href="'.$this->cinfo['cataloglink'].'" class="cebutton">';
+echo 'Return</a></p>';
 
 ?>

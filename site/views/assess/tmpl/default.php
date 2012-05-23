@@ -51,7 +51,7 @@ if ($pass) {
 	if ($this->canrate) {
 		echo '<form name="courserate" method="post" action="">';
 		echo '<p align="center">Give this Program a Rating: '.JHTML::_('select.integerlist',1,5,1,'addrating','',5);
-		echo ' <input type="submit" name="ratecourse" value="Submit Rating"></p>';
+		echo ' <input type="submit" name="ratecourse" value="Submit Rating" class="cebutton">></p>';
 		echo '</form>';
 	}
 	if ($this->cinfo->course_passmsg) echo '<p>'.$this->cinfo->course_passmsg.'</p><p align="center">';
@@ -64,17 +64,17 @@ if ($pass) {
 		else echo 'This program is ineligible for a: <b><em>'.$this->usercertif.'</em></b><br>however you may still receive a: <b><em>'.$this->defaultcertif.'</em></b><br>';
 	}
 	if ($this->cinfo->course_hascertif) {
-		echo '<a href="index.php?option=com_continued&view=certif&course='.$this->courseid.'&tmpl=component" target="_blank">';
-		echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_certif.png" border="0" alt="Get Certificate"></a>';
+		echo '<a href="index.php?option=com_continued&view=certif&course='.$this->courseid.'&tmpl=component" target="_blank" class="cebutton">';
+		echo 'Get Certificate</a>';
 	}
-	echo '<a href="'.$this->redirurl.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a></p>';
+	echo '<a href="'.$this->redirurl.'" class="button">Return</a></p>';
 }
 else
 {
 	if ($this->cinfo->course_failmsg) echo '<p>'.$this->cinfo->course_failmsg.'</p>';
-	echo '<p align="center"><a href="index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->courseid.'">';
-	echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_failed.png" border="0" alt="Take Again"></a>';
-	echo '<a href="'.$this->redirurl.'"><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a>';
+	echo '<p align="center"><a href="index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->courseid.'" class="cebutton_red">';
+	echo 'Take Again</a>';
+	echo '<a href="'.$this->redirurl.'" class="cebutton">Return</a>';
 }
 ?>
 </div>

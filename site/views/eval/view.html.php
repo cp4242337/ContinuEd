@@ -39,8 +39,9 @@ class ContinuEdViewEval extends JView
 		//Logged in, Has token, Material Complete, hasn't already done, eval exists
 		if ($user->id && $token && $should && !$already && $haseval) {
 			$part = JRequest::getVar( 'part' );
-			$evalstep = JRequest::getVar( 'evalstep' );
-			if (!$evalstep) $evalstep = JRequest::getVar( 'stepnext' );
+			//$evalstep = JRequest::getVar( 'evalstep' );
+			//if (!$evalstep) 
+			$evalstep = JRequest::getVar( 'stepnext' );
 			$addans = JRequest::getVar( 'addans' );
 			$hasans = JRequest::getVar( 'hasans' );
 			

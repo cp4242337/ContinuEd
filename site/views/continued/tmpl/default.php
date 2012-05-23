@@ -14,12 +14,12 @@ if ($this->cat != 0) {
 if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 	echo '<p>'.$this->catinfo->cat_desc.'<br><br></p><p align="right">';
 	if ($this->catinfo->cat_hasfm && $this->catinfo->cat_fmlink) {
-		echo '<a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'&showfm=1">';
-		echo '<img src="images/continued/btn_details.png" border="0" alt="Details"></a>';
+		echo '<a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'&showfm=1" class="cebutton">';
+		echo 'Details</a>';
 	}
 	if ($this->catinfo->cat_prev) {
-		$clink  = '<a href="'.JURI::current().'?option=com_continued&cat='.$this->catinfo->cat_menu.'&Itemid='.JRequest::getVar( 'Itemid' ).'">';
-		$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_prev.png" border="0" alt="Previous Menu">';
+		$clink  = '<a href="'.JURI::current().'?option=com_continued&cat='.$this->catinfo->cat_menu.'&Itemid='.JRequest::getVar( 'Itemid' ).'" class="cebutton">';
+		$clink  .= 'Previous Menu';
 		$clink  .= '</a>';
 		echo $clink;
 	}
@@ -50,67 +50,67 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		else $paid = true;
 		if ($course->course_catlink) {
 			//Catalog Page
-			$clink  = '<a href="'.$courseurl.'">';
-			if ($course->expired && $course->course_catexp)	$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_view.png" border="0" alt="View Only, CE Expired">';
-			else $clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_menu.png" border="0" alt="Program Menu">';
+			$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+			if ($course->expired && $course->course_catexp)	$clink  .= 'View Only, CE Expired';
+			else $clink  .= 'Program Menu';
 			$clink  .= '</a>';
 		} else if ($course->course_extlink) {
 			//External Link
-			$clink  = '<a href="'.$courseurl.'">';
-			$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" border="0" alt="Begin">';
+			$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+			$clink  .= 'Begin';
 			$clink  .= '</a>';
 		} else {
 			if (($course->status == 'fail') && $course->cantake && !$course->expired) {
 				// Failed, Can Take, Not Expired
-				$clink  = '<a href="'.$courseurl.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_failed.png" border="0" alt="Take Again">';
+				$clink  = '<a href="'.$courseurl.'" class="cebutton_red">';
+				$clink  .= 'Take Again';
 				$clink  .= '</a>';
 			} else if (($course->status == 'pass' || $course->status == 'complete') && $course->cantake && !$course->expired) {
 				// Passed, Can Take, Not Expired
-				$clink  = '<a href="'.$courseurl.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" border="0" alt="Completed, Review">';
+				$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+				$clink  .= 'Completed, Review';
 				$clink  .= '</a>';
 			} else if (!$course->status && $course->cantake && !$course->expired && $paid) {
 				// Not Taken, Can Take, Not Expired, Paid
-				$clink  = '<a href="'.$courseurl.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" border="0" alt="Begin">';
+				$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+				$clink  .= 'Begin';
 				$clink  .= '</a>';
 			} else if ($course->status == 'incomplete' && $course->cantake && !$course->expired && $paid) {
 				// Not Completed, Can Take, Not Expired, Paid
-				$clink  = '<a href="'.$courseurl.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_resume.png" border="0" alt="Resume">';
+				$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+				$clink  .= 'Resume';
 				$clink  .= '</a>';
 			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && !$paid) {
 				// Not Taken, Can Take, Not Expired, Not Paid
-				$clink  = '<a href="'.$courseurl.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_purchase.png" border="0" alt="Purchase">';
+				$clink  = '<a href="'.$courseurl.'" class="cebutton_red">';
+				$clink  .= 'Purchase';
 				$clink  .= '</a>';
 			} else if ($course->status == 'pass' && !$course->cantake && !$course->expired){
 				// Passed, Cannot Take, Not Expired
-				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_completed.png" border="0" alt="Completed">';
+				$clink  = '<span class="cebutton_grey">Completed</span>';
 			} else if (($course->status == 'incomplete' || !$course->status) && !$course->cantake && !$course->expired && $paid) {
 				// Not Taken, Cannot Take, Not Expired, Paid
-				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nolaunch.png" border="0" alt="Prerequsite not met">';
+				$clink  = '<span class="cebutton_grey">Begin</span>';
 			} else if (($course->status == 'incomplete' || !$course->status) && !$course->cantake && !$course->expired && !$paid) {
 				// Not Taken, Cannot Take, Not Expired, Not Paid
-				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nopurchase.png" border="0" alt="Purchase & Prerequsite not met">';
+				$clink  = '<span class="cebutton_grey">Begin</span>';
 			} else if ($course->expired && $course->status != 'pass' && $course->cantake) {
 				// Not Passed, Can Take, Expired
-				$clink  = '<a href="'.$courseurl.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_view.png" border="0" alt="View Only, CE Expired">';
+				$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+				$clink  .= 'View Only, CE Expired';
 				$clink  .= '</a>';
 			} else if ($course->expired && $course->status == 'pass' && $course->cantake) {
 				// Passed Can Take, Expired
-				$clink  = '<a href="'.$courseurl.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" border="0" alt="Completed, View Only">';
+				$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+				$clink  .= 'Review';
 				$clink  .= '</a>';
 			} else if ($course->expired && !$course->cantake) {
 				// Any Status, Cannot Take, Expired
-				$clink  = '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_expired.png" border="0" alt="Expired">';
+				$clink  = '<span class="cebutton_grey">Expired</span>';
 			}
 			if (($course->status == 'incomplete' || !$course->status) && $course->course_haseval && $course->course_viewans) {
-				$clink  .= '<a href="'.JURI::current().'?option=com_continued&view=answers&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->id.'">';
-				$clink  .= '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_answers.png" border="0" alt="View Answers">';
+				$clink  .= '<a href="'.JURI::current().'?option=com_continued&view=answers&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->id.'" class="cebutton">';
+				$clink  .= 'View Answers';
 				$clink  .= '</a>';
 			}
 		}
@@ -131,12 +131,12 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		if ($course->course_nocredit && $course->type != "ce") {
 			$urlnc = 'index.php?option=com_continued&view=nocredit&course='.$course->course_id;
 			if ($this->user->id) {
-				echo '<a href="'.$urlnc.'">';
-				echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocredit.png" border="0" alt="View Only, No Credit"></a>';
+				echo '<a href="'.$urlnc.'" class="cebutton">';
+				echo 'View Only, No Credit</a>';
 			} else {
 				$urlnc='index.php?option=com_continued&view=login&layout=login&tmpl=component&return='.base64_encode($urlnc);
-				echo '<a href="#" onclick="open'.$course->course_id.'();">';
-				echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocredit.png" border="0" alt="View Only, No Credit"></a>';
+				echo '<a href="#" onclick="open'.$course->course_id.'();" class="cebutton">';
+				echo 'View Only, No Credit</a>';
 				echo '<script type="text/javascript">';
 				echo 'function open'.$course->course_id.'() {';
 				echo 'var src = "'.$urlnc.'"; ';
@@ -148,10 +148,10 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				
 		}
 		if ($this->user->id && $course->status == 'pass' && $course->course_hascertif) {
-			echo '<a href="index.php?option=com_continued&view=certif&course='.$course->course_id.'&tmpl=component" target="_blank">';
-			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_certif.png" border="0" alt="Get Certificate"></a>';
+			echo '<a href="index.php?option=com_continued&view=certif&course='.$course->course_id.'&tmpl=component" target="_blank" class="cebutton">';
+			echo 'Get Certificate</a>';
 		} else if ($this->user->id && $course->course_hascertif && !$course->expired) {
-			echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_nocertif.png" border="0" alt="Certificate Not Yet Awarded">';
+			echo '<span class="cebutton_grey">Get Certificate</span>';
 		}
 
 
@@ -188,7 +188,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 			} else {
 				echo '<input name="fmv" id="fmv" value="true" type="hidden">';
 			}
-			echo '<input name="Submit" id="Continue to Educational Activity" value="Continue to Educational Activity" type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continue.png"></td></tr>';
+			echo '<input name="Submit" id="Continue to Educational Activity" value="Continue" type="submit" class="cebutton"></td></tr>';
 			if (!$this->expired) echo '</tbody></table><br>';
 			echo '</div></form>';
 			echo '<script type="text/javascript">
@@ -220,8 +220,8 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$cecfg->LOGIN_MSG.'</span></p>'; }
 } else if ($this->showfm && $this->cat != 0) {
 	echo $this->catinfo->cat_fm;
-	echo '<p align="center"><a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'">';
-	echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png" border="0" alt="Return"></a></p>';
+	echo '<p align="center"><a href="index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$this->cat.'" class="cebutton">';
+	echo 'Return</a></p>';
 }
 
 

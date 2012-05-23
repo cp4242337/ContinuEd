@@ -20,10 +20,10 @@ if ($this->mtext->course_material) {
 		if ($mp->mat_desc) echo $mp->mat_desc.'<br /><br />'; 
 		echo '<a href="index.php?option=com_continued&view=matpage&token='.$this->token;
 		if ($this->nocredit != 0) echo '&nocredit=1';
-		echo '&Itemid='.JRequest::getVar('Itemid').'&matid='.$mp->mat_id.'&course='.$mp->mat_course.'">';
-		if ($this->mpdata[$mp->mat_id]->mu_status == 'complete') echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_review.png" alt ="Review">';
-		else if ($this->mpdata[$mp->mat_id]->mu_status == 'incomplete') echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_resume.png" alt ="Resume">';
-		else echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_launch.png" alt ="Begin">';
+		echo '&Itemid='.JRequest::getVar('Itemid').'&matid='.$mp->mat_id.'&course='.$mp->mat_course.'" class="cebutton">';
+		if ($this->mpdata[$mp->mat_id]->mu_status == 'complete') echo 'Review';
+		else if ($this->mpdata[$mp->mat_id]->mu_status == 'incomplete') echo 'Resume';
+		else echo 'Begin';
 		echo '</a><br /><br />';
 	}
 }
@@ -33,7 +33,7 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 	echo '<div align="center">';
 	echo '<form name="continued_material" id="continued_material" method="post" action="">';
 	echo '<input type="hidden" name="gte" value="return">';
-	echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
+	echo '<input name="Submit" id="Return" value="Return"  type="submit" class="cebutton">';
 	echo '<input type="hidden" name="token" value="'.$this->token.'">';
 	if ($this->nocredit != 0) echo '<input type="hidden" name="nocredit" value="1">';
 	if ($this->mtext->course_hasinter) {
@@ -122,15 +122,15 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 				if ($this->mtext->haseval) {
 					//continue to eval
 					echo '<input type="hidden" name="gte" value="eval">';
-					echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continueeval.png">';
+					echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="submit"  class="cebutton">';
 				} else if ($this->mtext->course_haspre) {
 					//continue to check page if no eval and pretest
 					echo '<input type="hidden" name="gte" value="eval">';
-					echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_continue.png">';
+					echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="submit"  class="cebutton">';
 				} else {
 					//return to menu, no eval, no pretest, or done/exp/nonce
 					echo '<input type="hidden" name="gte" value="return">';
-					echo '<input name="Submit" id="Return" value="Return"  type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
+					echo '<input name="Submit" id="Return" value="Return"  type="submit" class="cebutton">';
 				}
 				?></td>
 			</tr>

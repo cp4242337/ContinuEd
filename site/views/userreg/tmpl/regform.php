@@ -244,7 +244,7 @@ echo '<div class="continued-user-reg-row">';
 echo '<div class="continued-user-reg-label">';
 echo '</div>';
 echo '<div class="continued-user-reg-submit">';
-echo '<input name="saveprofile" id="savereg" value="Submit Registration" type="image" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.'btn_register.png">';
+echo '<input name="saveprofile" id="savereg" value="Submit Registration" type="submit" class="cebutton">';
 echo '</div></div>';
 echo '<input type="hidden" name="option" value="com_continued">';
 echo '<input type="hidden" name="view" value="userreg">';

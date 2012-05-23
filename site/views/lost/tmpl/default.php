@@ -55,7 +55,7 @@ echo '</div>';
 echo '<div class="continued-lost-lost-row">';
 echo '<div class="continued-lost-lost-label"></div>';
 echo '<div class="continued-lost-lost-submit">';
-echo '<input type="image" value="Send Information" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.'btn_sendinfo.png" border="0" name="submit">';
+echo '<input type="submit" value="Send Information" class="cebutton" border="0" name="submit">';
 echo '</div>';
 echo '</div>';
 
