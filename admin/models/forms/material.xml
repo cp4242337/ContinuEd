@@ -89,5 +89,14 @@
 			buttons="false"
 		/>
 	</fieldset>
+	<fieldset name="media">
+		<field
+			name="mat_media"
+			type="MaterialMedias"
+			class="inputbox"
+			label="COM_CONTINUED_MATERIAL_FIELD_MEDIA_LABEL"
+			description="COM_CONTINUED_MATERIAL_FIELD_MEDIA_DESC"
+		/>
+	</fieldset>
 </form>
 

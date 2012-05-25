@@ -15,6 +15,12 @@ $saveOrder	= $listOrder == 'm.ordering';
 	<th>
 		<?php echo JText::_('COM_CONTINUED_MATERIAL_HEADING_TITLE'); ?>
 	</th>	
+	<?php
+	if (ContinuEdHelper::getConfig()->mams) {
+		echo '<td>'.JText::_('COM_CONTINUED_MATERIAL_HEADING_DLOADS').'</td>';
+	}
+	
+	?>
 	<th width="100">
 		<?php echo JText::_('JPUBLISHED'); ?>
 	</th>	

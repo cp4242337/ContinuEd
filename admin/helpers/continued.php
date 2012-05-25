@@ -18,7 +18,11 @@ abstract class ContinuEdHelper
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_CATSTATS'), 'index.php?option=com_continued&view=catstat', $submenu == 'catstat');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_UGROUPS'), 'index.php?option=com_continued&view=ugroups', $submenu == 'ugroups');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_UFIELDS'), 'index.php?option=com_continued&view=ufields', $submenu == 'ufields');
-		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_USERS'), 'index.php?option=com_continued&view=users', $submenu == 'Users');
+		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_USERS'), 'index.php?option=com_continued&view=users', $submenu == 'users');
+		if (ContinuEdHelper::getConfig()->mams) {
+			JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_DLOADS'), 'index.php?option=com_mams&view=dloads&extension=com_continued', $submenu == 'dloads');
+			JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_MEDIAS'), 'index.php?option=com_mams&view=medias&extension=com_continued', $submenu == 'medias');
+		}
 	}
 	
 	/**

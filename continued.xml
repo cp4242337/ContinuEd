@@ -45,13 +45,7 @@
 		<submenu>
 			<menu view="courses">COM_CONTINUED_SUBMENU_COURSES</menu>
 			<menu view="coursereport">COM_CONTINUED_SUBMENU_REPORTS</menu>
-			<menu view="cats">COM_CONTINUED_SUBMENU_CATEGORIES</menu>
-			<menu view="provs">COM_CONTINUED_SUBMENU_PROVIDERS</menu>
-			<menu view="certifs">COM_CONTINUED_SUBMENU_CERTIFICATES</menu>
-			<menu view="certtypes">COM_CONTINUED_SUBMENU_CERTTYPES</menu>
-			<menu view="groupcerts">COM_CONTINUED_SUBMENU_GROUPCERTS</menu>
 			<menu view="ugroups">COM_CONTINUED_SUBMENU_UGROUPS</menu>
-			<menu view="ufields">COM_CONTINUED_SUBMENU_UFIELDS</menu>
 			<menu view="users">COM_CONTINUED_SUBMENU_USERS</menu>
 		</submenu>
 		<files folder="admin">

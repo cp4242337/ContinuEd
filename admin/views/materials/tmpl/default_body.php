@@ -8,6 +8,7 @@ defined('_JEXEC') or die('Restricted Access');
 	$listDirn	= $this->escape($this->state->get('list.direction'));
 	$saveOrder	= $listOrder == 'm.ordering';
 	$ordering	= ($listOrder == 'm.ordering');
+	$db =& JFactory::getDBO();
 	?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td>
@@ -20,6 +21,18 @@ defined('_JEXEC') or die('Restricted Access');
 				<a href="<?php echo JRoute::_('index.php?option=com_continued&task=material.edit&mat_id='.(int) $item->mat_id); ?>">
 				<?php echo $item->mat_title; ?></a>
 		</td>
+		<?php
+			if (ContinuEdHelper::getConfig()->mams) {
+				echo '<td>';
+				echo '<a href="index.php?option=com_continued&view=matdloads&filter_material='.$item->mat_id.'">Downloads ';
+				$query = 'SELECT count(*) FROM #__ce_matdl WHERE published >= 1 && md_mat="'.$item->mat_id.'"';
+				$db->setQuery( $query );
+				$num_md=$db->loadResult();
+				echo ' ['.$num_md.']</a><br />';
+				echo '</td>';
+			}
+		
+		?>
 		<td class="center">
 			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'materials.', true);?>
 		</td>
