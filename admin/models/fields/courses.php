@@ -24,7 +24,7 @@ class JFormFieldCourses extends JFormField
 		$attr .= $this->element['onchange'] ? ' onchange="'.(string) $this->element['onchange'].'"' : '';
 
 		// Build the query for the ordering list.
-		$query = 'SELECT course_id AS value, course_name AS text' .
+		$query = 'SELECT course_id AS value, LEFT(course_name, 80) AS text' .
 				' FROM #__ce_courses' .
 				' ORDER BY course_name';
 		$db->setQuery($query);

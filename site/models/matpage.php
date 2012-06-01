@@ -35,10 +35,26 @@ class ContinuEdModelMatpage extends JModel
 	function getMatPage($pageid)
 	{
 		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$cecfg = ContinuEdHelper::getConfig();
 		$query = 'SELECT * FROM #__ce_material WHERE mat_id = '.$pageid;
 		$db->setQuery( $query );
-		$mtext = $db->loadObject();
-		return $mtext;
+		$matpage = $db->loadObject();
+		//Get Media if MAMS Exists
+		if ($cfg->mams) {
+			$qm=$db->getQuery(true);
+			$qm->select('m.*');
+			$qm->from('#__ce_matmed as mm');
+			$qm->join('RIGHT','#__mams_media AS m ON mm.mm_media = m.med_id');
+			$qm->where('am.published >= 1');
+			$qm->where('m.published >= 1');
+			$qm->where('m.access IN ('.implode(",",$user->getAuthorisedViewLevels()).')');
+			$qm->where('mm.mm_mat = '.$matpage->mat_id);
+			$qm->order('mm.ordering ASC');
+			$db->setQuery($qm);
+			$matpage->media=$db->loadObjectList();
+		}
+		return $matpage;
 	}
 
 }

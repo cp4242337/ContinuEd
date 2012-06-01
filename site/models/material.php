@@ -92,6 +92,10 @@ class ContinuEdModelMaterial extends JModel
 		$q  = 'SELECT * FROM #__ce_material ';
 		$q .= 'WHERE published = 1 && mat_course = '.$cid;
 		$db->setQuery( $q );
-		return $db->loadObjectList();
+		$matpages = $db->loadObjectList();
+		
+		return $matpages; 
 	}
+	
+	
 }
