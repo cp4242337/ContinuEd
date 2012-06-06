@@ -98,8 +98,8 @@ class ContinuEdViewMaterial extends JView
 			if ($courseid && !$gotoeval  && $hasmat) {
 				//Run plugin on text data
 				JPluginHelper::importPlugin('contined');
-				if (count($matpages) == 1) $results = $dispatcher->trigger('onContentPrepare', array(&$matpages[0]->mat_content));
-				if ($mtext->course_material) $results = $dispatcher->trigger('onContentPrepare', array(&$mtext->course_material));				
+				if (count($matpages) == 1) $results = $dispatcher->trigger('onContinuEdPrepare', array(&$matpages[0]->mat_content));
+				if ($mtext->course_material) $results = $dispatcher->trigger('onContinuEdPrepare', array(&$mtext->course_material));				
 				
 				//Get intermediated question if needed
 				if ($mtext->course_hasinter) {

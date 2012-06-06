@@ -41,17 +41,17 @@ class ContinuEdModelMatpage extends JModel
 		$db->setQuery( $query );
 		$matpage = $db->loadObject();
 		//Get Media if MAMS Exists
-		if ($cfg->mams) {
+		if ($cecfg->mams) {
 			$qm=$db->getQuery(true);
 			$qm->select('m.*');
 			$qm->from('#__ce_matmed as mm');
 			$qm->join('RIGHT','#__mams_media AS m ON mm.mm_media = m.med_id');
-			$qm->where('am.published >= 1');
+			$qm->where('mm.published >= 1');
 			$qm->where('m.published >= 1');
 			$qm->where('m.access IN ('.implode(",",$user->getAuthorisedViewLevels()).')');
 			$qm->where('mm.mm_mat = '.$matpage->mat_id);
 			$qm->order('mm.ordering ASC');
-			$db->setQuery($qm);
+			$db->setQuery($qm); 
 			$matpage->media=$db->loadObjectList();
 		}
 		return $matpage;

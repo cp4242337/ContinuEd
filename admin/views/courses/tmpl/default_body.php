@@ -2,6 +2,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
+$cecfg=ContinuEdHelper::getConfig();
 ?>
 <?php foreach($this->items as $i => $item): 
 	$listOrder	= $this->escape($this->state->get('list.ordering'));
@@ -23,6 +24,18 @@ defined('_JEXEC') or die('Restricted Access');
 		<td><?php
 		echo $item->provider_name; 
 		?></td>
+		<?php 
+		if ($cecfg->mams) {
+			echo '<td><a href="index.php?option=com_continued&view=coursecats&filter_course='.$item->course_id.'">Cats ';
+			$query = 'SELECT count(*) FROM #__ce_coursecat WHERE cc_course="'.$item->course_id.'"';
+			$db->setQuery( $query );
+			echo ' ['.$db->loadResult().']</a>';
+			echo '<br /><a href="index.php?option=com_continued&view=courseauths&filter_course='.$item->course_id.'">Authors ';
+			$query = 'SELECT count(*) FROM #__ce_courseauth WHERE ca_course="'.$item->course_id.'"';
+			$db->setQuery( $query );
+			echo ' ['.$db->loadResult().']</a></td>';
+		}
+		?>
 		<td><?php 
 		if ($item->course_prereq) {
 			
@@ -37,6 +50,7 @@ defined('_JEXEC') or die('Restricted Access');
 			$query = 'SELECT count(*) FROM #__ce_material WHERE mat_course="'.$item->course_id.'"';
 			$db->setQuery( $query );
 			echo ' ['.$db->loadResult().']</a>';
+			
 		}
 		?></td>
 		<td><?php 

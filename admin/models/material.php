@@ -243,7 +243,7 @@ class ContinuEdModelMaterial extends JModelAdmin
 		$query	= $db->getQuery(true);
 		$query->delete();
 		$query->from('#__ce_matmed');
-		$query->where('mm_mat = '.(int)$table->art_id);
+		$query->where('mm_mat = '.(int)$table->mat_id);
 		$db->setQuery((string)$query);
 		$db->query();
 	

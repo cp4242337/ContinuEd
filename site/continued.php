@@ -28,6 +28,13 @@ $doc->addScript('media/com_continued/scripts/additional-methods.js');
 $doc->addScript('media/com_continued/scripts/jquery.metadata.js');
 $doc->addScript('media/com_continued/scripts/jquery.simplemodal.js');
 
+if ($cecfg->mams) {
+	$doc->addScript('media/com_mams/vidplyr/jwplayer.js');
+	require_once(JPATH_BASE.DS.'components'.DS.'com_mams'.DS.'helpers'.DS.'mams.php');
+}
+
+
+
 // Create the controller
 $classname	= 'ContinuEdController'.$controller;
 $controller = new $classname( );

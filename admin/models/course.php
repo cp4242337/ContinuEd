@@ -155,7 +155,7 @@ class ContinuEdModelCourse extends JModelAdmin
 			$item->params = $registry->toArray();
 		}
 		
-		$q = 'SELECT cd_cert FROM #__ce_coursecerts WHERE cd_course = '.$item->course_id;
+		$q = 'SELECT cd_cert FROM #__ce_coursecerts WHERE cd_course = '.(int)$item->course_id;
 		$this->_db->setQuery($q);
 		$item->coursecerts=$this->_db->loadResultArray();
 		

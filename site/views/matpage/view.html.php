@@ -42,7 +42,7 @@ class ContinuEdViewMatpage extends JView
 			if (!$matstatus) ContinuEdHelper::startMat($pageid);
 			
 			//run plugins
-			$results = $dispatcher->trigger('onContentPrepare', array(&$matpage->mat_content));
+			$results = $dispatcher->trigger('onContinuEdPrepare', array(&$matpage->mat_content));
 			
 			//assign vars and show page
 			$this->assignRef('matpage',$matpage);

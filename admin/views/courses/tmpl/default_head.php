@@ -4,6 +4,7 @@ defined('_JEXEC') or die('Restricted Access');
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 $saveOrder	= $listOrder == 'c.ordering';
+$cecfg=ContinuEdHelper::getConfig();
 ?>
 <tr>
 	<th width="5"><?php echo JText::_( 'id' ); ?></th>
@@ -12,7 +13,8 @@ $saveOrder	= $listOrder == 'c.ordering';
 	<th width="100"><?php echo JText::_( 'Valid' ); ?></th>
 	<th width="75"><?php echo JText::_( 'Date' ); ?></th>
 	<th width="50"><?php echo JText::_( 'Provider' ); ?></th>
-	<th width="75"><?php echo JText::_( 'Options' ); ?></th>
+	<?php if ($cecfg->mams) echo '<th width="80">MAMS</th>'; ?>
+	<th width="80"><?php echo JText::_( 'Options' ); ?></th>
 	<th width="80"><?php echo JText::_( 'Questions' ); ?></th>
 	<th width="80"><?php echo JText::_( 'Parts' ); ?></th>
 	<th width="75">
@@ -23,7 +25,6 @@ $saveOrder	= $listOrder == 'c.ordering';
 	<th width="60"><?php echo JText::_( 'Access' ); ?></th>
 	<th width="100"><?php echo JText::_( 'Category' ); ?></th>
 	<th width="100"><?php echo JText::_( 'Report' ); ?></th>
-
 </tr>
 
 
