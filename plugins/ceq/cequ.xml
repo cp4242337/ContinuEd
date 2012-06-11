@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension version="1.7" type="plugin" group="continued" method="upgrade">
+	<name>plg_continued_cequ</name>
+	<author>Corona Productions</author>
+	<creationDate>2011.01.05</creationDate>
+	<copyright>Copyright (C) 2011-2012 Coron Productions. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@coronapro.com</authorEmail>
+	<authorUrl>www.coronapro.com</authorUrl>
+	<version>1.20</version>
+	<description>PLG_CONTINUED_CEQU_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="cequ">cequ.php</filename>
+		<filename>index.html</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_continued_cequ.ini</language>
+		<language tag="en-GB">en-GB.plg_continued_cequ.sys.ini</language>
+	</languages>
+
+</extension>
