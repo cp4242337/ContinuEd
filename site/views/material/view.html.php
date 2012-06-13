@@ -101,7 +101,7 @@ class ContinuEdViewMaterial extends JView
 				if (count($matpages) == 1) $results = $dispatcher->trigger('onContinuEdPrepare', array(&$matpages[0]->mat_content));
 				if ($mtext->course_material) $results = $dispatcher->trigger('onContinuEdPrepare', array(&$mtext->course_material));				
 				
-				//Get intermediated question if needed
+				//Get intermediated question counts if needed
 				if ($mtext->course_hasinter) {
 					$reqids=$model->getReQids($courseid);
 					$reqans=$model->getReqAns($courseid,$reqids);

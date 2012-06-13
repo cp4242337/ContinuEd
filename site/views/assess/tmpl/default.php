@@ -67,7 +67,7 @@ if ($pass) {
 		echo '<a href="index.php?option=com_continued&view=certif&course='.$this->courseid.'&tmpl=component" target="_blank" class="cebutton">';
 		echo 'Get Certificate</a>';
 	}
-	echo '<a href="'.$this->redirurl.'" class="button">Return</a></p>';
+	echo '<a href="'.$this->redirurl.'" class="cebutton">Return</a></p>';
 }
 else
 {

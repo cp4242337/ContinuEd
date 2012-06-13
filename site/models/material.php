@@ -95,9 +95,11 @@ class ContinuEdModelMaterial extends JModel
 		$db->setQuery( $q );
 		$matpages = $db->loadObjectList();
 		
-		//Get Media if MAMS Exists
+		//Get Media and Downloads if MAMS Exists
 		if ($cecfg->mams) {
 			foreach ($matpages as &$matpage) {
+				
+				//Get Media
 				$qm=$db->getQuery(true);
 				$qm->select('m.*');
 				$qm->from('#__ce_matmed as mm');
@@ -109,6 +111,19 @@ class ContinuEdModelMaterial extends JModel
 				$qm->order('mm.ordering ASC');
 				$db->setQuery($qm);
 				$matpage->media=$db->loadObjectList();
+				
+				//Get DLoads
+				$qd=$db->getQuery(true);
+				$qd->select('d.*');
+				$qd->from('#__ce_matdl as md');
+				$qd->join('RIGHT','#__mams_dloads AS d ON md.md_dload = d.dl_id');
+				$qd->where('md.published >= 1');
+				$qd->where('d.published >= 1');
+				$qd->where('d.access IN ('.implode(",",$user->getAuthorisedViewLevels()).')');
+				$qd->where('md.md_mat = '.$matpage->mat_id);
+				$qd->order('md.ordering ASC');
+				$db->setQuery($qd);
+				$matpage->dloads=$db->loadObjectList();
 			}
 		}
 		return $matpages; 

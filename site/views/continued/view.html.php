@@ -29,11 +29,11 @@ class ContinuEdViewContinuEd extends JView
 		//Get vars
 		$cat = JRequest::getVar('cat');
 		$fmv = JRequest::getVar('fmv');
-		$showfm = JRequest::getVar('showfm');
+		$showfm = JRequest::getVar('showfm',false);
 		
-		//Check if FM Agree for Cat based Course
+		//Set FM Agreed to for Cat based Course
 		if ($fmv == 'true') {
-			$model->viewedFM($userid,$cat);
+			$model->viewedFM($user->id,$cat);
 			//prevent resubmit of form of refresh
 			$app->redirect('index.php?option=com_continued&view=continued&Itemid='.JRequest::getVar( 'Itemid' ).'&cat='.$cat);
 		}
@@ -62,7 +62,6 @@ class ContinuEdViewContinuEd extends JView
 			
 			//Check if FM agreed
 			if (!$model->hasViewedFM($user->id,$cat) || $showfm) {
-				$this->expired=$expired;
 				$dispfm=true;
 			} else {
 				$dispfm=false;

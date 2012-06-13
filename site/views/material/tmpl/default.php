@@ -7,35 +7,32 @@ echo '<h2 class="componentheading">'.$this->mtext->course_name.'</h2>';
 //Gve error message if they tryed to jummop over material staright to the eval
 if ($this->jumpedover) echo '<div class="continued-error">Please complete all material before proceeding</div>';
 //Show Material
-if ($this->mtext->course_material) {
-//material in course info -- LEGACY
-	echo $this->mtext->course_material;
-} else if (count($this->matpages) == 1) {
+if (count($this->matpages) == 1) {
 //only 1 material page
 	echo $this->matpages[0]->mat_content;//Media
-	if ($this->matpage[0]->media && $cecfg->mams) {
+	if ($this->matpages[0]->media && $cecfg->mams) {
 		$mamscfg = MAMSHelper::getConfig();
 		echo '<div class="continued-material-media">';
 		echo '<div align="center">';
-		if ($this->matpage->media[0]->med_type == 'vid' || $this->matpage->media[0]->med_type == 'vids') { //Video Player
+		if ($this->matpages[0]->media[0]->med_type == 'vid' || $this->matpages[0]->media[0]->med_type == 'vids') { //Video Player
 			$detect_iDevice = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone") || strpos($_SERVER['HTTP_USER_AGENT'],"iPad");
 			if ($detect_iDevice) {
 				//html 5 video, only for iDevices
-				if ($this->matpage->media[0]->med_type == "vid") echo '<video src="'.JURI::base( true ).'/'.$this->matpage->media[0]->med_file.'" poster="'.JURI::base( true ).'/'.$this->matpage->media[0]->med_still.'" width="'.$mamscfg->vid_w.'" height="'.$mamscfg->vid_h.'" controls preload></video>';
-				if ($this->matpage->media[0]->med_type == "vids") echo '<video src="http://'.$mamscfg->vids_url.':1935/'.$mamscfg->vids_app.'/'.'/mp4:'.urlencode($this->matpage->media[0]->med_file).'/playlist.m3u8" poster="'.JURI::base( true ).'/'.$this->matpage->media[0]->med_still.'" width="'.$mamscfg->vid_w.'" height="'.$mamscfg->vid_h.'" controls preload></video>';
+				if ($this->matpages[0]->media[0]->med_type == "vid") echo '<video src="'.JURI::base( true ).'/'.$this->matpages[0]->media[0]->med_file.'" poster="'.JURI::base( true ).'/'.$this->matpages[0]->media[0]->med_still.'" width="'.$mamscfg->vid_w.'" height="'.$mamscfg->vid_h.'" controls preload></video>';
+				if ($this->matpages[0]->media[0]->med_type == "vids") echo '<video src="http://'.$mamscfg->vids_url.':1935/'.$mamscfg->vids_app.'/'.'/mp4:'.urlencode($this->matpages[0]->media[0]->med_file).'/playlist.m3u8" poster="'.JURI::base( true ).'/'.$this->matpages[0]->media[0]->med_still.'" width="'.$mamscfg->vid_w.'" height="'.$mamscfg->vid_h.'" controls preload></video>';
 			} else {
 				//flash player
 				echo '<div id="mediaspace"></div>'."\n";
 				echo "<script type='text/javascript'>"."\n";
 				echo "jwplayer('mediaspace').setup({"."\n";
 				echo "'flashplayer': '".JURI::base( true )."/media/com_mams/vidplyr/player.swf',"."\n";
-				if ($this->matpage->media[0]->med_type == "vid") echo "'file': '".JURI::base( true ).'/'.$this->matpage->media[0]->med_file."',"."\n";
-				if ($this->matpage->media[0]->med_type == "vids") {
+				if ($this->matpages[0]->media[0]->med_type == "vid") echo "'file': '".JURI::base( true ).'/'.$this->matpages[0]->media[0]->med_file."',"."\n";
+				if ($this->matpages[0]->media[0]->med_type == "vids") {
 					echo "'provider': 'rtmp',"."\n";
 					echo "'streamer': 'rtmp://".$mamscfg->vids_url.'/'.$mamscfg->vids_app.'/'."',"."\n";
-					echo "'file':'mp4:".$this->matpage->media[0]->med_file."',"."\n";
+					echo "'file':'mp4:".$this->matpages[0]->media[0]->med_file."',"."\n";
 				}
-				echo "'image': '".JURI::base( true ).'/'.$this->matpage->media[0]->med_still."',"."\n";
+				echo "'image': '".JURI::base( true ).'/'.$this->matpages[0]->media[0]->med_still."',"."\n";
 				echo "'frontcolor': '000000',"."\n";
 				echo "'lightcolor': 'cc9900',"."\n";
 				echo "'screencolor': '000000',"."\n";
@@ -48,14 +45,14 @@ if ($this->mtext->course_material) {
 				echo "</script>"."\n";
 			}
 		}
-		if ($this->matpage->media[0]->med_type == 'aud') { //Audio Player
+		if ($this->matpages[0]->media[0]->med_type == 'aud') { //Audio Player
 			echo '<div id="mediaspace"></div>'."\n";
 			echo '<script type="text/javascript">'."\n";
 			echo "jwplayer('mediaspace').setup({"."\n";
 			echo "'width': '".$mamscfg->aud_w."',"."\n";
 			echo "'height': '".((int)$mamscfg->aud_h+30)."',"."\n";
-			echo "'file': '".JURI::base( true ).'/'.$this->matpage->media[0]->med_file."',"."\n";
-			echo "'image': '".JURI::base( true ).'/'.$this->matpage->media[0]->med_still."',"."\n";
+			echo "'file': '".JURI::base( true ).'/'.$this->matpages[0]->media[0]->med_file."',"."\n";
+			echo "'image': '".JURI::base( true ).'/'.$this->matpages[0]->media[0]->med_still."',"."\n";
 			echo "'frontcolor': '000000',"."\n";
 			echo "'lightcolor': 'cc9900',"."\n";
 			echo "'screencolor': '000000',"."\n";
@@ -69,7 +66,20 @@ if ($this->mtext->course_material) {
 		echo '</div>';
 		echo '</div>';
 	}
-} else {
+	
+	if ($this->matpages[0]->dloads && $cecfg->mams) {
+		$mamscfg = MAMSHelper::getConfig();
+		//Downloads
+		echo '<div class="continued-material-downloads">';
+		$dloads = Array();
+		foreach ($this->matpages[0]->dloads as $d) {
+			$dloads[]='<a href="'.JRoute::_("components/com_mams/dl.php?dlid=".$d->dl_id).'" class="continued-material-dllink cebutton" target="_blank">Download '.$d->dl_lname.'</a>';
+		}
+		echo implode(" ",$dloads);
+		echo '</div>';
+	}
+	
+} else if (count($this->matpages)) {
 //multiple material pages
 	foreach ($this->matpages as $mp) {
 		echo '<b>'.$mp->mat_title.'</b><br />';
@@ -84,6 +94,10 @@ if ($this->mtext->course_material) {
 	}
 }
 
+if ($this->mtext->course_material) {
+	//material in course info 
+	echo $this->mtext->course_material;
+}
 //Expired or Passed/Completed or NoCredit, show return Button
 if ($this->expired || $this->passed || $this->nocredit != 0) {
 	echo '<div align="center">';

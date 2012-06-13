@@ -35,7 +35,8 @@ $query .= 'WHERE q_id = '.$qid;
 $db->setQuery( $query );
 $qdata = $db->loadObject();
 $anscor=false;
-echo '<p><b>'.$qdata->q_text.'</b><br /><br />';
+echo '<div class="continued-ceq-question">';
+echo '<div class="continued-ceq-question-text">'.$qdata->q_text.'</div>';
 switch ($qdata->q_type) {
 case 'multi':
 	$qnum = 'SELECT count(question) FROM #__ce_evalans WHERE question = '.$qid.' GROUP BY question';
@@ -60,13 +61,18 @@ case 'multi':
 		if ($qans == $opts->id && $opts->correct) {
 			$anscor=true;
 		}
-		
-		if ($opts->opt_correct) echo '<span class="opt-correct"><b>'.$opts->opt_text.'</b></span>';
+		echo '<div class="continued-ceq-opt">';
+		echo '<div class="continued-ceq-opt-text">';
+		if ($opts->opt_correct) echo '<div class="continued-ceq-opt-correct"><b>'.$opts->opt_text.'</b></div>';
 		else echo $opts->opt_text;
-		echo '<br />';
-		echo '<img src="media/com_continued/bar_'.$barc.'.jpg" height="15" width="'.($per*600).'" align="absmiddle" style="padding-bottom:8px;"> ';
-		echo '<b>'.($opts->anscount+$opts->prehits).'</b>';
-		echo '<br />';
+		echo '</div>';
+		echo '<div class="continued-ceq-opt-count">';
+		echo ($opts->anscount+$opts->prehits);
+		echo '</div>';
+		echo '<div class="continued-ceq-opt-bar-box"><div class="continued-ceq-opt-bar-bar" style="width:'.($per*100).'%"></div></div>';
+		echo '</div>';
+		
+		
 		$barc = $barc + 1;
 		if ($barc==5) $barc=1;
 		if ($gper < $per) { $gper = $per; $gperid = $opts->id; }
@@ -75,11 +81,13 @@ case 'multi':
 			else $expl=$opts->opt_expl;
 		}
 	}
+	
 	break;
 	
 }
+echo '</div>';
 if ($expl) {
-	echo '<div class="continued_mat_qexpl">'.$expl.'</div>';
+	echo '<div class="continued-ceq-qexpl">'.$expl.'</div>';
 }
 
 

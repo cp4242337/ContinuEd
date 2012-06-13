@@ -64,6 +64,18 @@ if ($this->matpage->media && $cecfg->mams) {
 	}
 	echo '</div>';
 	echo '</div>';
+	
+	if ($this->matpage->dloads && $cecfg->mams) {
+		$mamscfg = MAMSHelper::getConfig();
+		//Downloads
+		echo '<div class="continued-material-downloads">';
+		$dloads = Array();
+		foreach ($this->matpage->dloads as $d) {
+			$dloads[]='<a href="'.JRoute::_("components/com_mams/dl.php?dlid=".$d->dl_id).'" class="continued-material-dllink cebutton" target="_blank">Download '.$d->dl_lname.'</a>';
+		}
+		echo implode(" ",$dloads);
+		echo '</div>';
+	}
 }
 
 // Text/HTML

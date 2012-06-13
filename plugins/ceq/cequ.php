@@ -131,53 +131,64 @@ class plgContinuedCeQu extends JPlugin
 	
 		//Get question
 		$db  =& JFactory::getDBO();
-		//show results
 		$query = 'SELECT * FROM #__ce_questions ';
 		$query .= 'WHERE q_id = '.$qid;
 		$db->setQuery( $query );
 		$qdata = $db->loadObject();
 		$anscor=false;
-		$output .= '<p><b>'.$qdata->q_text.'</b>';
+		$output .=  '<div class="continued-ceq-question">';
+		$output .=  '<div class="continued-ceq-question-text">'.$qdata->q_text.'</div>';
 		switch ($qdata->q_type) {
-			case 'multi':
-				$output .= '<table width="680" border="0">';
-				$qnum = 'SELECT count(question) FROM #__ce_evalans WHERE question = '.$qid.' GROUP BY question';
-				$db->setQuery( $qnum );
-				$qnums = $db->loadAssoc();
-				$numr=$qnums['count(question)'];
-				$query  = 'SELECT o.*,COUNT(r.answer) FROM #__ce_questions_opts as o ';
-				$query .= 'LEFT JOIN #__ce_evalans as r ON o.opt_id = r.answer ';
-				$query .= 'WHERE o.opt_question = '.$qid.' GROUP BY o.opt_id ORDER BY ordering ASC';
-				$db->setQuery( $query );
-				$qopts = $db->loadAssocList();
-				$barc=1; $gper=0; $ansper=0; $gperid = 0;
-				//$cbg = "#FFFFFF";
-				$expl='';
-				foreach ($qopts as $opts) {
-					if ($numr != 0) $per = $opts['COUNT(r.answer)']/$numr; else $per=1;
-					$output .= '<tr><td valign="center" align="left" width="340">';
-					if ($opts['opt_correct']) {
-						if ($qdata->q_expl) $expl=$qdata->q_expl;
-						else $expl.=$opts['opt_expl'];
-					}
-						
-					if ($opts['opt_correct']) $output .= '<b>'.$opts['opt_text'].'</b>';
-					else $output .= $opts['opt_text'];
-					$output .= '</td>';
-					$output .= '<td valign="center" width="340"><img src="media/com_continued/bar_'.$barc.'.jpg" height="15" width="'.($per*320).'" align="absmiddle"> ';
-					$output .= '<b>'.$opts['COUNT(r.answer)'].'</b></td></tr>';
-					$barc = $barc + 1;
-					if ($barc==5) $barc=1;
-					if ($gper < $per) {
-						$gper = $per; $gperid = $opts['opt_id'];
-					}
+		case 'multi':
+			$qnum = 'SELECT count(question) FROM #__ce_evalans WHERE question = '.$qid.' GROUP BY question';
+			$db->setQuery( $qnum );
+			$qnums = $db->loadAssoc();
+			$numr=$qnums['count(question)'];
+			$query  = 'SELECT o.* FROM #__ce_questions_opts as o ';
+			$query .= 'WHERE o.opt_question = '.$qid.' ORDER BY ordering ASC';
+			$db->setQuery( $query );
+			$qopts = $db->loadObjectList();
+			$tph=0;
+			foreach ($qopts as &$o) {
+				$qa = 'SELECT count(*) FROM #__ce_evalans WHERE question = '.$qid.' && answer = '.$o->opt_id.' GROUP BY answer';
+				$db->setQuery($qa);
+				$o->anscount = $db->loadResult();
+				if ($o->anscount == "") $o->anscount = 0;
+				$tph = $tph + $o->prehits;
+			}
+			$barc=1; $gper=0; $ansper=0; $gperid = 0;
+			foreach ($qopts as $opts) {
+				if ($numr != 0) $per = ($opts->anscount+$opts->prehits)/($numr+$tph); else $per=1;
+				if ($qans == $opts->id && $opts->correct) {
+					$anscor=true;
 				}
-				$output .= '</table></p>';
-				break;
-	
+				$output .=  '<div class="continued-ceq-opt">';
+				$output .=  '<div class="continued-ceq-opt-text">';
+				if ($opts->opt_correct) $output .=  '<div class="continued-ceq-opt-correct"><b>'.$opts->opt_text.'</b></div>';
+				else $output .=  $opts->opt_text;
+				$output .=  '</div>';
+				$output .=  '<div class="continued-ceq-opt-count">';
+				$output .=  ($opts->anscount+$opts->prehits);
+				$output .=  '</div>';
+				$output .=  '<div class="continued-ceq-opt-bar-box"><div class="continued-ceq-opt-bar-bar" style="width:'.($per*100).'%"></div></div>';
+				$output .=  '</div>';
+				
+				
+				$barc = $barc + 1;
+				if ($barc==5) $barc=1;
+				if ($gper < $per) { $gper = $per; $gperid = $opts->id; }
+				if ($qans==$opts->opt_id) {
+					if ($qdata->q_expl) $expl=$qdata->q_expl;
+					else $expl=$opts->opt_expl;
+				}
+			}
+			
+			break;
+			
 		}
+		$output .=  '</div>';
 		if ($expl) {
-			$output .= '<div class="continued_mat_qexpl">'.$expl.'</div>';
+			$output .=  '<div class="continued-ceq-qexpl">'.$expl.'</div>';
 		}
 		return $output;
 	}
