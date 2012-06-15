@@ -259,7 +259,7 @@
 			description="COM_CONTINUED_COURSE_FIELD_MATTEXT_DESC"
 			class="inputbox"
 			required="false"
-			filter="safehtml"
+			filter="raw"
 			buttons="false"
 		/>
 	</fieldset>

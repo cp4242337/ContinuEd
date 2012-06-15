@@ -85,7 +85,7 @@
 			label="COM_CONTINUED_MATERIAL_FIELD_CONTENT_LABEL"
 			description="COM_CONTINUED_MATERIAL_FIELD_CONTENT_DESC"
 			class="inputbox"
-			filter="safehtml"
+			filter="raw"
 			buttons="false"
 		/>
 	</fieldset>

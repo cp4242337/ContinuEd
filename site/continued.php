@@ -30,6 +30,8 @@ $doc->addScript('media/com_continued/scripts/jquery.simplemodal.js');
 
 if ($cecfg->mams) {
 	$doc->addScript('media/com_mams/vidplyr/jwplayer.js');
+	$doc->addScript('media/com_mams/scripts/mams.js');
+	$doc->addScriptDeclaration("var mamsuri = '".JURI::base( true )."';");
 	require_once(JPATH_BASE.DS.'components'.DS.'com_mams'.DS.'helpers'.DS.'mams.php');
 }
 

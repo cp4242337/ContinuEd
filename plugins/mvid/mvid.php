@@ -80,7 +80,9 @@ class  plgContinuedMVid extends JPlugin
 					$output .= "'controlbar': 'bottom',"."\n";
 					$output .= "'width': '".$mamscfg->vid_w."',"."\n";
 					$output .= "'height': '".((int)$mamscfg->vid_h+30)."'";
-					if ($mamscfg->gapro)	$output .= ",\n'plugins': {'gapro-2': {}}"."\n";
+					$output .= ",\n'plugins': {'".JURI::base( true )."/media/com_mams/vidplyr/mamstrack.js': {'itemid':".$media->med_id."}";
+					if ($mamscfg->gapro)	$output .= ",'gapro-2': {}";
+					$output .= "}"."\n";
 					$output .= "});"."\n";
 					$output .= "</script>"."\n";
 				}
@@ -99,7 +101,9 @@ class  plgContinuedMVid extends JPlugin
 				$output .= "'skin': '".JURI::base( true )."/media/com_mams/vidplyr/glow.zip',"."\n";
 				$output .= "'controlbar': 'bottom',"."\n";
 				$output .= "'modes': [{type: 'flash', src: '".JURI::base( true )."/media/com_mams/vidplyr/player.swf'},{type: 'html5'},{type: 'download'}]"."\n";
-				if ($mamscfg->gapro)	$output .= ",\n'plugins': {'gapro-2': {}}"."\n";
+				$output .= ",\n'plugins': {'".JURI::base( true )."/media/com_mams/vidplyr/mamstrack.js': {'itemid':".$media->med_id."}";
+				if ($mamscfg->gapro)	$output .= ",'gapro-2': {}";
+				$output .= "}"."\n";
 				$output .= "});"."\n";
 				$output .= "</script>"."\n";
 			}

@@ -12,7 +12,7 @@ global $cecfg;
 
 //Get question
 $query = 'SELECT * FROM #__ce_questions ';
-$query .= 'WHERE id = '.$qid;
+$query .= 'WHERE q_id = '.$qid;
 $db->setQuery( $query );
 $qdata = $db->loadObject();
 $numans=0;
@@ -26,24 +26,24 @@ $havans = $db->loadObject();
 
 $output .= '<div id="qi_'.$qid.'" class="continued_mat_q">';
 $output .= '<p><form name="qf_'.$qid.'">'."\n";
-$output .= '<b>'.$qdata->qtext.'</b><br /><br />'."\n";
-$output .= '<div id="q'.$qdata->id.'_msg" class="error_msg"></div>';
-switch ($qdata->qtype) {
+$output .= '<b>'.$qdata->q_text.'</b><br /><br />'."\n";
+$output .= '<div id="q'.$qdata->q_id.'_msg" class="error_msg"></div>';
+switch ($qdata->q_type) {
 	case 'multi':
 		$query  = 'SELECT * FROM #__ce_questions_opts ';
-		$query .= 'WHERE question = '.$qid.' ORDER BY ordering ASC';
+		$query .= 'WHERE opt_question = '.$qid.' ORDER BY ordering ASC';
 		$db->setQuery( $query );
 		$qopts = $db->loadAssocList();
 		foreach ($qopts as $opts) {
 			$numans++;
-			$output .= ' <label><input type="radio" name="q'.$qid.'" value="'.$opts['id'].'" id="q'.$qid.'"';
-			if ($havans->answer==$opts['id']) $output.=' checked="checked"';
-			$output .= '> '.$opts['opttxt'].'</label><br>'."\n";
+			$output .= ' <label><input type="radio" name="q'.$qid.'" value="'.$opts['opt_id'].'" id="q'.$qid.'"';
+			if ($havans->answer==$opts['opt_id']) $output.=' checked="checked"';
+			$output .= '> '.$opts['opt_text'].'</label><br>'."\n";
 		}
 		break;
 	}
 if ($user->id) {
-	$output .= '<br /><div id="sb_'.$qdata->id.'"><a href="javascript:CEQ_'.$qid.'()" id="qf'.$qid.'sub" class="cebutton">';
+	$output .= '<br /><div id="sb_'.$qdata->q_id.'"><a href="javascript:CEQ_'.$qid.'()" id="qf'.$qid.'sub" class="cebutton">';
 	$output .= 'Submit</a></div>';
 } else {
 	$output .= '<br /><span style="color:#800000"><b>Please log in to answer</b></span>';
@@ -72,7 +72,7 @@ $output .= '				var ajaxDisplay = document.getElementById("qi_'.$qid.'");'."\n";
 $output .= '				ajaxDisplay.innerHTML = ajaxRequest.responseText;'."\n";
 $output .= '			}'."\n";
 $output .= '		}'."\n";
-$output .= '		var queryString = "?" + "course='.$qdata->course.'&question='.$qid.'&qans=" + getCheckedValue(ev.q'.$qid.');'."\n";
+$output .= '		var queryString = "?" + "course='.$qdata->q_course.'&question='.$qid.'&qans=" + getCheckedValue(ev.q'.$qid.');'."\n";
 $output .= '		ajaxRequest.open("GET", "components/com_continued/interq.php" + queryString, true);'."\n";
 $output .= '		ajaxRequest.send(null);'."\n"; 
 $output .= '	}'."\n";
