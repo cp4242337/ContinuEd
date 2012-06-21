@@ -20,14 +20,15 @@ class ContinuEdViewUsers extends JView
 		}
 		
 		$model=$this->getModel();
-		$items = $model->applyData($items);
 		$fdata=$model->getFields();
 		$adata=$model->getAnswers($fdata);
+		$udata=$model->getUserData($fdata);
 		
 		// Assign data to the view
 		$this->items = $items;
 		$this->fdata = $fdata;
 		$this->adata = $adata;
+		$this->udata = $udata;
 
 		// Display the template
 		parent::display($tpl);

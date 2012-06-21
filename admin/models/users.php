@@ -116,7 +116,7 @@ class ContinuEdModelUsers extends JModelList
 		$query=$this->getListQuery();
 		$db = JFactory::getDBO();
 		$db->setQuery($query);
-		return $db->loadObjectLIst();
+		return $db->loadObjectList();
 		
 	}
 	
@@ -142,8 +142,8 @@ class ContinuEdModelUsers extends JModelList
 		return $fields;
 	}
 	
-	public function applyData($records) {
-		$db =& JFactory::getDBO();
+	public function getUserData($fdata) {
+		/*$db =& JFactory::getDBO();
 		foreach ($records as $r) {
 			$q2  = 'SELECT q.*,a.* FROM #__ce_users as a ';
 			$q2 .= 'LEFT JOIN #__ce_ufields as q ON q.uf_id=a.usr_field ';
@@ -156,7 +156,26 @@ class ContinuEdModelUsers extends JModelList
 				$r->$title = $d->usr_data;
 			}
 		}
-		return $records;	
+		return $records;	*/
+		$db =& JFactory::getDBO();
+		foreach ($fdata as $f) {
+			if (!$f->uf_cms) { 
+				$sname = $f->uf_sname;
+				$ud = Array();
+				$fid=$f->uf_id;
+				$q2  = 'SELECT usr_user,usr_data FROM #__ce_users ';
+				$q2 .= 'WHERE usr_field = '.$fid;
+				$db->setQuery($q2);
+				$opts = $db->loadObjectList();
+				foreach ($opts as $o) {
+					$uid = $o->usr_user;
+					$ud[$uid] = $o->usr_data;
+				}
+				$udata->$sname = $ud;
+			}
+
+		}
+		return $udata;
 	}
 	
 	public function getAnswers($fdata) {
