@@ -20,7 +20,7 @@ if ($this->catalog) {
 	foreach ($this->catalog as $course) {
 		echo '<tr><td valign="top" colspan="2"><a href="index.php?option=com_continued&cat='.$course->cat_id.'&Itemid='.JRequest::getVar('Itemid').'">'.$course->cat_name.'</a><br /><b>';
 		echo $course->course_name;
-		echo '</b></td></tr><tr><td valign="top"><b>Date Started:</b> '.date("F d, Y", strtotime($course->rec_start)).'<br /><b>Date Finished:</b> '.date("F d, Y", strtotime($course->rec_end)).'</td><td><b>Status:</b> ';
+		echo '</b></td></tr><tr><td valign="top"><b>Date Started:</b> '.date("F d, Y", strtotime($course->rec_start)).'</td><td><b>Status:</b> ';
 		if ($course->course_haseval) {
 			if ($course->rec_pass == 'fail') echo '<span style="color:#800000">Failed</span>';
 			if ($course->rec_pass == 'pass') echo '<span style="color:#008000">Passed</span>';
