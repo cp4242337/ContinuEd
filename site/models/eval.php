@@ -20,7 +20,7 @@ class ContinuEdModelEval extends JModel
 	function getPart($courseid,$part)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT * FROM #__ce_parts WHERE part_course = '.$courseid.' && part_area = "pre" && part_part = '.$part;
+		$query = 'SELECT * FROM #__ce_parts WHERE part_course = '.$courseid.' && part_area = "post" && part_part = '.$part;
 		$db->setQuery( $query );
 		$mtext = $db->loadObject();
 		return $mtext;

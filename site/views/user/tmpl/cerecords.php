@@ -18,7 +18,7 @@ else echo '<p>Here are the accredited activities you\'ve taken.</p>';
 if ($this->catalog) {
 	echo '<table width="100%">';
 	foreach ($this->catalog as $course) {
-		echo '<tr><td valign="top" colspan="2"><a href="index.php?option=com_continued&cat='.$course->cat_id.'&Itemid='.JRequest::getVar('Itemid').'">'.$course->cat_name.'</a><br /><b>';
+		echo '<tr><td valign="top" colspan="2"><a href="'.JRoute::_('index.php?option=com_continued&cat='.$course->cat_id).'">'.$course->cat_name.'</a><br /><b>';
 		echo $course->course_name;
 		echo '</b></td></tr><tr><td valign="top"><b>Date Started:</b> '.date("F d, Y", strtotime($course->rec_start)).'</td><td><b>Status:</b> ';
 		if ($course->course_haseval) {
@@ -27,7 +27,7 @@ if ($this->catalog) {
 			if ($course->rec_pass == 'incomplete') echo '<span style="color:#800000">Incomplete</span>';
 
 			//echo '</td><td valign="top">';
-			if ($course->cpass == 'pass' && $course->course_hascertif)echo ' <a href="index.php?option=com_continued&tmpl=component&view=certif&course='.$course->course_id.'" target="_blank">Get Certificate</a>';
+			if ($course->rec_pass == 'pass' && $course->course_hascertif)echo ' <a href="'.JRoute::_('index.php?option=com_continued&tmpl=component&view=certif&course='.$course->course_id).'" target="_blank">Get Certificate</a>';
 
 		} else echo 'Completed';
 		echo '</td></tr>';
