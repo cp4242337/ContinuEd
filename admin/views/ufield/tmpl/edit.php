@@ -23,7 +23,7 @@ $params = $this->form->getFieldsets('params');
 				?>
 				<input type="checkbox" name="jform[fieldgroups][]" value="<?php echo (int) $ct->ug_id;?>" id="jform_fieldgroup<?php echo (int) $ct->ug_id;?>"<?php echo $checked;?>/>
 				<label for="jform_fieldgroup<?php echo $ct->ug_id; ?>">
-				<?php echo ' '.$ct->ug_name; ?></label><br />
+				<?php echo ' '.$ct->ug_name; ?></label><br /><br />
 				<?php 
 			}
 			?></fieldset></li>

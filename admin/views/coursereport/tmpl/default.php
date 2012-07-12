@@ -34,7 +34,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 			echo JText::_(' Question Group:').JHTML::_('select.genericlist',$this->qgrouplist,'qgroup','onchange="submitform();"','value','text',$this->qgroup,'qgrouplist');
 			echo JText::_(' Question Area:').JHTML::_('select.genericlist',$area,'qarea','onchange="submitform();"','value','text',$this->qarea,'area');
 		}
-		echo JText::_(' User Group:').JHTML::_('select.genericlist',$this->grouplist,'usergroup','onchange="submitform();"','value','text',$this->usergroup,'grouplist');
+		//echo JText::_(' User Group:').JHTML::_('select.genericlist',$this->grouplist,'usergroup','onchange="submitform();"','value','text',$this->usergroup,'grouplist');
 		echo JText::_(' Completion Status:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
 		echo JText::_(' Record Type:').JHTML::_('select.genericlist',$type,'type','onchange="submitform();"','value','text',$this->type,'type');
 		?></td>
@@ -101,7 +101,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 		<?php 
 		if (!$this->course) {
 			echo '<td>'.$row->course_name.'</td>';
-			echo '<td>'.$row->cat_name.'</td>';
+			echo '<td>'.$this->catids[$row->course_cat].'</td>';
 		} ?>
 		<td><?php 
 			switch ($row->rec_pass) {

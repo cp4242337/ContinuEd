@@ -170,7 +170,9 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '<p><b>Release Date:</b> '.date("F d, Y", strtotime($this->catinfo->cat_start)).'<br />';
 		echo '<b>Expiration Date:</b> '.date("F d, Y", strtotime($this->catinfo->cat_end)).'</p>';
 	}
+	echo '<div id="continued-fm-text">';
 	echo $this->catinfo->cat_fm;
+	echo '</div>';
 	if ($this->user->id) {
 		if ($this->bought) {
 			echo '<form name="form1" method="post" action=""';

@@ -46,11 +46,11 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 	$contents .= '"'.$this->userlist[$row->rec_user]->name.'",'; 
 	$contents .= '"'.$this->userlist[$row->rec_user]->usergroup.'",'; 
 	$contents .= '"'.$this->userlist[$row->rec_user]->email.'",'; 
-	$contents .= '"'.$row->pharmid.'",';
-	$contents .= '"'.$row->pharmdob.'",';
+	$contents .= '"'.$this->pharmids[$row->rec_user].'",';
+	$contents .= '"'.$this->pharmdobs[$row->rec_user].'",';
 	if (!$this->course) {
 		$contents .= '"'.$row->course_name.'",';
-		$contents .= '"'.$row->cat_name.'",';
+		$contents .= '"'.$this->catids[$row->course_cat].'",';
 	} 
 	switch ($row->rec_pass) {
 		case 'pass': $contents .= '"Completed - Pass",'; break;

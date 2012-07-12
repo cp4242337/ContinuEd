@@ -40,6 +40,7 @@ class ContinuEdViewCourseReport extends JView
 		$qgrouplist = & $this->get( 'QGroups' );
 		$startdate = $model->getState('startdate');
 		$enddate = $model->getState('enddate');
+		$catids=$model->getCatbyId();
 		$pf=$model->getState('pf');
 		$type=$model->getState('type');
 
@@ -56,6 +57,7 @@ class ContinuEdViewCourseReport extends JView
 		$this->assignRef('catlist',$catlist);
 		$this->assignRef('userlist',$userlist);
 		$this->assignRef('usergroup',$usergroup);
+		$this->assignRef('catids',$catids);
 		$this->assignRef('qgroup',$qgroup);
 		$this->assignRef('items',		$items);
 		$this->assignRef('pagination',	$pagination);

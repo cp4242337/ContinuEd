@@ -30,7 +30,7 @@ class ContinuEdModelCourseReport extends JModel
 		$enddate		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.enddate','enddate',date("Y-m-d") );
 		$course			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.course','course','' );
 		$cat			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.cat','cat','' );
-		$usergroup		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.usergroup','usergroup','' );
+		//$usergroup		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.usergroup','usergroup','' );
 		$qgroup			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.qgroup','qgroup','' );
 		$qarea			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.area','qarea','' );
 		
@@ -57,31 +57,20 @@ class ContinuEdModelCourseReport extends JModel
 		$type = $this->getState('type');
 		$cid = $this->getState('course');
 		$cat = $this->getState('cat');
-		$usergroup = $this->getState('usergroup');
+		//$usergroup = $this->getState('usergroup');
 		$stnum = JRequest::getVar('stnum');
 		if ($cid) $questions = $this->getQuestions($cid,$this->area);
-		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,cat.cat_name';
-		//$q .= ,u.email,u.name as fullname';
-		//$q .= ',ug.ug_name';
-		if ($csv) {
-			$q.=',udpdob.usr_data as pharmdob, udpid.usr_data as pharmid';
-		}
+		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name';
 		$q .= ' FROM #__ce_records as r';
 		$q .= ' STRAIGHT_JOIN #__ce_courses as c ON r.rec_course = c.course_id';
-		$q .= ' RIGHT JOIN #__ce_cats as cat ON c.course_cat = cat.cat_id';
-		if ($usergroup) {
-			$q .= ' LEFT JOIN #__ce_usergroup as g ON r.rec_user = g.userg_user';
-			$q .= ' LEFT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
-		}
-		if ($csv) {
-			$q .= ' LEFT JOIN #__ce_users as udpid ON udpid.usr_user = r.rec_user && udpid.usr_field = '.$cecfg->pharm_id_field;
-			$q .= ' LEFT JOIN #__ce_users as udpdob ON udpdob.usr_user = r.rec_user && udpdob.usr_field = '.$cecfg->pharm_dob_field;
-		}
-		//$q .= ' LEFT JOIN #__users as u ON r.rec_user = u.id';
+		//if ($usergroup) {
+		//	$q .= ' LEFT JOIN #__ce_usergroup as g ON r.rec_user = g.userg_user';
+		//	$q .= ' LEFT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
+		//}
 		$q .= ' WHERE date(r.rec_start) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
 		if ($cid) $q .= ' && r.rec_course = '.$cid.' ';
 		else if ($cat) $q .= ' && c.course_cat = '.$cat.' '; 
-		if ($usergroup) $q .= ' && ug.ug_id = '.$usergroup.' '; 
+		//if ($usergroup) $q .= ' && ug.ug_id = '.$usergroup.' '; 
 		if ($pf) $q .= ' && r.rec_pass = "'.$pf.'" ';
 		if ($type) $q .= ' && r.rec_type = "'.$type.'" ';
 		$q .= ' ORDER BY r.rec_start DESC'; 
@@ -102,6 +91,46 @@ class ContinuEdModelCourseReport extends JModel
 		return $this->_data;
 	}
 
+	function getPharmID() {
+		$cecfg = ContinuEdHelper::getConfig();
+		$db =& JFactory::getDBO();
+		$q = 'SELECT usr_user,usr_data FROM #__ce_users WHERE usr_field = '.$cecfg->pharm_id_field;
+		$db->setQuery($q);
+		$data = $db->loadObjectList();
+		$pharmids = Array();
+		foreach ($data as $d) {
+			$pharmids[$d->usr_user]=$d->usr_data;
+		}
+		return $pharmids;
+	}
+	
+	function getPharmDOB() {
+		$cecfg = ContinuEdHelper::getConfig();
+		$db =& JFactory::getDBO();
+		$q = 'SELECT usr_user,usr_data FROM #__ce_users WHERE usr_field = '.$cecfg->pharm_dob_field;
+		$db->setQuery($q);
+		$data = $db->loadObjectList();
+		$pharmdobs = Array();
+		foreach ($data as $d) {
+			$pharmdobs[$d->usr_user]=$d->usr_data;
+		}
+		return $pharmdobs;
+		
+	}	
+	
+	function getCatbyId() {
+		$cecfg = ContinuEdHelper::getConfig();
+		$db =& JFactory::getDBO();
+		$q = 'SELECT cat_id,cat_name FROM #__ce_cats';
+		$db->setQuery($q);
+		$data = $db->loadObjectList();
+		$catids = Array();
+		foreach ($data as $d) {
+			$catids[$d->usr_user]=$d->usr_data;
+		}
+		return $catids;
+	}
+	
 	function getTotal()
 	{
 		//DEVNOTE: Lets load the content if it doesn't already exist
@@ -165,15 +194,16 @@ class ContinuEdModelCourseReport extends JModel
 		$db =& JFactory::getDBO();
 		$db->setQuery($query);
 		foreach ($records as $r) {
-			$q2  = 'SELECT q.*,q.q_id,a.* FROM #__ce_evalans as a ';
-			$q2 .= 'LEFT JOIN #__ce_questions as q ON q.q_id=a.question ';
+			$q2  = 'SELECT a.* FROM #__ce_evalans as a ';//q.*,q.q_id,
+			//$q2 .= 'LEFT JOIN #__ce_questions as q ON q.q_id=a.question ';
 			$q2 .= 'WHERE a.tokenid = "'.$r->rec_token.'" && a.userid = "'.$r->rec_user.'" && a.course = "'.$cid.'" ';
-			$q2 .= 'GROUP BY q.q_id ';
-			$q2 .= 'ORDER BY q.q_part, q.ordering';
+			$q2 .= 'GROUP BY a.question ';
+			// .= 'GROUP BY q.q_id ';
+			//$q2 .= 'ORDER BY q.q_part, q.ordering';
 			$db->setQuery($q2);
 			$rdata = $db->loadObjectList();
 			foreach ($rdata as $d) {
-				$title = 'q'.$d->q_id.'ans';
+				$title = 'q'.$d->question.'ans';
 				$r->$title = $d->answer;
 			}
 		}
