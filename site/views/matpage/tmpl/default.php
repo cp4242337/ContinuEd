@@ -40,7 +40,7 @@ if ($this->matpage->media && $cecfg->mams) {
 			echo "'width': '".$mamscfg->vid_w."',"."\n";
 			echo "'height': '".((int)$mamscfg->vid_h+30)."'";
 			echo ",\n'plugins': {'".JURI::base( true )."/media/com_mams/vidplyr/mamstrack.js': {'itemid':".$this->matpage->media[0]->med_id."}";
-			if ($config->gapro)	echo ",'gapro-2': {}";
+			if ($mamscfg->gapro)	echo ",'gapro-2': {}";
 			echo "}"."\n";
 			echo "});"."\n";
 			echo "</script>"."\n";
@@ -61,7 +61,7 @@ if ($this->matpage->media && $cecfg->mams) {
 		echo "'controlbar': 'bottom',"."\n";
 		echo "'modes': [{type: 'flash', src: '".JURI::base( true )."/media/com_mams/vidplyr/player.swf'},{type: 'html5'},{type: 'download'}]"."\n";
 		echo ",\n'plugins': {'".JURI::base( true )."/media/com_mams/vidplyr/mamstrack.js': {'itemid':".$this->matpage->media[0]->med_id."}";
-		if ($config->gapro)	echo ",'gapro-2': {}";
+		if ($mamscfg->gapro)	echo ",'gapro-2': {}";
 		echo "}"."\n";
 		echo "});"."\n";
 		echo "</script>"."\n";
