@@ -550,7 +550,7 @@
 	</fieldset>
 	<fieldset name="purchasesettings">
 		<field
-			name="course_purchse"
+			name="course_purchase"
 			type="radio"
 			label="COM_CONTINUED_COURSE_FIELD_PURCHASE_LABEL"
 			description="COM_CONTINUED_COURSE_FIELD_PURCHASE_DESC"
@@ -562,17 +562,17 @@
 			<option	value="0">No</option>
 		</field>
 		<field
-			name="course_purchselink"
+			name="course_purchaseprice"
 			type="text"
-			label="COM_CONTINUED_COURSE_FIELD_PURCHASELINK_LABEL"
-			description="COM_CONTINUED_COURSE_FIELD_PURCHASELINK_DESC"
-			size="60"
+			label="COM_CONTINUED_COURSE_FIELD_PURCHASEPRICE_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PURCHASEPRICE_DESC"
+			size="10"
 			class="inputbox"
 			required="false"
 			default=""
 		/>	
 		<field
-			name="course_purchsesku"
+			name="course_purchasesku"
 			type="text"
 			label="COM_CONTINUED_COURSE_FIELD_PURCHASESKU_LABEL"
 			description="COM_CONTINUED_COURSE_FIELD_PURCHASESKU_DESC"
@@ -581,6 +581,18 @@
 			required="false"
 			default=""
 		/>	
+	</fieldset>
+	<fieldset name="purchasecontent">
+		<field
+			name="course_purchaseinfo"
+			type="editor"
+			label="COM_CONTINUED_COURSE_FIELD_PURCHASEINFO_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PURCHASEINFO_DESC"
+			class="inputbox"
+			required="false"
+			filter="raw"
+			buttons="false"
+		/>
 	</fieldset>
 	<fieldset>
 		<field name="coursecerts" type="hidden" />

@@ -61,8 +61,9 @@ class ContinuEdViewFrontMatter extends JView
 
 		//Course Purchase Check
 		if ($this->cinfo->course_purchase) {
-			if ($this->cinfo->course_purchasesku) $this->paid = ContinuEdHelper::SKUCheck($user->id,$this->cinfo->course_purchasesku);
-			else $this->paid = ContinuEdHelper::PurchaseCheck($user->id,$this->cinfo->course_id);
+			//if ($this->cinfo->course_purchasesku) $this->paid = ContinuEdHelper::SKUCheck($user->id,$this->cinfo->course_purchasesku);
+			//else 
+			$this->paid = ContinuEdHelper::PurchaseCheck($this->cinfo->course_id);
 		}
 		else $this->paid = true;
 		

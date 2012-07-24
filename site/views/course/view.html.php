@@ -32,8 +32,9 @@ class ContinuEdViewCourse extends JView
 		
 		//Check purchase
 		if ($course->course_purchase) {
-			if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$course->course_purchasesku);
-			else $paid = ContinuEdHelper::PurchaseCheck($user->id,$course->course_id);
+			//if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$course->course_purchasesku);
+			//else 
+			$paid = ContinuEdHelper::PurchaseCheck($course->course_id);
 		}
 		else $paid = true;
 		

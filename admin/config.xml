@@ -86,6 +86,21 @@
 		<field name="WELCOME_SUBJECT" type="text" label="COM_CONTINUED_CONFIG_FIELD_WELCOME_SUBJECT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_WELCOME_SUBJECT_DESC" size="70" class="inputbox" required="false" default="" />
 		<field name="LOSTINFO_SUBJECT" type="text" label="COM_CONTINUED_CONFIG_FIELD_LOSTINFO_SUBJECT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_LOSTINFO_SUBJECT_DESC" size="70" class="inputbox" required="false" default="" /> 
 	</fieldset>
+	<fieldset name="purchasing" label="COM_CONTINUED_CONFIG_PURCHASE_LABEL" description="COM_CONTINUED_CONFIG_PURCHASE_DESC">
+		<field 
+			name="paypal_mode" 
+			type="radio" 
+			class="inputbox"
+			label="COM_CONTINUED_CONFIG_FIELD_PAYPALMODE_LABEL"
+			description="COM_CONTINUED_CONFIG_FIELD_PAYPALMODE_DESC" 
+		>
+			<option value="live">Live</option>
+			<option value="sandbox">Sandbox</option>
+		</field>
+		<field name="paypal_username" type="text" label="COM_CONTINUED_CONFIG_FIELD_PAYPALUSERNAME_LABEL" description="COM_CONTINUED_CONFIG_FIELD_PAYPALUSERNAME_DESC" size="70" class="inputbox" required="false" default="" />
+		<field name="paypal_password" type="text" label="COM_CONTINUED_CONFIG_FIELD_PAYPALPASSWORD_LABEL" description="COM_CONTINUED_CONFIG_FIELD_PAYPALPASSWORD_DESC" size="70" class="inputbox" required="false" default="" /> 
+		<field name="paypal_signature" type="text" label="COM_CONTINUED_CONFIG_FIELD_PAYPALSIG_LABEL" description="COM_CONTINUED_CONFIG_FIELD_PAYPALSIG_DESC" size="70" class="inputbox" required="false" default="" /> 
+	</fieldset>
 	<fieldset name="reports" label="COM_CONTINUED_CONFIG_REPORTS_LABEL" description="COM_CONTINUED_CONFIG_REPORTS_DESC" addfieldpath="/administrator/components/com_continued/models/fields">
 		<field 
 			name="on_list_field" 

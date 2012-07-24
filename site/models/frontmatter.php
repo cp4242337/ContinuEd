@@ -17,7 +17,7 @@ class ContinuEdModelFrontMatter extends JModel
 	function getFrontMatter($courseid)
 	{
 		$db =& JFactory::getDBO();
-		$query = 'SELECT course_id,course_frontmatter,course_name,course_hasfm,course_prereq,course_cataloglink,course_cat,published,access,course_startdate,course_enddate,course_haspre,course_haseval,course_purchase,course_purchaselink,course_purchasesku FROM #__ce_courses WHERE course_id = '.$courseid;
+		$query = 'SELECT course_id,course_frontmatter,course_name,course_hasfm,course_prereq,course_cataloglink,course_cat,published,access,course_startdate,course_enddate,course_haspre,course_haseval,course_purchase,course_purchaseprice,course_purchasesku FROM #__ce_courses WHERE course_id = '.$courseid;
 		$db->setQuery( $query );
 		$fmtext = $db->loadObject();
 		return $fmtext;

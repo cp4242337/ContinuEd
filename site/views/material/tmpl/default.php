@@ -193,7 +193,7 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 				<td colspan="2" align="center"><br>
 	
 				<?php
-				if ($this->mtext->haseval) {
+				if ($this->mtext->course_haseval) {
 					//continue to eval
 					echo '<input type="hidden" name="gte" value="eval">';
 					echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="submit"  class="cebutton">';

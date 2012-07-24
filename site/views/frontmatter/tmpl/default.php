@@ -69,7 +69,7 @@ function isChecked(elem) {
 
 <?php } } else { 
 	if ($username == 'Guest') echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$config->LOGIN_MSG.'</span></p>';
-	if ($this->cinfo->course_purchase) echo '<p align="center"><a href="'.$this->cinfo->course_purchaselink.'" class="cebutton_red">Purchase</p>';
+	else if ($this->cinfo->course_purchase) echo '<p align="center"><a href="'.JRoute::_('index.php?option=com_continued&view=purchase&course='.$this->cinfo->course_id).'" class="cebutton_red">Purchase - $'.$this->cinfo->course_purchaseprice.'</a></p>';
 }
 
 

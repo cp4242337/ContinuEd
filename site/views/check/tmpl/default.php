@@ -171,7 +171,7 @@ function isChecked(elem) {
 	echo '<div align="center"><form method="post" action="" name="editp1">';
 	echo '<input type="hidden" name="token" value="'.$this->token.'">';
 	echo '<input type="hidden" name="editpart" value="1">';
-	echo '<input type="image" name="edit" value="Edit" src="media/com_continued/template/'.$cecfg->TEMPLATE.'/btn_return.png">';
+	echo '<input type="submit" name="edit" value="Return to Posttest" class="cebutton">';
 	echo '</form></div>';
 }
 ?>

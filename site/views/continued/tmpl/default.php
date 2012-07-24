@@ -44,8 +44,16 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		$courseurl = JURI::current().'?option=com_continued&view=course&course='.$course->course_id.'&Itemid='.JRequest::getVar( 'Itemid' );
 		
 		if ($course->course_purchase) {
-			if ($course->course_purchasesku) $paid = ContinuEdHelperCourse::SKUCheck($user->id,$catinfo->course_purchasesku);
-			else $paid = ContinuEdHelperCourse::PurchaseCheck($user->id,$course->id);
+			//if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$catinfo->course_purchasesku);
+			//else 
+			$paid = ContinuEdHelper::PurchaseCheck($course->course_id);
+			if (!$paid) {
+				$paylink  = '<a href="'.JRoute::_('index.php?option=com_continued&view=purchase&course='.$course->course_id).'" class="cebutton_red">';
+				$paylink .=  'Purchase - $'.$course->course_purchaseprice;
+				$paylink .=  '</a>';
+			} else {
+				$paylink =  '<span class="cebutton_grey">Purchased</span>';
+			}
 		}
 		else $paid = true;
 		if ($course->course_catlink) {
@@ -82,9 +90,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				$clink  .= '</a>';
 			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && !$paid) {
 				// Not Taken, Can Take, Not Expired, Not Paid
-				$clink  = '<a href="'.$courseurl.'" class="cebutton_red">';
-				$clink  .= 'Purchase';
-				$clink  .= '</a>';
+				$clink  = '<span class="cebutton_grey">Begin</span>';
 			} else if ($course->status == 'pass' && !$course->cantake && !$course->expired){
 				// Passed, Cannot Take, Not Expired
 				$clink  = '<span class="cebutton_grey">Completed</span>';
@@ -127,7 +133,9 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		}
 		echo '</td></tr><tr><td>';
 		if (!empty($course->course_desc)) echo $course->course_desc;
-		echo '</td></tr><tr><td colspan="2">'.$clink;
+		echo '</td></tr><tr><td colspan="2">';
+		if ($course->course_purchase) echo $paylink;
+		echo $clink;
 		if ($course->course_nocredit && $course->type != "ce") {
 			$urlnc = 'index.php?option=com_continued&view=nocredit&course='.$course->course_id;
 			if ($this->user->id) {

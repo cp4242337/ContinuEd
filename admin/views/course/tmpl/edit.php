@@ -100,6 +100,9 @@ $params = $this->form->getFieldsets('params');
 				<li><?php echo $field->label;echo $field->input;?></li>
 <?php endforeach; ?>
 			</ul>
+<?php foreach($this->form->getFieldset('purchasecontent') as $field): ?>
+				<?php echo '<div>'.$field->label.'<div class="clr"></div>'.$field->input.'</div>';?>
+<?php endforeach; ?>
 		</fieldset>
 	</div>
 	<div>

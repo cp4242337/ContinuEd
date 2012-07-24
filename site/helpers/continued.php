@@ -51,19 +51,23 @@ class ContinuEdHelper {
 	}
 
 	/**
-	* Check if course access has been purchased. For use with AmbraSubs.
+	* Check if course access has been purchased. 
 	*
-	* @param int $userid Uesrs id number
 	* @param int $courseid Course id number
 	*
 	* @return boolean true if purchased, false if not.
 	*
-	* @since 1.7
+	* @since 1.30
 	*/
-	function PurchaseCheck($userid,$courseid) {
-		if (method_exists('AmbraSubsHelperCourse', 'hasPurchased')) {
-			return AmbraSubsHelperCourse::hasPurchased($courseid,$userid);
-		} else { return false; }
+	function PurchaseCheck($courseid) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$q  = 'SELECT * FROM #__ce_purchased WHERE purchase_user = '.$userid.' && purchase_course = '.$courseid.' && purchase_status="accepted"';
+		$db->setQuery( $q );
+		$pur = $db->loadObject();
+		if ($pur->purchase_time) return true;
+		return false;
 	}
 	
 	/**
@@ -74,12 +78,6 @@ class ContinuEdHelper {
 	* @since 1.20
 	*/
 	function getConfig() {
-		/*$db =& JFactory::getDBO();
-		$q = 'SELECT * FROM #__ce_config';
-		$db->setQuery($q);
-		global $cecfg;
-		$cecfg = $db->loadObject();
-		*/
 		$ceConfig = JComponentHelper::getParams('com_continued'); 
 		$cecfg = $ceConfig->toObject();
 		return $cecfg;
