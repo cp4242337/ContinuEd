@@ -572,15 +572,17 @@
 			default=""
 		/>	
 		<field
-			name="course_purchasesku"
+			name="course_purchaseco"
 			type="text"
-			label="COM_CONTINUED_COURSE_FIELD_PURCHASESKU_LABEL"
-			description="COM_CONTINUED_COURSE_FIELD_PURCHASESKU_DESC"
+			label="COM_CONTINUED_COURSE_FIELD_PURCHASECO_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_PURCHASECO_DESC"
 			size="60"
 			class="inputbox"
 			required="false"
-			default=""
-		/>	
+			default="0">
+			<option	value="1">Yes</option>
+			<option	value="0">No</option>
+		</field>
 	</fieldset>
 	<fieldset name="purchasecontent">
 		<field

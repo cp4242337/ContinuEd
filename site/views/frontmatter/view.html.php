@@ -42,6 +42,7 @@ class ContinuEdViewFrontMatter extends JView
 		$this->nocredit = JRequest::getVar('nocredit','0');
 		$user =& JFactory::getUser();
 		$model =& $this->getModel();
+		$cecfg = ContinuEdHelper::getConfig();
 				
 		//Get Course Info
 		$this->cinfo=$model->getFrontMatter($courseid);
@@ -60,7 +61,7 @@ class ContinuEdViewFrontMatter extends JView
 		if (!$bought) { $app->redirect($this->redirurl,"Purchase Required"); }
 
 		//Course Purchase Check
-		if ($this->cinfo->course_purchase) {
+		if ($this->cinfo->course_purchase && $cecfg->purchase) {
 			//if ($this->cinfo->course_purchasesku) $this->paid = ContinuEdHelper::SKUCheck($user->id,$this->cinfo->course_purchasesku);
 			//else 
 			$this->paid = ContinuEdHelper::PurchaseCheck($this->cinfo->course_id);
@@ -188,6 +189,10 @@ class ContinuEdViewFrontMatter extends JView
 	function moveOn($resume=false) {
 		$app =& JFactory::getApplication();
 		$user =& JFactory::getUser();
+		
+		if (!$this->paid) {
+			$app->redirect('index.php?option=com_continued&view=purchase&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->cinfo->course_id);
+		}
 		//Track FM Viewed
 		if ($this->passed) {
 			$what = "fmp";

@@ -1,15 +1,38 @@
 <div id="continued">
 <?php // no direct access
 defined('_JEXEC') or die('Restricted access');
-$cecfg = ContinuEdHelper::getConfig();
+$config = ContinuEdHelper::getConfig();
+
+$user =& JFactory::getUser();
 echo '<h2 class="componentheading">'.$this->cinfo->course_name.'</h2>';
 echo $this->cinfo->course_purchaseinfo;
-echo '<form action="" method="post">';
-echo '<div align="center">';
-echo '<input type="image" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" />';
-echo '<input type="hidden" name="layout" value="subpay" />';
-echo JHTML::_( 'form.token' );
-echo '</div>';
+if (!$user->id) {
+	echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$config->LOGIN_MSG.'</span></p>';
+} else {
+	echo '<table width="100%" border="0"><tr>';
+	$fromtoken=JHTML::_( 'form.token' );
+	if ($config->paypal && !$this->cinfo->course_purchaseco) {
+		echo '<td align="center">';
+		echo '<form action="" method="post" name="paypalcheckout">';
+		echo '<input type="image" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" />';
+		echo '<input type="hidden" name="layout" value="ppsubpay" />';
+		echo $fromtoken;
+		echo '</form>';
+		echo '</td>';
+	}
+	if ($config->redemption) {
+		echo '<td align="center">';
+		echo '<form action="" method="post" name="redeemcodecheckout">';
+		echo '<div>';
+		echo '<input type="text" name="redeemcode" class="field_purchase" /><br />';
+		echo '<input type="submit" name="submit" value="Redeem Code" class="cebutton" />';
+		echo '<input type="hidden" name="layout" value="redeem" />';
+		echo $fromtoken;
 echo '</form>';
+		echo '</td>';
+	}
+	echo '</tr></table>';
+}
+
 ?>
 </div>

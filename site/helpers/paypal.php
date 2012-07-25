@@ -9,9 +9,6 @@ class PayPalAPI {
 	var $API_SIGNATURE = "";
 	var $API_ENDPOINT = "";
 	var $SUBJECT = '';
-	var $USE_PROXY = "FALSE";
-	var $PROXY_HOST = '127.0.0.1';
-	var $PROXY_PORT = '808';
 	var $PAYPAL_URL = "";
 	var $PPVERSION = '65.1';
 	var $ACK_SUCCESS = 'SUCCESS';
@@ -21,6 +18,7 @@ class PayPalAPI {
 	var $AUTH_TIMESTAMP = '';
 	var $AUTH_MODE = '';
 	var $nvp_header = '';
+	var $error="";
 	
 	function __construct($mode,$username,$pass,$sig) {
 		$this->API_USERNAME = $username;
@@ -36,19 +34,126 @@ class PayPalAPI {
 		}
 	}
 	
+	function cancelPayment($cinfo,$pid) {
+		$db  =& JFactory::getDBO();
+		$q2='UPDATE #__ce_purchased SET purchase_status="canceled" WHERE purchase_id = "'.$pid.'"';
+		$db->setQuery($q2);
+		$db->query();
+	}
+	
+	function verifyPayment($cinfo,$pid) {
+		$session=JFactory::getSession();
+		$db  =& JFactory::getDBO();
+		$user  =& JFactory::getUser();
+		$app=Jfactory::getApplication();
+		$iid = JRequest::getVar('Itemid');
+		$config = ContinuEdHelper::getConfig();
+		
+		$token =urlencode( $session->get('token'));
+		$paymentAmount =urlencode ($session->get('TotalAmount'));
+		$paymentType = urlencode($session->get('paymentType'));
+		$currCodeType = urlencode($session->get('currCodeType'));
+		$payerID = urlencode($session->get('payer_id'));
+		$serverName = urlencode($_SERVER['SERVER_NAME']);
+		
+		$nvpstr='&INVNUM='.$invnum.'&TOKEN='.$token.'&PAYERID='.$payerID.'&PAYMENTACTION='.$paymentType.'&AMT='.$paymentAmount.'&CURRENCYCODE='.$currCodeType.'&IPADDRESS='.$serverName ;
+		$resArray=$this->hash_call("DoExpressCheckoutPayment",$nvpstr);
+		$ack = strtoupper($resArray["ACK"]);
+		
+		if ($resArray) {
+			$ralogtxt = "";
+			foreach($resArray as $key => $value) {
+				$ralogtxt .= "$key: $value\r\n";
+			}
+			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_user,pl_course,pl_resarray) VALUES ('.$pid.','.$user->id.','.$cinfo->course_id.',"'.$db->getEscaped($ralogtxt).'")';
+			$db->setQuery($ql);
+			$db->query();
+		}
+		
+		if($ack != 'SUCCESS' && $ack != 'SUCCESSWITHWARNING'){
+			$this->error="An Error has occurred";
+			return false;
+		} else {
+			$q2='UPDATE #__ce_purchased SET purchase_transid = "'.$resArray['TRANSACTIONID'].'", purchase_status="accepted" WHERE purchase_id = "'.$pid.'"';
+			$db->setQuery($q2);
+			$db->query();
+			
+			//Confirm Email
+			$cmsg  = '<html><head></head><body><table width="662" cellspacing="0" border="0" cellpadding="0" style="border: 1px solid black;">';
+			$cmsg .= '<tr><td style="font-family:Arial, Helvetica, sans-serif; font-size:12px;padding:10px;"><br>';
+			$cmsg .= 'Dear '.$user->name.':<br><br>We are pleased to confirm your of $'.$paymentAmount.' USD for <strong>'.$cinfo->course_name.'</strong><br><br>';
+			$cmsg .= 'Thank You';
+			$cmsg .= '</td></tr></table></body></html>';
+			$mail = &JFactory::getMailer();
+			$mail->IsHTML(true);
+			$mail->addRecipient($user->email);
+			$mail->setSender($config->FROM_EMAIL,$config->FROM_NAME);
+			$mail->setSubject($cinfo->course_name);
+			$mail->setBody( $cmsg );
+			$sent = $mail->Send();
+		}
+		return true;
+		
+	}
+	
+	function confirmPayment($cinfo,$pid,$ppt) {
+		$session=JFactory::getSession();
+		$db  =& JFactory::getDBO();
+		$user  =& JFactory::getUser();
+		$app=Jfactory::getApplication();
+		$iid = JRequest::getVar('Itemid');
+		
+		$nvpHeader=$this->nvpHeader();
+		$nvpstr="&TOKEN=".$ppt;
+		$nvpstr = $nvpHeader.$nvpstr;
+		$resArray=$this->hash_call("GetExpressCheckoutDetails",$nvpstr);
+		$ack = strtoupper($resArray["ACK"]);
+		
+		if ($resArray) {
+			$ralogtxt = "";
+			foreach($resArray as $key => $value) {
+				$ralogtxt .= "$key: $value\r\n";
+			}
+			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_user,pl_course,pl_resarray) VALUES ('.$pid.','.$user->id.','.$cinfo->course_id.',"'.$db->getEscaped($ralogtxt).'")';
+			$db->setQuery($ql);
+			$db->query();
+		}
+		
+		if($ack == 'SUCCESS' || $ack == 'SUCCESSWITHWARNING') {
+			$session->set('token',$ppt);
+			$session->set('payer_id',$_REQUEST['PayerID']);
+			$session->set('paymentAmount',$_REQUEST['paymentAmount']);
+			$session->set('currCodeType',$_REQUEST['currencyCodeType']);
+			$session->set('paymentType',"Sale");
+			$session->set('TotalAmount',$resArray['AMT'] + $resArray['SHIPDISCAMT']);
+			//setup CORRELATIONID with INVNUM
+			$token = $resArray['TOKEN'];
+			$q= 'UPDATE #__ce_purchased SET purchase_status="verified" WHERE purchase_id = '.$pid;
+			$db->setQuery($q);
+			$db->query();
+		} else  {
+			$q='UPDATE #__ce_purchased SET purchase_status="error" WHERE purchase_id = "'.$pid.'"';
+			$db->setQuery($q);
+			$db->query();
+			$this->error="An error has occured";
+			return false;
+		}
+		return true;
+	}
+	
 	function submitPayment($cinfo) {
 		
 		JRequest::checkToken() or jexit( 'Invalid Token' );
 		$db  =& JFactory::getDBO();
 		$user  =& JFactory::getUser();
 		$app=Jfactory::getApplication();
-		$iid = JRequest::getVar('Itemdid');
+		$iid = JRequest::getVar('Itemid');
 		
-		$q = 'INSERT INTO #__ce_purchased (purchase_user,purchase_course,purchase_status) VALUES ('.$user->id.','.$cinfo->course_id.',"notyetstarted")';
+		$q = 'INSERT INTO #__ce_purchased (purchase_user,purchase_course,purchase_status,purchase_type) VALUES ('.$user->id.','.$cinfo->course_id.',"notyetstarted","paypal")';
 		$db->setQuery($q); $db->query();
 		$purchaseid = $db->insertid();
 		
-		$ivn="Course:".$cinfo->course_id;
+		$ivn="Course-".$cinfo->course_id."-".$user->id;
 		
 		$currencyCodeType="USD";
 		$paymentType="Sale";
@@ -60,8 +165,8 @@ class PayPalAPI {
 		$itemamt = $cinfo->course_purchaseprice;
 		$amt = $itemamt;
 		
-		$returnURL =urlencode(JURI::base().'index.php?option=com_continued&view=purchase&layout=confirm&Itemid='.$iid.'&purchaseid='.$purchaseid.'&course='.$cinfo->course_id);
-		$cancelURL =urlencode(JURI::base().'index.php?option=com_continued&view=purchase&layout=cancel&Itemid='.$iid.'&purchaseid='.$purchaseid.'&course='.$cinfo->course_id);
+		$returnURL =urlencode(JURI::base().'index.php?option=com_continued&view=purchase&layout=ppconfirm&Itemid='.$iid.'&purchaseid='.$purchaseid.'&course='.$cinfo->course_id);
+		$cancelURL =urlencode(JURI::base().'index.php?option=com_continued&view=purchase&layout=ppcancel&Itemid='.$iid.'&purchaseid='.$purchaseid.'&course='.$cinfo->course_id);
 		
 		$nvpstr="";
 		$nvpstr  = "&NOSHIPPING=1&ALLOWNOTE=0&INVNUM=$ivn";
@@ -76,22 +181,22 @@ class PayPalAPI {
 			foreach($resArray as $key => $value) {
 				$ralogtxt .= "$key: $value\r\n";
 			}
-			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_user,pl_course,pl_resarray) VALUES ('.$purchaseid.','.$subid.','.$formid.',"'.$db->getEscaped($ralogtxt).'")';
+			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_user,pl_course,pl_resarray) VALUES ('.$purchaseid.','.$user->id.','.$cinfo->course_id.',"'.$db->getEscaped($ralogtxt).'")';
 			$db->setQuery($ql);
 			$db->query();
-		}
+		} 
 		
 		$ack = strtoupper($resArray["ACK"]);
 		$token = $resArray['TOKEN'];
 		if($ack=="SUCCESS"){
 			// Redirect to paypal.com here
-			$qt='UPDATE #__ce_purchased SET purchase_paypalid = "'.$token.'", purchase_status="started" WHERE purchase_id = '.(int)$purchaseid;
+			$qt='UPDATE #__ce_purchased SET purchase_status="started" WHERE purchase_id = '.(int)$purchaseid;
 			$db->setQuery($qt);
 			$db->query();
 			$token = urldecode($resArray["TOKEN"]);
 			$payPalURL = $this->PAYPAL_URL.$token;
-			$api->redirect($payPalURL);
-		} else  {
+			$app->redirect($payPalURL);
+		} else {
 			$q='UPDATE #__ce_purchased SET purchase_status="error" WHERE purchase_id = "'.$purchaseid.'"';
 			$db->setQuery($q);
 			$db->query();
@@ -180,10 +285,7 @@ class PayPalAPI {
 		{
 			$nvpStr=$nvpheader.$nvpStr;
 		}
-		//if USE_PROXY constant set to TRUE in Constants.php, then only proxy will be enabled.
-		//Set proxy name to PROXY_HOST and port number to PROXY_PORT in constants.php
-		if($this->USE_PROXY)
-			curl_setopt ($ch, CURLOPT_PROXY, $this->PROXY_HOST.":".$this->PROXY_PORT);
+
 	
 		//check if version is included in $nvpStr else include the version.
 		if(strlen(str_replace('VERSION=', '', strtoupper($nvpStr))) == strlen($nvpStr)) {
@@ -205,10 +307,8 @@ class PayPalAPI {
 	
 		if (curl_errno($ch)) {
 			// moving to display page to display curl errors
-			$session->set('curl_error_no',curl_errno($ch)) ;
-			$session->set('curl_error_msg',curl_error($ch));
-			$location = "/components/com_programreg/APIError.php";
-			die('<p>'.curl_error($ch).'<br><br>'.$nvpreq.'<br><br></p><pre>'.print_r(curl_getinfo($ch)).'</pre>');
+			$this->error='<p>'.curl_error($ch).'<br><br>'.$nvpreq.'</p>';
+			return false;
 		} else {
 			//closing the curl
 			curl_close($ch);

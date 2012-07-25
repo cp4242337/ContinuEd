@@ -22,7 +22,9 @@ jimport( 'joomla.application.component.model' );
  */
 class ContinuEdModelPurchase extends JModel
 {
-
+	
+	var $codeError= "";
+	
 	/**
 	* Course Info 
 	*
@@ -42,6 +44,29 @@ class ContinuEdModelPurchase extends JModel
 		$query .= ' && c.course_id = '.$cid;
 		$db->setQuery( $query );
 		return $db->loadObject();
+	}
+	
+	function redeemCode($cinfo,$code) {
+		JRequest::checkToken() or jexit( 'Invalid Token' );
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$qc = 'SELECT * FROM #__ce_purchased_codes WHERE code_code = "'.$code.'" && code_course IN (0,'.$cinfo->course_id.')';
+		$db->setQuery( $qc );
+		$codeinfo = $db->loadObject();
+		if (!$codeinfo) {
+			$this->codeError = 'Code invalid';
+			return false;
+		}
+		if ($codeinfo->code_limit == 0) { 
+			$this->codeError = 'Code use limit met';
+			return false;
+		} else if ($codeinfo->code_limit != -1) { 
+			$qu = 'UPDATE #__ce_purchased_codes SET code_limit=code_limit-1 WHERE code_code = "'.$code.'" && code_course IN (0,'.$cinfo->course_id.')';
+			$db->setQuery($qu); $db->query();
+		}
+		$q = 'INSERT INTO #__ce_purchased (purchase_user,purchase_course,purchase_status,purchase_type,purchase_transid) VALUES ('.$user->id.','.$cinfo->course_id.',"accepted","redeem","'.$code.'")';
+		$db->setQuery($q); $db->query();
+		return true;
 	}
 	
 }

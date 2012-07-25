@@ -147,6 +147,7 @@ label.uf_pickerror { text-align: left; display: none; color: #800000; font-size:
 .uf_field { font-size:12px; padding:2px; width: 350px; border: solid 1px #888888; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px; }
 .uf_modfield { font-size:12px; padding:2px; width: 120px; border: solid 1px #888888; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px;}
 .uf_modfieldh { font-size:12px; padding:2px; width: 80px; border: solid 1px #444444; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px;}
+.field_purchase { font-size:12px; padding:2px; width: 120px; border: solid 1px #888888; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px;}
 .uf_login { font-size:12px; padding:2px; width: 140px; border: solid 1px #888888;}
 .uf_lost { font-size:12px; padding:2px; width: 190px; border: solid 1px #888888;}
 .uf_select { }

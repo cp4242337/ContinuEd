@@ -93,6 +93,7 @@ $params = $this->form->getFieldsets('params');
 <?php endforeach; ?>
 			</ul>
 		</fieldset>
+<?php if(ContinuEdHelper::getConfig()->purchase) { ?>
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'COM_CONTINUED_COURSE_PURCHASE' ); ?></legend>
 			<ul class="adminformlist">
@@ -104,6 +105,7 @@ $params = $this->form->getFieldsets('params');
 				<?php echo '<div>'.$field->label.'<div class="clr"></div>'.$field->input.'</div>';?>
 <?php endforeach; ?>
 		</fieldset>
+<?php } ?>
 	</div>
 	<div>
 		<input type="hidden" name="task" value="course.edit" />

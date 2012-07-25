@@ -43,13 +43,14 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		if ($cecfg->SHOW_FAC == '1') echo '<br><em>'.$course->course_faculty.'</em>';
 		$courseurl = JURI::current().'?option=com_continued&view=course&course='.$course->course_id.'&Itemid='.JRequest::getVar( 'Itemid' );
 		
-		if ($course->course_purchase) {
+		if ($course->course_purchase && $cecfg->purchase) {
 			//if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$catinfo->course_purchasesku);
 			//else 
 			$paid = ContinuEdHelper::PurchaseCheck($course->course_id);
 			if (!$paid) {
-				$paylink  = '<a href="'.JRoute::_('index.php?option=com_continued&view=purchase&course='.$course->course_id).'" class="cebutton_red">';
-				$paylink .=  'Purchase - $'.$course->course_purchaseprice;
+				$paylink  = '<a href="'.JRoute::_('index.php?option=com_continued&view=purchase&course='.$course->course_id).'" class="cebutton">';
+				if (!$course->course_purchaseco) $paylink .=  'Purchase - $'.$course->course_purchaseprice;
+				else $paylink .= "Redeem Code";
 				$paylink .=  '</a>';
 			} else {
 				$paylink =  '<span class="cebutton_grey">Purchased</span>';
@@ -134,7 +135,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo '</td></tr><tr><td>';
 		if (!empty($course->course_desc)) echo $course->course_desc;
 		echo '</td></tr><tr><td colspan="2">';
-		if ($course->course_purchase) echo $paylink;
+		if ($course->course_purchase && $cecfg->purchase) echo $paylink;
 		echo $clink;
 		if ($course->course_nocredit && $course->type != "ce") {
 			$urlnc = 'index.php?option=com_continued&view=nocredit&course='.$course->course_id;

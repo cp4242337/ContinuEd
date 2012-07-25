@@ -328,11 +328,11 @@ class ContinuEdModelCourse extends JModelAdmin
 					}
 		
 					//Course Certificates
-					$q='SELECT * FROM #__ce_coursecerts WHERE course_id = '.$oldcourse;
+					$q='SELECT * FROM #__ce_coursecerts WHERE cd_course = '.$oldcourse;
 					$this->_db->setQuery($q);
 					$qcs = $this->_db->loadObjectList();
 					foreach($qcs as $qc) {
-						$q  = 'INSERT INTO #__ce_coursecerts (qd_course,qd_cert) ';
+						$q  = 'INSERT INTO #__ce_coursecerts (cd_course,cd_cert) ';
 						$q .= 'VALUES ("'.$newcourse.'","'.$qc->qd_cert.'")';
 						$this->_db->setQuery($q);
 						if (!$this->_db->query($q)) {
