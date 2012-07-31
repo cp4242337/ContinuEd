@@ -1,5 +1,4 @@
-
-CREATE TABLE IF NOT EXISTS `#__ce_cats` (
+CREATE TABLE IF NOT EXISTS `jos_ce_cats` (
   `cat_id` int(11) NOT NULL AUTO_INCREMENT,
   `cat_name` varchar(255) NOT NULL,
   `cat_desc` text NOT NULL,
@@ -15,9 +14,9 @@ CREATE TABLE IF NOT EXISTS `#__ce_cats` (
   `cat_end` datetime NOT NULL,
   `published` tinyint(4) NOT NULL,
   PRIMARY KEY (`cat_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_cattrack` (
+CREATE TABLE IF NOT EXISTS `jos_ce_cattrack` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
   `cat` int(11) NOT NULL,
@@ -26,24 +25,24 @@ CREATE TABLE IF NOT EXISTS `#__ce_cattrack` (
   `sessionid` varchar(32) NOT NULL,
   `ct_ipaddr` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_certifs` (
+CREATE TABLE IF NOT EXISTS `jos_ce_certifs` (
   `crt_id` int(11) NOT NULL AUTO_INCREMENT,
   `crt_name` varchar(50) NOT NULL,
   PRIMARY KEY (`crt_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_certiftempl` (
+CREATE TABLE IF NOT EXISTS `jos_ce_certiftempl` (
   `ctmpl_id` int(11) NOT NULL AUTO_INCREMENT,
   `ctmpl_cert` int(11) NOT NULL,
   `ctmpl_prov` int(11) NOT NULL,
   `ctmpl_content` text NOT NULL,
   `published` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`ctmpl_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_courseauth` (
+CREATE TABLE IF NOT EXISTS `jos_ce_courseauth` (
   `ca_id` int(11) NOT NULL AUTO_INCREMENT,
   `ca_course` int(11) NOT NULL,
   `ca_auth` int(11) NOT NULL,
@@ -52,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `#__ce_courseauth` (
   PRIMARY KEY (`ca_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_coursecat` (
+CREATE TABLE IF NOT EXISTS `jos_ce_coursecat` (
   `cc_id` int(11) NOT NULL AUTO_INCREMENT,
   `cc_course` int(11) NOT NULL,
   `cc_cat` int(11) NOT NULL,
@@ -61,14 +60,14 @@ CREATE TABLE IF NOT EXISTS `#__ce_coursecat` (
   PRIMARY KEY (`cc_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_coursecerts` (
+CREATE TABLE IF NOT EXISTS `jos_ce_coursecerts` (
   `cd_id` int(4) NOT NULL AUTO_INCREMENT,
   `cd_course` int(11) NOT NULL,
   `cd_cert` int(11) NOT NULL,
   PRIMARY KEY (`cd_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_courses` (
+CREATE TABLE IF NOT EXISTS `jos_ce_courses` (
   `course_id` int(11) NOT NULL AUTO_INCREMENT,
   `course_name` varchar(255) NOT NULL,
   `course_keywords` text NOT NULL,
@@ -116,16 +115,17 @@ CREATE TABLE IF NOT EXISTS `#__ce_courses` (
   `course_preparts` int(11) NOT NULL DEFAULT '0',
   `course_changepre` tinyint(1) NOT NULL DEFAULT '0',
   `course_purchase` tinyint(1) NOT NULL DEFAULT '0',
-  `course_purchaselink` varchar(255) NOT NULL,
-  `course_purchasesku` varchar(255) NOT NULL,
+  `course_purchaseprice` float NOT NULL,
+  `course_purchaseco` tinyint(1) NOT NULL DEFAULT '0',
+  `course_purchaseinfo` text NOT NULL,
   `course_learntype` varchar(255) NOT NULL DEFAULT 'online enduring material',
   `course_hasinter` tinyint(1) NOT NULL DEFAULT '0',
   `course_qanda` enum('none','submit','panda','all') NOT NULL DEFAULT 'none',
   `course_nocredit` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`course_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_evalans` (
+CREATE TABLE IF NOT EXISTS `jos_ce_evalans` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `userid` int(11) NOT NULL,
   `course` int(11) NOT NULL,
@@ -139,16 +139,16 @@ CREATE TABLE IF NOT EXISTS `#__ce_evalans` (
   PRIMARY KEY (`id`),
   KEY `course` (`course`),
   KEY `question` (`question`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_groupcerts` (
+CREATE TABLE IF NOT EXISTS `jos_ce_groupcerts` (
   `gc_id` int(11) NOT NULL AUTO_INCREMENT,
   `gc_group` int(11) NOT NULL,
   `gc_cert` int(11) NOT NULL,
   PRIMARY KEY (`gc_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_matdl` (
+CREATE TABLE IF NOT EXISTS `jos_ce_matdl` (
   `md_id` int(11) NOT NULL AUTO_INCREMENT,
   `md_dload` int(11) NOT NULL,
   `md_mat` int(11) NOT NULL,
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `#__ce_matdl` (
   PRIMARY KEY (`md_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_material` (
+CREATE TABLE IF NOT EXISTS `jos_ce_material` (
   `mat_id` int(11) NOT NULL AUTO_INCREMENT,
   `mat_course` int(11) NOT NULL,
   `mat_title` varchar(255) NOT NULL,
@@ -168,9 +168,9 @@ CREATE TABLE IF NOT EXISTS `#__ce_material` (
   `ordering` int(11) NOT NULL,
   `published` int(11) NOT NULL,
   PRIMARY KEY (`mat_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_matmed` (
+CREATE TABLE IF NOT EXISTS `jos_ce_matmed` (
   `mm_id` int(11) NOT NULL AUTO_INCREMENT,
   `mm_mat` int(11) NOT NULL,
   `mm_media` int(11) NOT NULL,
@@ -179,15 +179,15 @@ CREATE TABLE IF NOT EXISTS `#__ce_matmed` (
   PRIMARY KEY (`mm_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_matuser` (
+CREATE TABLE IF NOT EXISTS `jos_ce_matuser` (
   `mu_mat` int(11) NOT NULL,
   `mu_user` int(11) NOT NULL,
   `mu_start` datetime NOT NULL,
   `mu_end` datetime NOT NULL,
   `mu_status` enum('complete','incomplete') NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_parts` (
+CREATE TABLE IF NOT EXISTS `jos_ce_parts` (
   `part_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `part_course` int(11) NOT NULL,
   `part_part` tinyint(4) NOT NULL,
@@ -195,24 +195,54 @@ CREATE TABLE IF NOT EXISTS `#__ce_parts` (
   `part_desc` text NOT NULL,
   `part_area` enum('pre','post','inter') NOT NULL DEFAULT 'post',
   PRIMARY KEY (`part_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_prereqs` (
+CREATE TABLE IF NOT EXISTS `jos_ce_prereqs` (
   `pr_id` int(11) NOT NULL AUTO_INCREMENT,
   `pr_course` int(11) NOT NULL,
   `pr_reqcourse` int(11) NOT NULL,
   PRIMARY KEY (`pr_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_providers` (
+CREATE TABLE IF NOT EXISTS `jos_ce_providers` (
   `prov_id` int(11) NOT NULL AUTO_INCREMENT,
   `prov_name` varchar(50) NOT NULL,
   `prov_logo` varchar(255) NOT NULL,
   `published` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`prov_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `jos_ce_purchased` (
+  `purchase_id` int(11) NOT NULL AUTO_INCREMENT,
+  `purchase_user` int(11) NOT NULL,
+  `purchase_course` int(11) NOT NULL,
+  `purchase_type` enum('paypal','redeem','admin') NOT NULL,
+  `purchase_transid` varchar(255) NOT NULL,
+  `purchase_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `purchase_ip` varchar(20) NOT NULL,
+  `purchase_status` enum('notyetstarted','verified','canceled','accepted','pending','started','denied') NOT NULL,
+  PRIMARY KEY (`purchase_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_questions` (
+CREATE TABLE IF NOT EXISTS `jos_ce_purchased_codes` (
+  `code_id` int(11) NOT NULL AUTO_INCREMENT,
+  `code_code` varchar(10) NOT NULL,
+  `code_course` int(11) NOT NULL,
+  `code_limit` int(11) NOT NULL,
+  PRIMARY KEY (`code_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `jos_ce_purchased_log` (
+  `pl_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pl_pid` int(11) NOT NULL,
+  `pl_user` int(11) NOT NULL,
+  `pl_course` int(11) NOT NULL,
+  `pl_resarray` text NOT NULL,
+  `pl_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`pl_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `jos_ce_questions` (
   `q_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `q_course` int(11) NOT NULL,
   `ordering` smallint(6) NOT NULL COMMENT 'qnum',
@@ -228,15 +258,15 @@ CREATE TABLE IF NOT EXISTS `#__ce_questions` (
   `published` tinyint(1) NOT NULL DEFAULT '1',
   `q_addedby` int(11) NOT NULL DEFAULT '62',
   PRIMARY KEY (`q_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_questions_groups` (
+CREATE TABLE IF NOT EXISTS `jos_ce_questions_groups` (
   `qg_id` int(11) NOT NULL AUTO_INCREMENT,
   `qg_name` varchar(255) NOT NULL,
   PRIMARY KEY (`qg_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_questions_opts` (
+CREATE TABLE IF NOT EXISTS `jos_ce_questions_opts` (
   `opt_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `opt_question` bigint(20) NOT NULL,
   `opt_text` text NOT NULL,
@@ -244,11 +274,10 @@ CREATE TABLE IF NOT EXISTS `#__ce_questions_opts` (
   `opt_expl` text NOT NULL,
   `ordering` int(11) NOT NULL,
   `published` tinyint(4) NOT NULL DEFAULT '1',
-  `opt_prehits` int(11) NOT NULL,
   PRIMARY KEY (`opt_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8  ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_records` (
+CREATE TABLE IF NOT EXISTS `jos_ce_records` (
   `rec_token` varchar(255) NOT NULL,
   `rec_user` int(11) NOT NULL,
   `rec_start` datetime NOT NULL,
@@ -263,9 +292,9 @@ CREATE TABLE IF NOT EXISTS `#__ce_records` (
   `rec_type` enum('nonce','ce','review','expired','viewed') NOT NULL,
   `rec_laststep` varchar(10) NOT NULL,
   PRIMARY KEY (`rec_token`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_track` (
+CREATE TABLE IF NOT EXISTS `jos_ce_track` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
   `course` int(11) NOT NULL,
@@ -275,9 +304,9 @@ CREATE TABLE IF NOT EXISTS `#__ce_track` (
   `token` varchar(32) NOT NULL,
   `track_ipaddr` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_ufields` (
+CREATE TABLE IF NOT EXISTS `jos_ce_ufields` (
   `uf_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `uf_sname` varchar(50) NOT NULL,
   `ordering` smallint(6) NOT NULL COMMENT 'qnum',
@@ -296,18 +325,18 @@ CREATE TABLE IF NOT EXISTS `#__ce_ufields` (
   `uf_max` int(11) NOT NULL DEFAULT '0',
   `uf_default` varchar(255) NOT NULL,
   PRIMARY KEY (`uf_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_ufields_opts` (
+CREATE TABLE IF NOT EXISTS `jos_ce_ufields_opts` (
   `opt_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `opt_field` bigint(20) NOT NULL,
   `opt_text` text NOT NULL,
   `ordering` int(11) NOT NULL,
   `published` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`opt_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_ugroups` (
+CREATE TABLE IF NOT EXISTS `jos_ce_ugroups` (
   `ug_id` int(11) NOT NULL AUTO_INCREMENT,
   `ug_name` varchar(255) NOT NULL,
   `ug_desc` text NOT NULL,
@@ -317,64 +346,28 @@ CREATE TABLE IF NOT EXISTS `#__ce_ugroups` (
   `published` tinyint(4) NOT NULL,
   `ordering` int(11) NOT NULL,
   PRIMARY KEY (`ug_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_uguf` (
+CREATE TABLE IF NOT EXISTS `jos_ce_uguf` (
   `uguf_field` int(11) NOT NULL,
   `uguf_group` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_usergroup` (
+CREATE TABLE IF NOT EXISTS `jos_ce_usergroup` (
   `userg_user` int(11) NOT NULL,
   `userg_group` int(11) NOT NULL,
   `userg_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `userg_notes` text NOT NULL,
   PRIMARY KEY (`userg_user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__ce_users` (
+CREATE TABLE IF NOT EXISTS `jos_ce_users` (
   `usr_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `usr_user` int(11) NOT NULL,
   `usr_field` int(11) NOT NULL,
   `usr_data` text NOT NULL,
   PRIMARY KEY (`usr_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `#__ce_courseauth` (
-  `ca_id` int(11) NOT NULL AUTO_INCREMENT,
-  `ca_course` int(11) NOT NULL,
-  `ca_auth` int(11) NOT NULL,
-  `ordering` int(11) NOT NULL,
-  `published` int(11) NOT NULL,
-  PRIMARY KEY (`ca_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `#__ce_coursecat` (
-  `cc_id` int(11) NOT NULL AUTO_INCREMENT,
-  `cc_course` int(11) NOT NULL,
-  `cc_cat` int(11) NOT NULL,
-  `ordering` int(11) NOT NULL,
-  `published` int(11) NOT NULL,
-  PRIMARY KEY (`cc_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `#__ce_matdl` (
-  `md_id` int(11) NOT NULL AUTO_INCREMENT,
-  `md_dload` int(11) NOT NULL,
-  `md_mat` int(11) NOT NULL,
-  `ordering` int(11) NOT NULL,
-  `published` int(11) NOT NULL,
-  PRIMARY KEY (`md_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `#__ce_matmed` (
-  `mm_id` int(11) NOT NULL AUTO_INCREMENT,
-  `mm_mat` int(11) NOT NULL,
-  `mm_media` int(11) NOT NULL,
-  `ordering` int(11) NOT NULL,
-  `published` int(11) NOT NULL,
-  PRIMARY KEY (`mm_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 INSERT INTO `#__ce_ufields` (`uf_id`, `uf_sname`, `ordering`, `uf_name`, `uf_type`, `uf_cms`, `uf_req`, `uf_note`, `uf_match`, `published`, `uf_hidden`, `uf_change`, `uf_reg`, `uf_profile`, `uf_min`, `uf_max`, `uf_default`) VALUES
 (1, 'fname', 2, 'First Name', 'textbox', 0, 1, '', '', 1, 0, 1, 1, 1, 0, 0, ''),

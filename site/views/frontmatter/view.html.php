@@ -54,16 +54,16 @@ class ContinuEdViewFrontMatter extends JView
 		//Get Category Info
 		$this->catinfo=$model->getCatInfo($this->cinfo->course_cat);
 		
-		//Check Cat Purchased
+		/*/Check Cat Purchased
 		if ($this->catinfo->cat_free == 0) {
 			$bought=ContinuEdHelper::SKUCheck($user->id,$this->catinfo->cat_sku);
 		} else { $bought=true; }
 		if (!$bought) { $app->redirect($this->redirurl,"Purchase Required"); }
-
+		*/
+		$bought = true;
+		
 		//Course Purchase Check
 		if ($this->cinfo->course_purchase && $cecfg->purchase) {
-			//if ($this->cinfo->course_purchasesku) $this->paid = ContinuEdHelper::SKUCheck($user->id,$this->cinfo->course_purchasesku);
-			//else 
 			$this->paid = ContinuEdHelper::PurchaseCheck($this->cinfo->course_id);
 		}
 		else $this->paid = true;

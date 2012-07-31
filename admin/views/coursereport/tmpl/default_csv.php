@@ -13,6 +13,7 @@ if (!$this->course) {
 	$contents .= '"'.JText::_( 'Course' ).'",';
 	$contents .= '"'.JText::_( 'Category' ).'",'; 
 } 
+$contents .= '"'.JText::_( 'Session ID' ).'",'; 
 $contents .= '"'.JText::_( 'Completion Status' ).'",'; 
 $contents .= '"'.JText::_( 'Record Type' ).'",'; 
 $contents .= '"'.JText::_( 'Last Step Completed' ).'",';
@@ -52,6 +53,7 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 		$contents .= '"'.$row->course_name.'",';
 		$contents .= '"'.$this->catids[$row->course_cat].'",';
 	} 
+	$contents .= '"'.$row->rec_session.'",';
 	switch ($row->rec_pass) {
 		case 'pass': $contents .= '"Completed - Pass",'; break;
 		case 'fail': $contents .= '"Completed - Fail",'; break;

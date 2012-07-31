@@ -190,6 +190,9 @@ class plgContinuedCeQu extends JPlugin
 		if ($expl) {
 			$output .=  '<div class="continued-ceq-qexpl">'.$expl.'</div>';
 		}
+		$output .= '<script type="text/javascript">'."\n";
+		$output .= '	numans++;'."\n";
+		$output .= '</script>'."\n";
 		return $output;
 	}
 	

@@ -44,8 +44,6 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		$courseurl = JURI::current().'?option=com_continued&view=course&course='.$course->course_id.'&Itemid='.JRequest::getVar( 'Itemid' );
 		
 		if ($course->course_purchase && $cecfg->purchase) {
-			//if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$catinfo->course_purchasesku);
-			//else 
 			$paid = ContinuEdHelper::PurchaseCheck($course->course_id);
 			if (!$paid) {
 				$paylink  = '<a href="'.JRoute::_('index.php?option=com_continued&view=purchase&course='.$course->course_id).'" class="cebutton">';

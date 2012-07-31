@@ -3,7 +3,10 @@
 $cecfg = ContinuEdHelper::getConfig();
 defined('_JEXEC') or die('Restricted access');
 echo '<h2 class="componentheading">'.$this->mtext->course_name.'</h2>';
-
+echo '<script type="text/javascript">';
+echo 'var numtohave = '.$this->numreq.';';
+echo 'var numans=0;';
+echo '</script>';
 //Gve error message if they tryed to jummop over material staright to the eval
 if ($this->jumpedover) echo '<div class="continued-error">Please complete all material before proceeding</div>';
 //Show Material
@@ -215,8 +218,6 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 	</div>
 	</form>
 	<script type="text/javascript">  
-				var numtohave = <?php echo $this->numreq; ?>;
-				var numans=0;
 				function getCheckedValue(radioObj) {
 					if(!radioObj)
 						return "";

@@ -26,14 +26,14 @@ class ContinuEdViewNoCredit extends JView
 		$model =& $this->getModel();
 		$tracked = ContinuEdHelper::trackViewed("lnk",$courseid,"PageLinkNoTokenNoCredit");
 		$user =& JFactory::getUser();
+		$cecfg = ContinuEdHelper::getConfig();
 
 		//Get course info
 		$course=$model->getCourse($courseid);
 		
 		//Check purchase
-		if ($course->course_purchase) {
-			if ($course->course_purchasesku) $paid = ContinuEdHelper::SKUCheck($user->id,$course->course_purchasesku);
-			else $paid = ContinuEdHelper::PurchaseCheck($user->id,$course->course_id);
+		if ($course->course_purchase && $cecfg->purchase) {
+			$this->paid = ContinuEdHelper::PurchaseCheck($course->course_id);
 		}
 		else $paid = true;
 		
