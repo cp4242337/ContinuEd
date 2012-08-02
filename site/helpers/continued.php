@@ -19,38 +19,6 @@ defined('_JEXEC') or die('Restricted access');
 class ContinuEdHelper {
 
 	/**
-	* Check if course acess has been purchased. For use with OS Commerece related stores.
-	*
-	* @param int $userid Uesrs id number
-	* @param string $skunum SKu of item to check for purchase
-	*
-	* @return boolean true if purchased, false if not.
-	*
-	* @since 1.00Nad
-	*/
-	function SKUCheck($userid,$skunum) {
-		//for naadac
-		$db =& JFactory::getDBO();
-		$chksout=false;
-		$query =  "SELECT jo.date_purchased, jop.products_id, jop.products_model, DATEDIFF(NOW(),jo.date_purchased)"
-		. "FROM #__osc_orders as jo, #__osc_orders_products as jop "
-		. "WHERE customers_id=" . $userid . " "
-		. "AND jo.orders_id = jop.orders_id "
-		. "ORDER BY jo.date_purchased DESC";
-		$db->setQuery($query);
-		$res=$db->loadAssocList();
-		if ($res) {
-			foreach ($res as $r) {
-				$f3 = $r['products_model'];
-				if ($f3 == $skunum) {
-					$chksout=true;
-				}
-			}
-		} else { $chksout=false; }
-		return $chksout;
-	}
-
-	/**
 	* Check if course access has been purchased. 
 	*
 	* @param int $courseid Course id number
@@ -63,7 +31,7 @@ class ContinuEdHelper {
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$q  = 'SELECT * FROM #__ce_purchased WHERE purchase_user = '.$userid.' && purchase_course = '.$courseid.' && purchase_status="accepted"';
+		$q  = 'SELECT * FROM #__ce_purchased WHERE purchase_user = '.$userid.' && purchase_course = '.$courseid.' && purchase_status IN("accepted","completed")';
 		$db->setQuery( $q );
 		$pur = $db->loadObject();
 		if ($pur->purchase_time) return true;

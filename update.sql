@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `jos_ce_purchased` (
   `purchase_transid` varchar(255) NOT NULL,
   `purchase_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `purchase_ip` varchar(20) NOT NULL,
-  `purchase_status` enum('notyetstarted','verified','canceled','accepted','pending','started','denied') NOT NULL,
+  `purchase_status` enum('notyetstarted','verified','canceled','accepted','pending','started','denied','refunded','failed','pending','reversed','canceled_reversal','expired','voided','completed','dispute') NOT NULL,
   PRIMARY KEY (`purchase_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 

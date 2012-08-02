@@ -573,7 +573,7 @@
 		/>	
 		<field
 			name="course_purchaseco"
-			type="text"
+			type="radio"
 			label="COM_CONTINUED_COURSE_FIELD_PURCHASECO_LABEL"
 			description="COM_CONTINUED_COURSE_FIELD_PURCHASECO_DESC"
 			size="60"

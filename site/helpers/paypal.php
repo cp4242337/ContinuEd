@@ -17,6 +17,7 @@ class PayPalAPI {
 	var $AUTH_SIGNATURE = '';
 	var $AUTH_TIMESTAMP = '';
 	var $AUTH_MODE = '';
+	var $IPN_URL = '';
 	var $nvp_header = '';
 	var $error="";
 	
@@ -27,9 +28,11 @@ class PayPalAPI {
 		if ($mode == "sandbox") {
 			$this->API_ENDPOINT = "https://api-3t.sandbox.paypal.com/nvp";
 			$this->PAYPAL_URL = "https://www.sandbox.paypal.com/webscr&cmd=_express-checkout&token=";
+			$this->IPN_URL = "ssl://sandbox.paypal.com";
 		} else {
 			$this->API_ENDPOINT = "https://api-3t.paypal.com/nvp";
 			$this->PAYPAL_URL = "https://www.paypal.com/webscr&cmd=_express-checkout&token=";
+			$this->IPN_URL = "ssl://www.paypal.com";
 			
 		}
 	}
@@ -65,7 +68,7 @@ class PayPalAPI {
 			foreach($resArray as $key => $value) {
 				$ralogtxt .= "$key: $value\r\n";
 			}
-			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_user,pl_course,pl_resarray) VALUES ('.$pid.','.$user->id.','.$cinfo->course_id.',"'.$db->getEscaped($ralogtxt).'")';
+			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_resarray) VALUES ('.$pid.',"'.$db->getEscaped($ralogtxt).'")';
 			$db->setQuery($ql);
 			$db->query();
 		}
@@ -114,7 +117,7 @@ class PayPalAPI {
 			foreach($resArray as $key => $value) {
 				$ralogtxt .= "$key: $value\r\n";
 			}
-			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_user,pl_course,pl_resarray) VALUES ('.$pid.','.$user->id.','.$cinfo->course_id.',"'.$db->getEscaped($ralogtxt).'")';
+			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_resarray) VALUES ('.$pid.',"'.$db->getEscaped($ralogtxt).'")';
 			$db->setQuery($ql);
 			$db->query();
 		}
@@ -149,11 +152,11 @@ class PayPalAPI {
 		$app=Jfactory::getApplication();
 		$iid = JRequest::getVar('Itemid');
 		
-		$q = 'INSERT INTO #__ce_purchased (purchase_user,purchase_course,purchase_status,purchase_type) VALUES ('.$user->id.','.$cinfo->course_id.',"notyetstarted","paypal")';
+		$q = 'INSERT INTO #__ce_purchased (purchase_user,purchase_course,purchase_status,purchase_type,purchase_ip) VALUES ('.$user->id.','.$cinfo->course_id.',"notyetstarted","paypal","'.$_SERVER['REMOTE_ADDR'].'")';
 		$db->setQuery($q); $db->query();
 		$purchaseid = $db->insertid();
 		
-		$ivn="Course-".$cinfo->course_id."-".$user->id;
+		$ivn=$purchaseid."-c".$cinfo->course_id."-u".$user->id;
 		
 		$currencyCodeType="USD";
 		$paymentType="Sale";
@@ -181,7 +184,7 @@ class PayPalAPI {
 			foreach($resArray as $key => $value) {
 				$ralogtxt .= "$key: $value\r\n";
 			}
-			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_user,pl_course,pl_resarray) VALUES ('.$purchaseid.','.$user->id.','.$cinfo->course_id.',"'.$db->getEscaped($ralogtxt).'")';
+			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_resarray) VALUES ('.$purchaseid.',"'.$db->getEscaped($ralogtxt).'")';
 			$db->setQuery($ql);
 			$db->query();
 		} 
@@ -206,7 +209,114 @@ class PayPalAPI {
 		return true;
 	}
 	
-	
+	function ipnResponse() {
+		$db  =& JFactory::getDBO();
+		$req = 'cmd=_notify-validate';
+		$ralogtxt = "";
+		foreach ($_POST as $key => $value) {
+			$value = urlencode(stripslashes($value));
+			$req .= "&$key=$value";
+			$ralogtxt .= "$key: ".urldecode($value)."\r\n";
+		}
+		
+		// post back to PayPal system to validate
+		$header .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
+		$header .= "Content-Type: application/x-www-form-urlencoded\r\n";
+		$header .= "Content-Length: " . strlen($req) . "\r\n\r\n";
+		$fp = fsockopen ($this->IPN_URL, 443, $errno, $errstr, 30); 
+		
+		// assign posted variables to local variables
+		$item_name = $_POST['item_name'];
+		$item_number = $_POST['item_number'];
+		$payment_status = $_POST['payment_status'];
+		$payment_amount = $_POST['mc_gross'];
+		$payment_currency = $_POST['mc_currency'];
+		$txn_type = $_POST['txn_type'];
+		$receiver_email = $_POST['receiver_email'];
+		$payer_email = $_POST['payer_email'];
+		$pid = (int)$_POST['invoice'];
+		
+		if (!$fp) {
+			// HTTP ERROR
+		} else {
+			fputs ($fp, $header . $req);
+			while (!feof($fp)) {
+				$res = fgets ($fp, 1024);
+				if (strcmp ($res, "VERIFIED") == 0) {
+					$ralogtxt .= "VERIFIED";
+					if ($txn_type == "new_case") {
+						$q1='UPDATE #__ce_purchased SET purchase_status="dispute" WHERE purchase_id = "'.$pid.'"';
+						$db->setQuery($q1);
+						$db->query();
+						break;
+					}
+					switch ($payment_status) {
+						case "Refunded":
+							$q2='UPDATE #__ce_purchased SET purchase_status="refunded" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Completed":
+							$q2='UPDATE #__ce_purchased SET purchase_status="completed" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Canceled_Reversal":
+							$q2='UPDATE #__ce_purchased SET purchase_status="canceled_reversal" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Denied":
+							$q2='UPDATE #__ce_purchased SET purchase_status="denied" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Expired":
+							$q2='UPDATE #__ce_purchased SET purchase_status="expired" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Failed":
+							$q2='UPDATE #__ce_purchased SET purchase_status="failed" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Pending":
+							$q2='UPDATE #__ce_purchased SET purchase_status="pending" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Reversed":
+							$q2='UPDATE #__ce_purchased SET purchase_status="reversed" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Processed":
+							$q2='UPDATE #__ce_purchased SET purchase_status="completed" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+						case "Voided":
+							$q2='UPDATE #__ce_purchased SET purchase_status="voided" WHERE purchase_id = "'.$pid.'"';
+							$db->setQuery($q2);
+							$db->query();
+							break;
+					}
+				} else if (strcmp ($res, "INVALID") == 0) {
+					$ralogtxt .= "INVALID";
+				}
+			}
+			fclose ($fp);
+		}
+		
+		if ($req) {
+			$ql = 'INSERT INTO #__ce_purchased_log (pl_pid,pl_resarray) VALUES ('.$pid.',"'.$db->getEscaped($ralogtxt).'")';
+			$db->setQuery($ql);
+			$db->query();
+		}
+		
+		
+	}
 	function nvpHeader()
 	{
 		$nvpHeaderStr = "";

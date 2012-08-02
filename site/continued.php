@@ -21,7 +21,7 @@ require_once(JPATH_COMPONENT.DS.'helpers'.DS.'continued.php');
 // Load StyleSheet for template, based on config
 $cecfg = ContinuEdHelper::getConfig();
 $doc = &JFactory::getDocument();
-$doc->addStyleSheet('media/com_continued/template/'.$cecfg->TEMPLATE.'/continued.css');
+//$doc->addStyleSheet('media/com_continued/template/'.$cecfg->TEMPLATE.'/continued.css');
 $doc->addScript('media/com_continued/scripts/jquery.js');
 $doc->addScript('media/com_continued/scripts/jquery.validate.js');
 $doc->addScript('media/com_continued/scripts/additional-methods.js');
