@@ -54,7 +54,7 @@ class ContinuEdModelCheck extends JModel
 	}
 	function getNumReq($courseid) {
 		$db =& JFactory::getDBO();
-		$q='SELECT * FROM #__ce_questions WHERE q_type != "message" && q_course = "'.$courseid.'" && q_req = 1 && q_area != "qanda"';
+		$q='SELECT * FROM #__ce_questions WHERE published > 0 && q_type != "message" && q_course = "'.$courseid.'" && q_req = 1 && q_area != "qanda"';
 		$db->setQuery($q);
 		$data = $db->query();
 		return $db->getNumRows();

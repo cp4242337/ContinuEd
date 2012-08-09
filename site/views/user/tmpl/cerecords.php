@@ -16,22 +16,22 @@ if ($cecfg->REC_PRETXT) echo $cecfg->REC_PRETXT;
 else echo '<p>Here are the accredited activities you\'ve taken.</p>';
 
 if ($this->catalog) {
-	echo '<table width="100%">';
+	echo '<table width="100%" class="zebra">';
+	
 	foreach ($this->catalog as $course) {
-		echo '<tr><td valign="top" colspan="2"><a href="'.JRoute::_('index.php?option=com_continued&cat='.$course->cat_id).'">'.$course->cat_name.'</a><br /><b>';
-		echo $course->course_name;
-		echo '</b></td></tr><tr><td valign="top"><b>Date Started:</b> '.date("F d, Y", strtotime($course->rec_start)).'</td><td><b>Status:</b> ';
+		echo '<tr><td valign="top"><b>';
+		echo $course->course_certifname;
+		echo '</b></td><td valign="top"><b>Date Started:</b> '.date("F d, Y", strtotime($course->rec_start)).'</td><td><b>Status:</b> ';
 		if ($course->course_haseval) {
-			if ($course->rec_pass == 'fail') echo '<span style="color:#800000">Failed</span>';
-			if ($course->rec_pass == 'pass') echo '<span style="color:#008000">Passed</span>';
-			if ($course->rec_pass == 'incomplete') echo '<span style="color:#800000">Incomplete</span>';
+			if ($course->rec_pass == 'fail') echo '<span style="color:#800000">Failed</span> ';
+			if ($course->rec_pass == 'pass') echo '<span style="color:#008000">Passed</span> ';
+			if ($course->rec_pass == 'incomplete') echo '<span style="color:#800000">Incomplete</span> ';
 
 			//echo '</td><td valign="top">';
-			if ($course->rec_pass == 'pass' && $course->course_hascertif)echo ' <a href="'.JRoute::_('index.php?option=com_continued&tmpl=component&view=certif&course='.$course->course_id).'" target="_blank">Get Certificate</a>';
+			if ($course->rec_pass == 'pass' && $course->course_hascertif)echo '</td><td><a href="'.JURI::base( true ).'/components/com_continued/gencert.php?course='.$course->course_id.'" target="_blank">Get Certificate</a>';
 
 		} else echo 'Completed';
 		echo '</td></tr>';
-		echo '<tr><td colspan="2"><hr size="1"></td></tr>';
 	}
 	echo '</table>';
 } else echo '<p>At this time, you have not completed any CE courses.</p>';

@@ -155,7 +155,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				
 		}
 		if ($this->user->id && $course->status == 'pass' && $course->course_hascertif) {
-			echo '<a href="index.php?option=com_continued&view=certif&course='.$course->course_id.'&tmpl=component" target="_blank" class="cebutton">';
+			echo '<a href="'.JURI::base( true ).'/components/com_continued/gencert.php?course='.$course->course_id.'" target="_blank" class="cebutton">';
 			echo 'Get Certificate</a>';
 		} else if ($this->user->id && $course->course_hascertif && !$course->expired) {
 			echo '<span class="cebutton_grey">Get Certificate</span>';

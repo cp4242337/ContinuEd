@@ -23,6 +23,9 @@ abstract class ContinuEdHelper
 			JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_DLOADS'), 'index.php?option=com_mams&view=dloads&extension=com_continued', $submenu == 'dloads');
 			JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_MEDIAS'), 'index.php?option=com_mams&view=medias&extension=com_continued', $submenu == 'medias');
 		}
+		if (ContinuEdHelper::getConfig()->purchase) {
+			JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_PURCHASES'), 'index.php?option=com_continued&view=purchases', $submenu == 'purchases');
+		}
 	}
 	
 	/**

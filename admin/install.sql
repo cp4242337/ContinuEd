@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `#__ce_purchased` (
   `purchase_id` int(11) NOT NULL AUTO_INCREMENT,
   `purchase_user` int(11) NOT NULL,
   `purchase_course` int(11) NOT NULL,
-  `purchase_type` enum('paypal','redeem','admin') NOT NULL,
+  `purchase_type` enum('paypal','redeem','admin', 'google') NOT NULL,
   `purchase_transid` varchar(255) NOT NULL,
   `purchase_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `purchase_ip` varchar(20) NOT NULL,
