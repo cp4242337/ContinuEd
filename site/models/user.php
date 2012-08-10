@@ -14,6 +14,21 @@ jimport( 'joomla.application.component.model' );
 class ContinuEdModelUser extends JModel
 {
 
+	function getPurchaseRecords($userid)
+	{
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$query  = 'SELECT * ';
+		$query .= 'FROM #__ce_purchased as f ';
+		$query .= 'LEFT JOIN #__ce_courses as c ON f.purchase_course = c.course_id ';
+		$query .= 'WHERE f.purchase_user = '.$userid;
+		$query .= ' ORDER BY f.purchase_time DESC';
+		$db->setQuery( $query );
+		$postlist = $db->loadObjectList();
+		return $postlist;
+	}
+
 	function getCERecords($userid)
 	{
 		$db =& JFactory::getDBO();
@@ -22,7 +37,6 @@ class ContinuEdModelUser extends JModel
 		$query  = 'SELECT * ';
 		$query .= 'FROM #__ce_records as f ';
 		$query .= 'LEFT JOIN #__ce_courses as c ON f.rec_course = c.course_id ';
-		$query .= 'LEFT JOIN #__ce_cats as p ON c.course_cat = p.cat_id ';
 		$query .= 'WHERE f.rec_user = '.$userid;
 		$query .= ' ORDER BY f.rec_start DESC';
 		$db->setQuery( $query );

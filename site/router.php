@@ -24,6 +24,7 @@ function ContinuEdBuildRoute(&$query)
 	static $profile;
 	static $proedit;
 	static $cerecords;
+	static $purchases;
 	static $login;
 	static $logout;
 	static $lost;
@@ -63,6 +64,9 @@ function ContinuEdBuildRoute(&$query)
 			}
 			if (empty($cerecords) && !empty($items[$i]->query['view']) && ($items[$i]->query['view'] == 'user') && !empty($items[$i]->query['layout']) && ($items[$i]->query['layout'] == 'cerecords')) {
 				$cerecords = $items[$i]->id;
+			}
+			if (empty($purchases) && !empty($items[$i]->query['view']) && ($items[$i]->query['view'] == 'user') && !empty($items[$i]->query['layout']) && ($items[$i]->query['layout'] == 'purchases')) {
+				$purchases = $items[$i]->id;
 			}
 			
 			// Check to see if we have found the lost info menu item.
@@ -162,6 +166,15 @@ function ContinuEdBuildRoute(&$query)
 		
 					case 'cerecords':
 						if ($query['Itemid'] = $cerecords) {
+							unset ($query['view']);
+							unset ($query['layout']);
+						} else {
+							$query['Itemid'] = $default;
+						}
+						break;
+		
+					case 'purchases':
+						if ($query['Itemid'] = $purchases) {
 							unset ($query['view']);
 							unset ($query['layout']);
 						} else {

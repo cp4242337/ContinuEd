@@ -25,6 +25,9 @@ class ContinuEdViewUser extends JView
 		$layout = $this->getLayout();
 		
 		switch($layout) {
+			case "purchases": 
+				$this->userPurchases();
+				break;
 			case "cerecords": 
 				$this->userCERecords();
 				break;
@@ -41,6 +44,20 @@ class ContinuEdViewUser extends JView
 		parent::display($tpl);
 	}
 	
+	protected function userPurchases() {
+		$model =& $this->getModel();
+		$print = JRequest::getVar('print');
+		$user =& JFactory::getUser();
+		$cert=NULL;
+		$userid = $user->id;
+		if ($userid != 0) {
+			$catalog=$model->getPurchaseRecords($userid);
+			$this->assignRef('print',$print);
+			$this->assignRef('catalog',$catalog);
+			$this->assignRef('userid',$userid);
+		}
+	
+	}
 	protected function userCERecords() {
 		$model =& $this->getModel();
 		$print = JRequest::getVar('print');

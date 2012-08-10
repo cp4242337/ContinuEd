@@ -17,11 +17,12 @@ else echo '<p>Here are the accredited activities you\'ve taken.</p>';
 
 if ($this->catalog) {
 	echo '<table width="100%" class="zebra">';
+	echo '<thead><tr><th>Program</th><th>Date</th><th>Status</th><th></th></tr></thead><tbody>';
 	
 	foreach ($this->catalog as $course) {
 		echo '<tr><td valign="top"><b>';
 		echo $course->course_certifname;
-		echo '</b></td><td valign="top"><b>Date Started:</b> '.date("F d, Y", strtotime($course->rec_start)).'</td><td><b>Status:</b> ';
+		echo '</b></td><td valign="top">'.date("F d, Y", strtotime($course->rec_start)).'</td><td><b>Status:</b> ';
 		if ($course->course_haseval) {
 			if ($course->rec_pass == 'fail') echo '<span style="color:#800000">Failed</span> ';
 			if ($course->rec_pass == 'pass') echo '<span style="color:#008000">Passed</span> ';
@@ -33,7 +34,7 @@ if ($this->catalog) {
 		} else echo 'Completed';
 		echo '</td></tr>';
 	}
-	echo '</table>';
+	echo '</tbody></table>';
 } else echo '<p>At this time, you have not completed any CE courses.</p>';
 if (!$this->print) {
 	if ($cecfg->REC_POSTTXT) echo '<br />'.$cecfg->REC_POSTTXT;
