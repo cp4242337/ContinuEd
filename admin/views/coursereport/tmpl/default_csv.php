@@ -9,6 +9,7 @@ $contents .= '"'.JText::_( 'Group' ).'",';
 $contents .= '"'.JText::_( 'EMail' ).'",'; 
 $contents .= '"'.JText::_( 'NABP ID' ).'",'; 
 $contents .= '"'.JText::_( 'DOB' ).'",'; 
+$contents .= '"'.JText::_( 'CPE Number' ).'",'; 
 if (!$this->course) {
 	$contents .= '"'.JText::_( 'Course' ).'",';
 	$contents .= '"'.JText::_( 'Category' ).'",'; 
@@ -49,6 +50,7 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 	$contents .= '"'.$this->userlist[$row->rec_user]->email.'",'; 
 	$contents .= '"'.$this->pharmids[$row->rec_user].'",';
 	$contents .= '"'.$this->pharmdobs[$row->rec_user].'",';
+	$contents .= '"'.$row->course_cpeprognum.'",';
 	if (!$this->course) {
 		$contents .= '"'.$row->course_name.'",';
 		$contents .= '"'.$this->catids[$row->course_cat].'",';

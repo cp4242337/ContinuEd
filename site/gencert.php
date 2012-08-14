@@ -25,7 +25,7 @@ $cecfg = ContinuEdHelper::getConfig();
 $status = statusCheck($courseid);
 
 //Valid Course id, Course Passed
-if ($courseid && $status == "pass") {
+if ($courseid && $status->rec_pass == "pass") {
 	ContinuEdHelper::trackViewed("crt",$courseid,'GetCertificate');
 		
 	//Get Course Information
@@ -43,7 +43,7 @@ if ($courseid && $status == "pass") {
 	$certhtml = str_replace('{Faculty}',$cinfo->course_faculty,$certhtml);
 	$certhtml = str_replace('{Credits}',$cinfo->course_credits,$certhtml);
 	$certhtml = str_replace('{ADate}',date("F d, Y", strtotime($cinfo->course_actdate)),$certhtml);
-	$certhtml = str_replace('{IDate}',date("F d, Y"),$certhtml);
+	$certhtml = str_replace('{IDate}',date("F d, Y", strtotime($status->rec_end)),$certhtml);
 	$certhtml = str_replace('{Name}',$username,$certhtml);
 	//$certhtml = str_replace('{Degree}',$uinfo->cb_degree,$certhtml);
 	//$certhtml = str_replace('{Address1}',$uinfo->cb_address,$certhtml);
@@ -134,7 +134,7 @@ if ($courseid && $status == "pass") {
 	 */
 	function statusCheck($course) {
 		$cmpllist = ContinuEdHelper::completedList();
-		$status=$cmpllist[$course]->rec_pass;
+		$status=$cmpllist[$course];
 		return $status;
 	}
 

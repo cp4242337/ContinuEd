@@ -229,7 +229,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 	$k = 1 - $k;
 	$cq = $row->disporder+1;
 	}
-	$colcount = 11 + count($qinter) + count($qpre) + count($qpost);
+	$colcount = 12 + count($qinter) + count($qpre) + count($qpost);
 	if ($this->course) $count = $count - 2;
 	?>
 	</tbody>

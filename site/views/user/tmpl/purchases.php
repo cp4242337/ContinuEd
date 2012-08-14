@@ -5,7 +5,7 @@ $cecfg = ContinuEdHelper::getConfig();
 if (!$this->print) {
 	?>
 <h2 class="componentheading"><a
-	href="index.php?option=com_continued&view=userce&print=1&tmpl=component"
+	href="index.php?option=com_continued&view=user&layout=purchases&print=1&tmpl=component"
 	target="_blank"><img src="components/com_continued/printButton.png"
 	border="0" align="right"></a><?php echo "CE Purchases"; ?></h2>
 <?php 
@@ -19,9 +19,9 @@ if ($this->catalog) {
 	echo '<table width="100%" class="zebra">';
 	echo '<thead><tr><th>Program</th><th>Date</th><th>Method</th><th>Status</th><th>Cost</th></tr></thead><tbody>';
 	foreach ($this->catalog as $course) {
-		echo '<tr><td valign="top"><b>';
+		echo '<tr><td><b>';
 		echo $course->course_certifname;
-		echo '</b></td><td valign="top"> '.date("F d, Y", strtotime($course->purchase_time)).'</td><td>';
+		echo '</b></td><td> '.date("F d, Y", strtotime($course->purchase_time)).'</td><td>';
 		switch ($course->purchase_type) {
 			case "paypal": echo "PayPal"; break;
 			case "redeem": echo "Code"; break;
@@ -41,7 +41,7 @@ if ($this->catalog) {
 			case "failed": echo "Failed"; break;
 			case "pending": echo "Pending"; break;
 			case "reversed": echo "Reversed"; break;
-			case "canceled_reversal": echo "Cancelled Dispute"; break;
+			case "canceled_reversal": echo "Canceled Dispute"; break;
 			case "expired": echo "Expired"; break;
 			case "voided": echo "Voided"; break;
 			case "completed": echo "Completed"; break;

@@ -28,7 +28,7 @@
 		/>
 		<field 
 			name="purchase_user" 
-			type="text" 
+			type="user" 
 			class="inputbox"
 			label="COM_CONTINUED_PURCHASE_FIELD_USER_LABEL"
 			description="COM_CONTINUED_PURCHASE_FIELD_USER_DESC" 

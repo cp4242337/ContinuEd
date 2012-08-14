@@ -75,7 +75,7 @@ class ContinuEdModelQuestion extends JModelAdmin
 		if (empty($data)) 
 		{
 			$data = $this->getItem();
-			if ($this->getState('question.q_id') == 0) {
+			if ($this->getState('question.id') == 0) {
 				$app = JFactory::getApplication();
 				$data->set('q_course', JRequest::getInt('q_course', $app->getUserState('com_continued.questions.filter.course')));
 				$data->set('q_area', JRequest::getString('q_area', $app->getUserState('com_continued.questions.filter.area')));

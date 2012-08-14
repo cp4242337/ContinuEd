@@ -75,9 +75,9 @@ class ContinuEdModelPurchase extends JModelAdmin
 		if (empty($data)) 
 		{
 			$data = $this->getItem();
-			if ($this->getState('purchase.purchase_id') == 0) {
+			if ($this->getState('purchase.id') == 0) {
 				$app = JFactory::getApplication();
-				//$data->set('purchase_course', JRequest::getInt('purchase_course', $app->getUserState('com_continued.purchases.filter.course')));
+				$data->set('purchase_course', JRequest::getInt('purchase_course', $app->getUserState('com_continued.purchases.filter.course')));
 			}
 		}
 		return $data;

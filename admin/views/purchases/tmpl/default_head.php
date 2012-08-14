@@ -14,14 +14,17 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 	<th>
 		<?php echo JText::_('COM_CONTINUED_PURCHASE_HEADING_COURSE'); ?>
 	</th>	
+	<th>
+		<?php echo JText::_( 'COM_CONTINUED_PURCHASE_HEADING_USER' ); ?>
+	</th>
+	<th>
+		<?php echo JText::_( 'COM_CONTINUED_PURCHASE_HEADING_EMAIL' ); ?>
+	</th>
 	<th width="75">
 		<?php echo JText::_( 'COM_CONTINUED_PURCHASE_HEADING_TYPE' ); ?>
 	</th>
 	<th width="75">
 		<?php echo JText::_( 'COM_CONTINUED_PURCHASE_HEADING_TRANSINFO' ); ?>
-	</th>
-	<th width="100">
-		<?php echo JText::_( 'COM_CONTINUED_PURCHASE_HEADING_USER' ); ?>
 	</th>
 	<th width="75">
 		<?php echo JText::_( 'COM_CONTINUED_PURCHASE_HEADING_TIME' ); ?>

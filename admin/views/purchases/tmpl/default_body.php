@@ -18,6 +18,12 @@ defined('_JEXEC') or die('Restricted Access');
 				<?php echo $item->course_name; ?>
 		</td>
 		<td>
+			<?php echo $item->user_name.' ('.$item->username.')'; ?>
+		</td>
+		<td>
+			<?php echo $item->user_email; ?>
+		</td>
+		<td>
 			<?php 
 			switch ($item->purchase_type) {
 				case "paypal": echo "PayPal"; break;
@@ -29,9 +35,6 @@ defined('_JEXEC') or die('Restricted Access');
 		</td>
 		<td>
 			<?php echo $item->purchase_transid; ?>
-		</td>
-		<td>
-			<?php echo $item->user_name; ?>
 		</td>
 		<td>
 			<?php echo $item->purchase_time; ?>
@@ -55,7 +58,7 @@ defined('_JEXEC') or die('Restricted Access');
 				case "failed": echo "Failed"; break;
 				case "pending": echo "Pending"; break;
 				case "reversed": echo "Reversed"; break;
-				case "canceled_reversal": echo "Cancelled Dispute"; break;
+				case "canceled_reversal": echo "Canceled Dispute"; break;
 				case "expired": echo "Expired"; break;
 				case "voided": echo "Voided"; break;
 				case "completed": echo "Completed"; break;

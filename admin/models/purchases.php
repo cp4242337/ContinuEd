@@ -24,6 +24,12 @@ class ContinuEdModelPurchases extends JModelList
 		// Load the filter state.
 		$cId = $this->getUserStateFromRequest($this->context.'.filter.course', 'filter_course', '');
 		$this->setState('filter.course', $cId);
+		$sd = $this->getUserStateFromRequest($this->context.'.filter.start', 'filter_start', date("Y-m-d",strtotime("-1 months")));
+		$this->setState('filter.start', $sd);
+		$ed = $this->getUserStateFromRequest($this->context.'.filter.end', 'filter_end', date("Y-m-d"));
+		$this->setState('filter.end', $ed);
+		$search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
+		$this->setState('filter.search', $search);
 
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_continued');
@@ -46,17 +52,29 @@ class ContinuEdModelPurchases extends JModelList
 		$query->from('#__ce_purchased as p');
 		
 		// Join over the users.
-		$query->select('u.name AS user_name');
+		$query->select('u.name AS user_name, u.username, u.email as user_email');
 		$query->join('LEFT', '#__users AS u ON u.id = p.purchase_user');
 		
 		// Join over the courses.
 		$query->select('c.course_name AS course_name');
 		$query->join('LEFT', '#__ce_courses AS c ON c.course_id = p.purchase_course');
 		
-		// Filter by poll.
+		// Set Date range
+		$startdate = $this->getState('filter.start');
+		$enddate = $this->getState('filter.end');
+		$query->where('date(p.purchase_time) BETWEEN "'.$startdate.'" AND "'.$enddate.'"');
+		
+		// Filter by course.
 		$cId = $this->getState('filter.course');
 		if (is_numeric($cId)) {
 			$query->where('p.purchase_course = '.(int) $cId);
+		}
+		
+		// Filter by search in title
+		$search = $this->getState('filter.search');
+		if (!empty($search)) {
+			$search = $db->Quote('%'.$db->escape($search, true).'%');
+			$query->where('(u.username LIKE '.$search.' OR u.name LIKE '.$search.' OR u.email LIKE '.$search.')');
 		}
 				
 		$orderCol	= $this->state->get('list.ordering');
