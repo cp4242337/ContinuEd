@@ -13,7 +13,7 @@ if (!$this->print) {
 	echo '<div class="componentheading">CE Purchases<a href="javascript:print()"><img src="components/com_continued/printButton.png" border="0"> Print</a> </div>';
 }
 
-echo '<p>Here are the accredited activities you\'ve purchased.</p>';
+echo '<p>Here are the accredited programs you\'ve purchased.</p>';
 
 if ($this->catalog) {
 	echo '<table width="100%" class="zebra">';

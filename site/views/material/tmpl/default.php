@@ -124,8 +124,6 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 	//Show Q&A Entry box
 	if ($this->mtext->course_qanda == "submit") {
 		?>
-		<script type="text/javascript" src="media/com_continued/scripts/jquery.js"></script>
-		<script type="text/javascript">jQuery.noConflict();</script>
 		<script type="text/javascript">
 		  /* attach a submit handler to the form */
 		  window.onload = (function(){

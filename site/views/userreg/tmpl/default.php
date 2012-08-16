@@ -5,18 +5,18 @@ $cecfg = ContinuEdHelper::getConfig();
 
 ?>
 <script type="text/javascript">
-	jceq(document).ready(function() {
-		jceq.metadata.setType("attr", "validate");
-		jceq("#regform").validate({
+	jQuery(document).ready(function() {
+		jQuery.metadata.setType("attr", "validate");
+		jQuery("#regform").validate({
 			errorClass:"uf_pickerror",
 			errorPlacement: function(error, element) {
 		    	error.appendTo( element.parent("div").next("div") );
 		    }
 	    });
-		jceq(".continued-user-pick-item").click(function(){
-			var parent = jceq(this).parents('.continued-user-pick-row');
-			jceq('.continued-user-pick-item',parent).removeClass('selected');
-			jceq(this).addClass('selected');
+		jQuery(".continued-user-pick-item").click(function(){
+			var parent = jQuery(this).parents('.continued-user-pick-row');
+			jQuery('.continued-user-pick-item',parent).removeClass('selected');
+			jQuery(this).addClass('selected');
 		});
 	
 	});

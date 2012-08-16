@@ -1,5 +1,5 @@
 /**
- * jceq Validation Plugin 1.9.0
+ * jQuery Validation Plugin 1.9.0
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -11,9 +11,9 @@
  *   http://www.gnu.org/licenses/gpl.html
  */
 
-(function(jceq) {
+(function($) {
 
-jceq.extend(jceq.fn, {
+$.extend($.fn, {
 	// http://docs.jquery.com/Plugins/Validation/validate
 	validate: function( options ) {
 
@@ -24,7 +24,7 @@ jceq.extend(jceq.fn, {
 		}
 
 		// check if a validator for this form was already created
-		var validator = jceq.data(this[0], 'validator');
+		var validator = $.data(this[0], 'validator');
 		if ( validator ) {
 			return validator;
 		}
@@ -32,8 +32,8 @@ jceq.extend(jceq.fn, {
 		// Add novalidate tag if HTML5.
 		this.attr('novalidate', 'novalidate');
 
-		validator = new jceq.validator( options, this[0] );
-		jceq.data(this[0], 'validator', validator);
+		validator = new $.validator( options, this[0] );
+		$.data(this[0], 'validator', validator);
 
 		if ( validator.settings.onsubmit ) {
 
@@ -61,7 +61,7 @@ jceq.extend(jceq.fn, {
 					if ( validator.settings.submitHandler ) {
 						if (validator.submitButton) {
 							// insert a hidden input as a replacement for the missing submit button
-							var hidden = jceq("<input type='hidden'/>").attr("name", validator.submitButton.name).val(validator.submitButton.value).appendTo(validator.currentForm);
+							var hidden = $("<input type='hidden'/>").attr("name", validator.submitButton.name).val(validator.submitButton.value).appendTo(validator.currentForm);
 						}
 						validator.settings.submitHandler.call( validator, validator.currentForm );
 						if (validator.submitButton) {
@@ -95,11 +95,11 @@ jceq.extend(jceq.fn, {
 	},
 	// http://docs.jquery.com/Plugins/Validation/valid
 	valid: function() {
-        if ( jceq(this[0]).is('form')) {
+        if ( $(this[0]).is('form')) {
             return this.validate().form();
         } else {
             var valid = true;
-            var validator = jceq(this[0].form).validate();
+            var validator = $(this[0].form).validate();
             this.each(function() {
 				valid &= validator.element(this);
             });
@@ -109,10 +109,10 @@ jceq.extend(jceq.fn, {
 	// attributes: space seperated list of attributes to retrieve and remove
 	removeAttrs: function(attributes) {
 		var result = {},
-			jceqelement = this;
-		jceq.each(attributes.split(/\s/), function(index, value) {
-			result[value] = jceqelement.attr(value);
-			jceqelement.removeAttr(value);
+			$element = this;
+		$.each(attributes.split(/\s/), function(index, value) {
+			result[value] = $element.attr(value);
+			$element.removeAttr(value);
 		});
 		return result;
 	},
@@ -121,15 +121,15 @@ jceq.extend(jceq.fn, {
 		var element = this[0];
 
 		if (command) {
-			var settings = jceq.data(element.form, 'validator').settings;
+			var settings = $.data(element.form, 'validator').settings;
 			var staticRules = settings.rules;
-			var existingRules = jceq.validator.staticRules(element);
+			var existingRules = $.validator.staticRules(element);
 			switch(command) {
 			case "add":
-				jceq.extend(existingRules, jceq.validator.normalizeRule(argument));
+				$.extend(existingRules, $.validator.normalizeRule(argument));
 				staticRules[element.name] = existingRules;
 				if (argument.messages)
-					settings.messages[element.name] = jceq.extend( settings.messages[element.name], argument.messages );
+					settings.messages[element.name] = $.extend( settings.messages[element.name], argument.messages );
 				break;
 			case "remove":
 				if (!argument) {
@@ -137,7 +137,7 @@ jceq.extend(jceq.fn, {
 					return existingRules;
 				}
 				var filtered = {};
-				jceq.each(argument.split(/\s/), function(index, method) {
+				$.each(argument.split(/\s/), function(index, method) {
 					filtered[method] = existingRules[method];
 					delete existingRules[method];
 				});
@@ -145,20 +145,20 @@ jceq.extend(jceq.fn, {
 			}
 		}
 
-		var data = jceq.validator.normalizeRules(
-		jceq.extend(
+		var data = $.validator.normalizeRules(
+		$.extend(
 			{},
-			jceq.validator.metadataRules(element),
-			jceq.validator.classRules(element),
-			jceq.validator.attributeRules(element),
-			jceq.validator.staticRules(element)
+			$.validator.metadataRules(element),
+			$.validator.classRules(element),
+			$.validator.attributeRules(element),
+			$.validator.staticRules(element)
 		), element);
 
 		// make sure required is at front
 		if (data.required) {
 			var param = data.required;
 			delete data.required;
-			data = jceq.extend({required: param}, data);
+			data = $.extend({required: param}, data);
 		}
 
 		return data;
@@ -166,42 +166,42 @@ jceq.extend(jceq.fn, {
 });
 
 // Custom selectors
-jceq.extend(jceq.expr[":"], {
+$.extend($.expr[":"], {
 	// http://docs.jquery.com/Plugins/Validation/blank
-	blank: function(a) {return !jceq.trim("" + a.value);},
+	blank: function(a) {return !$.trim("" + a.value);},
 	// http://docs.jquery.com/Plugins/Validation/filled
-	filled: function(a) {return !!jceq.trim("" + a.value);},
+	filled: function(a) {return !!$.trim("" + a.value);},
 	// http://docs.jquery.com/Plugins/Validation/unchecked
 	unchecked: function(a) {return !a.checked;}
 });
 
 // constructor for validator
-jceq.validator = function( options, form ) {
-	this.settings = jceq.extend( true, {}, jceq.validator.defaults, options );
+$.validator = function( options, form ) {
+	this.settings = $.extend( true, {}, $.validator.defaults, options );
 	this.currentForm = form;
 	this.init();
 };
 
-jceq.validator.format = function(source, params) {
+$.validator.format = function(source, params) {
 	if ( arguments.length == 1 )
 		return function() {
-			var args = jceq.makeArray(arguments);
+			var args = $.makeArray(arguments);
 			args.unshift(source);
-			return jceq.validator.format.apply( this, args );
+			return $.validator.format.apply( this, args );
 		};
 	if ( arguments.length > 2 && params.constructor != Array  ) {
-		params = jceq.makeArray(arguments).slice(1);
+		params = $.makeArray(arguments).slice(1);
 	}
 	if ( params.constructor != Array ) {
 		params = [ params ];
 	}
-	jceq.each(params, function(i, n) {
+	$.each(params, function(i, n) {
 		source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
 	});
 	return source;
 };
 
-jceq.extend(jceq.validator, {
+$.extend($.validator, {
 
 	defaults: {
 		messages: {},
@@ -211,8 +211,8 @@ jceq.extend(jceq.validator, {
 		validClass: "valid",
 		errorElement: "label",
 		focusInvalid: true,
-		errorContainer: jceq( [] ),
-		errorLabelContainer: jceq( [] ),
+		errorContainer: $( [] ),
+		errorLabelContainer: $( [] ),
 		onsubmit: true,
 		ignore: ":hidden",
 		ignoreTitle: false,
@@ -247,21 +247,21 @@ jceq.extend(jceq.validator, {
 			if (element.type === 'radio') {
 				this.findByName(element.name).addClass(errorClass).removeClass(validClass);
 			} else {
-				jceq(element).addClass(errorClass).removeClass(validClass);
+				$(element).addClass(errorClass).removeClass(validClass);
 			}
 		},
 		unhighlight: function(element, errorClass, validClass) {
 			if (element.type === 'radio') {
 				this.findByName(element.name).removeClass(errorClass).addClass(validClass);
 			} else {
-				jceq(element).removeClass(errorClass).addClass(validClass);
+				$(element).removeClass(errorClass).addClass(validClass);
 			}
 		}
 	},
 
 	// http://docs.jquery.com/Plugins/Validation/Validator/setDefaults
 	setDefaults: function(settings) {
-		jceq.extend( jceq.validator.defaults, settings );
+		$.extend( $.validator.defaults, settings );
 	},
 
 	messages: {
@@ -276,12 +276,12 @@ jceq.extend(jceq.validator, {
 		creditcard: "Please enter a valid credit card number.",
 		equalTo: "Please enter the same value again.",
 		accept: "Please enter a value with a valid extension.",
-		maxlength: jceq.validator.format("Please enter no more than {0} characters."),
-		minlength: jceq.validator.format("Please enter at least {0} characters."),
-		rangelength: jceq.validator.format("Please enter a value between {0} and {1} characters long."),
-		range: jceq.validator.format("Please enter a value between {0} and {1}."),
-		max: jceq.validator.format("Please enter a value less than or equal to {0}."),
-		min: jceq.validator.format("Please enter a value greater than or equal to {0}.")
+		maxlength: $.validator.format("Please enter no more than {0} characters."),
+		minlength: $.validator.format("Please enter at least {0} characters."),
+		rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
+		range: $.validator.format("Please enter a value between {0} and {1}."),
+		max: $.validator.format("Please enter a value less than or equal to {0}."),
+		min: $.validator.format("Please enter a value greater than or equal to {0}.")
 	},
 
 	autoCreateRanges: false,
@@ -289,9 +289,9 @@ jceq.extend(jceq.validator, {
 	prototype: {
 
 		init: function() {
-			this.labelContainer = jceq(this.settings.errorLabelContainer);
-			this.errorContext = this.labelContainer.length && this.labelContainer || jceq(this.currentForm);
-			this.containers = jceq(this.settings.errorContainer).add( this.settings.errorLabelContainer );
+			this.labelContainer = $(this.settings.errorLabelContainer);
+			this.errorContext = this.labelContainer.length && this.labelContainer || $(this.currentForm);
+			this.containers = $(this.settings.errorContainer).add( this.settings.errorLabelContainer );
 			this.submitted = {};
 			this.valueCache = {};
 			this.pendingRequest = 0;
@@ -300,22 +300,22 @@ jceq.extend(jceq.validator, {
 			this.reset();
 
 			var groups = (this.groups = {});
-			jceq.each(this.settings.groups, function(key, value) {
-				jceq.each(value.split(/\s/), function(index, name) {
+			$.each(this.settings.groups, function(key, value) {
+				$.each(value.split(/\s/), function(index, name) {
 					groups[name] = key;
 				});
 			});
 			var rules = this.settings.rules;
-			jceq.each(rules, function(key, value) {
-				rules[key] = jceq.validator.normalizeRule(value);
+			$.each(rules, function(key, value) {
+				rules[key] = $.validator.normalizeRule(value);
 			});
 
 			function delegate(event) {
-				var validator = jceq.data(this[0].form, "validator"),
+				var validator = $.data(this[0].form, "validator"),
 					eventType = "on" + event.type.replace(/^validate/, "");
 				validator.settings[eventType] && validator.settings[eventType].call(validator, this[0], event);
 			}
-			jceq(this.currentForm)
+			$(this.currentForm)
 			       .validateDelegate("[type='text'], [type='password'], [type='file'], select, textarea, " +
 						"[type='number'], [type='search'] ,[type='tel'], [type='url'], " +
 						"[type='email'], [type='datetime'], [type='date'], [type='month'], " +
@@ -325,16 +325,16 @@ jceq.extend(jceq.validator, {
 				.validateDelegate("[type='radio'], [type='checkbox'], select, option", "click", delegate);
 
 			if (this.settings.invalidHandler)
-				jceq(this.currentForm).bind("invalid-form.validate", this.settings.invalidHandler);
+				$(this.currentForm).bind("invalid-form.validate", this.settings.invalidHandler);
 		},
 
 		// http://docs.jquery.com/Plugins/Validation/Validator/form
 		form: function() {
 			this.checkForm();
-			jceq.extend(this.submitted, this.errorMap);
-			this.invalid = jceq.extend({}, this.errorMap);
+			$.extend(this.submitted, this.errorMap);
+			this.invalid = $.extend({}, this.errorMap);
 			if (!this.valid())
-				jceq(this.currentForm).triggerHandler("invalid-form", [this]);
+				$(this.currentForm).triggerHandler("invalid-form", [this]);
 			this.showErrors();
 			return this.valid();
 		},
@@ -352,7 +352,7 @@ jceq.extend(jceq.validator, {
 			element = this.validationTargetFor( this.clean( element ) );
 			this.lastElement = element;
 			this.prepareElement( element );
-			this.currentElements = jceq(element);
+			this.currentElements = $(element);
 			var result = this.check( element );
 			if ( result ) {
 				delete this.invalid[element.name];
@@ -371,7 +371,7 @@ jceq.extend(jceq.validator, {
 		showErrors: function(errors) {
 			if(errors) {
 				// add items to error list and map
-				jceq.extend( this.errorMap, errors );
+				$.extend( this.errorMap, errors );
 				this.errorList = [];
 				for ( var name in errors ) {
 					this.errorList.push({
@@ -380,7 +380,7 @@ jceq.extend(jceq.validator, {
 					});
 				}
 				// remove items from success list
-				this.successList = jceq.grep( this.successList, function(element) {
+				this.successList = $.grep( this.successList, function(element) {
 					return !(element.name in errors);
 				});
 			}
@@ -391,8 +391,8 @@ jceq.extend(jceq.validator, {
 
 		// http://docs.jquery.com/Plugins/Validation/Validator/resetForm
 		resetForm: function() {
-			if ( jceq.fn.resetForm )
-				jceq( this.currentForm ).resetForm();
+			if ( $.fn.resetForm )
+				$( this.currentForm ).resetForm();
 			this.submitted = {};
 			this.lastElement = null;
 			this.prepareForm();
@@ -426,7 +426,7 @@ jceq.extend(jceq.validator, {
 		focusInvalid: function() {
 			if( this.settings.focusInvalid ) {
 				try {
-					jceq(this.findLastActive() || this.errorList.length && this.errorList[0].element || [])
+					$(this.findLastActive() || this.errorList.length && this.errorList[0].element || [])
 					.filter(":visible")
 					.focus()
 					// manually trigger focusin event; without it, focusin handler isn't called, findLastActive won't have anything to find
@@ -439,7 +439,7 @@ jceq.extend(jceq.validator, {
 
 		findLastActive: function() {
 			var lastActive = this.lastActive;
-			return lastActive && jceq.grep(this.errorList, function(n) {
+			return lastActive && $.grep(this.errorList, function(n) {
 				return n.element.name == lastActive.name;
 			}).length == 1 && lastActive;
 		},
@@ -449,7 +449,7 @@ jceq.extend(jceq.validator, {
 				rulesCache = {};
 
 			// select all valid inputs inside the form (no submit or reset buttons)
-			return jceq(this.currentForm)
+			return $(this.currentForm)
 			.find("input, select, textarea")
 			.not(":submit, :reset, :image, [disabled]")
 			.not( this.settings.ignore )
@@ -457,7 +457,7 @@ jceq.extend(jceq.validator, {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
 
 				// select only the first element for each name, and only those with rules specified
-				if ( this.name in rulesCache || !validator.objectLength(jceq(this).rules()) )
+				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) )
 					return false;
 
 				rulesCache[this.name] = true;
@@ -466,20 +466,20 @@ jceq.extend(jceq.validator, {
 		},
 
 		clean: function( selector ) {
-			return jceq( selector )[0];
+			return $( selector )[0];
 		},
 
 		errors: function() {
-			return jceq( this.settings.errorElement + "." + this.settings.errorClass, this.errorContext );
+			return $( this.settings.errorElement + "." + this.settings.errorClass, this.errorContext );
 		},
 
 		reset: function() {
 			this.successList = [];
 			this.errorList = [];
 			this.errorMap = {};
-			this.toShow = jceq([]);
-			this.toHide = jceq([]);
-			this.currentElements = jceq([]);
+			this.toShow = $([]);
+			this.toHide = $([]);
+			this.currentElements = $([]);
 		},
 
 		prepareForm: function() {
@@ -495,12 +495,12 @@ jceq.extend(jceq.validator, {
 		check: function( element ) {
 			element = this.validationTargetFor( this.clean( element ) );
 
-			var rules = jceq(element).rules();
+			var rules = $(element).rules();
 			var dependencyMismatch = false;
 			for (var method in rules ) {
 				var rule = { method: method, parameters: rules[method] };
 				try {
-					var result = jceq.validator.methods[method].call( this, element.value.replace(/\r/g, ""), element, rule.parameters );
+					var result = $.validator.methods[method].call( this, element.value.replace(/\r/g, ""), element, rule.parameters );
 
 					// if a method indicates that the field is optional and therefore valid,
 					// don't mark it as valid when there are no other rules
@@ -535,12 +535,12 @@ jceq.extend(jceq.validator, {
 		// return the custom message for the given element and validation method
 		// specified in the element's "messages" metadata
 		customMetaMessage: function(element, method) {
-			if (!jceq.metadata)
+			if (!$.metadata)
 				return;
 
 			var meta = this.settings.meta
-				? jceq(element).metadata()[this.settings.meta]
-				: jceq(element).metadata();
+				? $(element).metadata()[this.settings.meta]
+				: $(element).metadata();
 
 			return meta && meta.messages && meta.messages[method];
 		},
@@ -568,18 +568,18 @@ jceq.extend(jceq.validator, {
 				this.customMetaMessage( element, method ),
 				// title is never undefined, so handle empty string as undefined
 				!this.settings.ignoreTitle && element.title || undefined,
-				jceq.validator.messages[method],
+				$.validator.messages[method],
 				"<strong>Warning: No message defined for " + element.name + "</strong>"
 			);
 		},
 
 		formatAndAdd: function( element, rule ) {
 			var message = this.defaultMessage( element, rule.method ),
-				theregex = /\jceq?\{(\d+)\}/g;
+				theregex = /\$?\{(\d+)\}/g;
 			if ( typeof message == "function" ) {
 				message = message.call(this, rule.parameters, element);
 			} else if (theregex.test(message)) {
-				message = jceq.format(message.replace(theregex, '{jceq1}'), rule.parameters);
+				message = jQuery.format(message.replace(theregex, '{$1}'), rule.parameters);
 			}
 			this.errorList.push({
 				message: message,
@@ -625,7 +625,7 @@ jceq.extend(jceq.validator, {
 		},
 
 		invalidElements: function() {
-			return jceq(this.errorList).map(function() {
+			return $(this.errorList).map(function() {
 				return this.element;
 			});
 		},
@@ -640,7 +640,7 @@ jceq.extend(jceq.validator, {
 				label.attr("generated") && label.html(message);
 			} else {
 				// create label
-				label = jceq("<" + this.settings.errorElement + "/>")
+				label = $("<" + this.settings.errorElement + "/>")
 					.attr({"for":  this.idOrName(element), generated: true})
 					.addClass(this.settings.errorClass)
 					.html(message || "");
@@ -651,7 +651,7 @@ jceq.extend(jceq.validator, {
 				}
 				if ( !this.labelContainer.append(label).length )
 					this.settings.errorPlacement
-						? this.settings.errorPlacement(label, jceq(element) )
+						? this.settings.errorPlacement(label, $(element) )
 						: label.insertAfter(element);
 			}
 			if ( !message && this.settings.success ) {
@@ -666,7 +666,7 @@ jceq.extend(jceq.validator, {
 		errorsFor: function(element) {
 			var name = this.idOrName(element);
     		return this.errors().filter(function() {
-				return jceq(this).attr('for') == name;
+				return $(this).attr('for') == name;
 			});
 		},
 
@@ -689,7 +689,7 @@ jceq.extend(jceq.validator, {
 		findByName: function( name ) {
 			// select by name and filter by form for performance over form.find("[name=...]")
 			var form = this.currentForm;
-			return jceq(document.getElementsByName(name)).map(function(index, element) {
+			return $(document.getElementsByName(name)).map(function(index, element) {
 				return element.form == form && element.name == name && element  || null;
 			});
 		},
@@ -697,7 +697,7 @@ jceq.extend(jceq.validator, {
 		getLength: function(value, element) {
 			switch( element.nodeName.toLowerCase() ) {
 			case 'select':
-				return jceq("option:selected", element).length;
+				return $("option:selected", element).length;
 			case 'input':
 				if( this.checkable( element) )
 					return this.findByName(element.name).filter(':checked').length;
@@ -716,7 +716,7 @@ jceq.extend(jceq.validator, {
 				return param;
 			},
 			"string": function(param, element) {
-				return !!jceq(param, element.form).length;
+				return !!$(param, element.form).length;
 			},
 			"function": function(param, element) {
 				return param(element);
@@ -724,7 +724,7 @@ jceq.extend(jceq.validator, {
 		},
 
 		optional: function(element) {
-			return !jceq.validator.methods.required.call(this, jceq.trim(element.value), element) && "dependency-mismatch";
+			return !$.validator.methods.required.call(this, $.trim(element.value), element) && "dependency-mismatch";
 		},
 
 		startRequest: function(element) {
@@ -741,16 +741,16 @@ jceq.extend(jceq.validator, {
 				this.pendingRequest = 0;
 			delete this.pending[element.name];
 			if ( valid && this.pendingRequest == 0 && this.formSubmitted && this.form() ) {
-				jceq(this.currentForm).submit();
+				$(this.currentForm).submit();
 				this.formSubmitted = false;
 			} else if (!valid && this.pendingRequest == 0 && this.formSubmitted) {
-				jceq(this.currentForm).triggerHandler("invalid-form", [this]);
+				$(this.currentForm).triggerHandler("invalid-form", [this]);
 				this.formSubmitted = false;
 			}
 		},
 
 		previousValue: function(element) {
-			return jceq.data(element, "previousValue") || jceq.data(element, "previousValue", {
+			return $.data(element, "previousValue") || $.data(element, "previousValue", {
 				old: null,
 				valid: true,
 				message: this.defaultMessage( element, "remote" )
@@ -775,15 +775,15 @@ jceq.extend(jceq.validator, {
 	addClassRules: function(className, rules) {
 		className.constructor == String ?
 			this.classRuleSettings[className] = rules :
-			jceq.extend(this.classRuleSettings, className);
+			$.extend(this.classRuleSettings, className);
 	},
 
 	classRules: function(element) {
 		var rules = {};
-		var classes = jceq(element).attr('class');
-		classes && jceq.each(classes.split(' '), function() {
-			if (this in jceq.validator.classRuleSettings) {
-				jceq.extend(rules, jceq.validator.classRuleSettings[this]);
+		var classes = $(element).attr('class');
+		classes && $.each(classes.split(' '), function() {
+			if (this in $.validator.classRuleSettings) {
+				$.extend(rules, $.validator.classRuleSettings[this]);
 			}
 		});
 		return rules;
@@ -791,19 +791,19 @@ jceq.extend(jceq.validator, {
 
 	attributeRules: function(element) {
 		var rules = {};
-		var jceqelement = jceq(element);
+		var $element = $(element);
 
-		for (var method in jceq.validator.methods) {
+		for (var method in $.validator.methods) {
 			var value;
-			// If .prop exists (jceq >= 1.6), use it to get true/false for required
-			if (method === 'required' && typeof jceq.fn.prop === 'function') {
-				value = jceqelement.prop(method);
+			// If .prop exists (jQuery >= 1.6), use it to get true/false for required
+			if (method === 'required' && typeof $.fn.prop === 'function') {
+				value = $element.prop(method);
 			} else {
-				value = jceqelement.attr(method);
+				value = $element.attr(method);
 			}
 			if (value) {
 				rules[method] = value;
-			} else if (jceqelement[0].getAttribute("type") === method) {
+			} else if ($element[0].getAttribute("type") === method) {
 				rules[method] = true;
 			}
 		}
@@ -817,26 +817,26 @@ jceq.extend(jceq.validator, {
 	},
 
 	metadataRules: function(element) {
-		if (!jceq.metadata) return {};
+		if (!$.metadata) return {};
 
-		var meta = jceq.data(element.form, 'validator').settings.meta;
+		var meta = $.data(element.form, 'validator').settings.meta;
 		return meta ?
-			jceq(element).metadata()[meta] :
-			jceq(element).metadata();
+			$(element).metadata()[meta] :
+			$(element).metadata();
 	},
 
 	staticRules: function(element) {
 		var rules = {};
-		var validator = jceq.data(element.form, 'validator');
+		var validator = $.data(element.form, 'validator');
 		if (validator.settings.rules) {
-			rules = jceq.validator.normalizeRule(validator.settings.rules[element.name]) || {};
+			rules = $.validator.normalizeRule(validator.settings.rules[element.name]) || {};
 		}
 		return rules;
 	},
 
 	normalizeRules: function(rules, element) {
 		// handle dependency check
-		jceq.each(rules, function(prop, val) {
+		$.each(rules, function(prop, val) {
 			// ignore rule when param is explicitly false, eg. required:false
 			if (val === false) {
 				delete rules[prop];
@@ -846,7 +846,7 @@ jceq.extend(jceq.validator, {
 				var keepRule = true;
 				switch (typeof val.depends) {
 					case "string":
-						keepRule = !!jceq(val.depends, element.form).length;
+						keepRule = !!$(val.depends, element.form).length;
 						break;
 					case "function":
 						keepRule = val.depends.call(element, element);
@@ -861,23 +861,23 @@ jceq.extend(jceq.validator, {
 		});
 
 		// evaluate parameters
-		jceq.each(rules, function(rule, parameter) {
-			rules[rule] = jceq.isFunction(parameter) ? parameter(element) : parameter;
+		$.each(rules, function(rule, parameter) {
+			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
 		});
 
 		// clean number parameters
-		jceq.each(['minlength', 'maxlength', 'min', 'max'], function() {
+		$.each(['minlength', 'maxlength', 'min', 'max'], function() {
 			if (rules[this]) {
 				rules[this] = Number(rules[this]);
 			}
 		});
-		jceq.each(['rangelength', 'range'], function() {
+		$.each(['rangelength', 'range'], function() {
 			if (rules[this]) {
 				rules[this] = [Number(rules[this][0]), Number(rules[this][1])];
 			}
 		});
 
-		if (jceq.validator.autoCreateRanges) {
+		if ($.validator.autoCreateRanges) {
 			// auto-create ranges
 			if (rules.min && rules.max) {
 				rules.range = [rules.min, rules.max];
@@ -903,7 +903,7 @@ jceq.extend(jceq.validator, {
 	normalizeRule: function(data) {
 		if( typeof data == "string" ) {
 			var transformed = {};
-			jceq.each(data.split(/\s/), function() {
+			$.each(data.split(/\s/), function() {
 				transformed[this] = true;
 			});
 			data = transformed;
@@ -913,10 +913,10 @@ jceq.extend(jceq.validator, {
 
 	// http://docs.jquery.com/Plugins/Validation/Validator/addMethod
 	addMethod: function(name, method, message) {
-		jceq.validator.methods[name] = method;
-		jceq.validator.messages[name] = message != undefined ? message : jceq.validator.messages[name];
+		$.validator.methods[name] = method;
+		$.validator.messages[name] = message != undefined ? message : $.validator.messages[name];
 		if (method.length < 3) {
-			jceq.validator.addClassRules(name, jceq.validator.normalizeRule(name));
+			$.validator.addClassRules(name, $.validator.normalizeRule(name));
 		}
 	},
 
@@ -930,13 +930,13 @@ jceq.extend(jceq.validator, {
 			switch( element.nodeName.toLowerCase() ) {
 			case 'select':
 				// could be an array for select-multiple or a string, both are fine this way
-				var val = jceq(element).val();
+				var val = $(element).val();
 				return val && val.length > 0;
 			case 'input':
 				if ( this.checkable(element) )
 					return this.getLength(value, element) > 0;
 			default:
-				return jceq.trim(value).length > 0;
+				return $.trim(value).length > 0;
 			}
 		},
 
@@ -965,7 +965,7 @@ jceq.extend(jceq.validator, {
 			this.startRequest(element);
 			var data = {};
 			data[element.name] = value;
-			jceq.ajax(jceq.extend(true, {
+			$.ajax($.extend(true, {
 				url: param,
 				mode: "abort",
 				port: "validate" + element.name,
@@ -983,7 +983,7 @@ jceq.extend(jceq.validator, {
 					} else {
 						var errors = {};
 						var message = response || validator.defaultMessage( element, "remote" );
-						errors[element.name] = previous.message = jceq.isFunction(message) ? message(value) : message;
+						errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
 						validator.showErrors(errors);
 					}
 					previous.valid = valid;
@@ -995,17 +995,17 @@ jceq.extend(jceq.validator, {
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/minlength
 		minlength: function(value, element, param) {
-			return this.optional(element) || this.getLength(jceq.trim(value), element) >= param;
+			return this.optional(element) || this.getLength($.trim(value), element) >= param;
 		},
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
 		maxlength: function(value, element, param) {
-			return this.optional(element) || this.getLength(jceq.trim(value), element) <= param;
+			return this.optional(element) || this.getLength($.trim(value), element) <= param;
 		},
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
 		rangelength: function(value, element, param) {
-			var length = this.getLength(jceq.trim(value), element);
+			var length = this.getLength($.trim(value), element);
 			return this.optional(element) || ( length >= param[0] && length <= param[1] );
 		},
 
@@ -1026,13 +1026,13 @@ jceq.extend(jceq.validator, {
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/email
 		email: function(value, element) {
-		// contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
 			return this.optional(element) || /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(value);
 		},
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/url
 		url: function(value, element) {
-		// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
+			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
 			return this.optional(element) || /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
 		},
 
@@ -1043,7 +1043,7 @@ jceq.extend(jceq.validator, {
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/dateISO
 		dateISO: function(value, element) {
-			return this.optional(element) || /^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(value);
+			return this.optional(element) || /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value);
 		},
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/number
@@ -1087,15 +1087,15 @@ jceq.extend(jceq.validator, {
 		// http://docs.jquery.com/Plugins/Validation/Methods/accept
 		accept: function(value, element, param) {
 			param = typeof param == "string" ? param.replace(/,/g, '|') : "png|jpe?g|gif";
-			return this.optional(element) || value.match(new RegExp(".(" + param + ")jceq", "i"));
+			return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i"));
 		},
 
 		// http://docs.jquery.com/Plugins/Validation/Methods/equalTo
 		equalTo: function(value, element, param) {
 			// bind to the blur event of the target in order to revalidate whenever the target field is updated
 			// TODO find a way to bind the event just once, avoiding the unbind-rebind overhead
-			var target = jceq(param).unbind(".validate-equalTo").bind("blur.validate-equalTo", function() {
-				jceq(element).valid();
+			var target = $(param).unbind(".validate-equalTo").bind("blur.validate-equalTo", function() {
+				$(element).valid();
 			});
 			return value == target.val();
 		}
@@ -1104,19 +1104,19 @@ jceq.extend(jceq.validator, {
 
 });
 
-// deprecated, use jceq.validator.format instead
-jceq.format = jceq.validator.format;
+// deprecated, use $.validator.format instead
+$.format = $.validator.format;
 
-})(jceq);
+})(jQuery);
 
 // ajax mode: abort
-// usage: jceq.ajax({ mode: "abort"[, port: "uniqueport"]});
+// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
 // if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
-;(function(jceq) {
+;(function($) {
 	var pendingRequests = {};
 	// Use a prefilter if available (1.5+)
-	if ( jceq.ajaxPrefilter ) {
-		jceq.ajaxPrefilter(function(settings, _, xhr) {
+	if ( $.ajaxPrefilter ) {
+		$.ajaxPrefilter(function(settings, _, xhr) {
 			var port = settings.port;
 			if (settings.mode == "abort") {
 				if ( pendingRequests[port] ) {
@@ -1127,10 +1127,10 @@ jceq.format = jceq.validator.format;
 		});
 	} else {
 		// Proxy ajax
-		var ajax = jceq.ajax;
-		jceq.ajax = function(settings) {
-			var mode = ( "mode" in settings ? settings : jceq.ajaxSettings ).mode,
-				port = ( "port" in settings ? settings : jceq.ajaxSettings ).port;
+		var ajax = $.ajax;
+		$.ajax = function(settings) {
+			var mode = ( "mode" in settings ? settings : $.ajaxSettings ).mode,
+				port = ( "port" in settings ? settings : $.ajaxSettings ).port;
 			if (mode == "abort") {
 				if ( pendingRequests[port] ) {
 					pendingRequests[port].abort();
@@ -1140,22 +1140,22 @@ jceq.format = jceq.validator.format;
 			return ajax.apply(this, arguments);
 		};
 	}
-})(jceq);
+})(jQuery);
 
 // provides cross-browser focusin and focusout events
 // IE has native support, in other browsers, use event caputuring (neither bubbles)
 
 // provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
-// handler is only called when jceq(event.target).is(delegate), in the scope of the jquery-object for event.target
-;(function(jceq) {
-	// only implement if not provided by jceq core (since 1.4)
-	// TODO verify if jceq 1.4's implementation is compatible with older jceq special-event APIs
-	if (!jceq.event.special.focusin && !jceq.event.special.focusout && document.addEventListener) {
-		jceq.each({
+// handler is only called when $(event.target).is(delegate), in the scope of the jquery-object for event.target
+;(function($) {
+	// only implement if not provided by jQuery core (since 1.4)
+	// TODO verify if jQuery 1.4's implementation is compatible with older jQuery special-event APIs
+	if (!jQuery.event.special.focusin && !jQuery.event.special.focusout && document.addEventListener) {
+		$.each({
 			focus: 'focusin',
 			blur: 'focusout'
 		}, function( original, fix ){
-			jceq.event.special[fix] = {
+			$.event.special[fix] = {
 				setup:function() {
 					this.addEventListener( original, handler, true );
 				},
@@ -1163,26 +1163,26 @@ jceq.format = jceq.validator.format;
 					this.removeEventListener( original, handler, true );
 				},
 				handler: function(e) {
-					arguments[0] = jceq.event.fix(e);
+					arguments[0] = $.event.fix(e);
 					arguments[0].type = fix;
-					return jceq.event.handle.apply(this, arguments);
+					return $.event.handle.apply(this, arguments);
 				}
 			};
 			function handler(e) {
-				e = jceq.event.fix(e);
+				e = $.event.fix(e);
 				e.type = fix;
-				return jceq.event.handle.call(this, e);
+				return $.event.handle.call(this, e);
 			}
 		});
 	};
-	jceq.extend(jceq.fn, {
+	$.extend($.fn, {
 		validateDelegate: function(delegate, type, handler) {
 			return this.bind(type, function(event) {
-				var target = jceq(event.target);
+				var target = $(event.target);
 				if (target.is(delegate)) {
 					return handler.apply(target, arguments);
 				}
 			});
 		}
 	});
-})(jceq);
+})(jQuery);

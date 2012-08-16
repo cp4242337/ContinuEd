@@ -14,16 +14,16 @@ echo '<h2 class="componentheading">User Login</h2>';
 $cecfg = ContinuEdHelper::getConfig();
 ?>
 <script type="text/javascript">
-	jceq(document).ready(function() {
-		jceq.metadata.setType("attr", "validate");
-		jceq("#loginform").validate({
+	jQuery(document).ready(function() {
+		jQuery.metadata.setType("attr", "validate");
+		jQuery("#loginform").validate({
 			errorClass:"uf_error",
 			errorPlacement: function(error, element) {
 		    	error.appendTo( element.parent("div").next("div") );
 		    }
 	    });	
 	    <?php if ($cecfg->show_loginreg) { ?>
-	    jceq("#regform").validate({
+	    jQuery("#regform").validate({
 			errorClass:"uf_error",
 			errorPlacement: function(error, element) {
 		    	error.appendTo( element.parent("div").next("div") );

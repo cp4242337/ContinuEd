@@ -32,6 +32,7 @@ if ($type == 'logout') {
 	
 	echo '<br /><a href="'.JRoute::_('index.php?option=com_continued&view=user&layout=profile').'" >'.JText::_('MOD_CELOGINH_PROFILE').'</a><br />';
 	echo '<a href="'.JRoute::_('index.php?option=com_continued&view=user&layout=cerecords').'">'.JText::_('MOD_CELOGINH_CERECORDS').'</a>';
+	if ($cecfg->purchase) echo '<br /><a href="'.JRoute::_('index.php?option=com_continued&view=user&layout=purchases').'">'.JText::_('MOD_CELOGIN_PURCHASES').'</a>';
 
 	
 	echo '</form>';
