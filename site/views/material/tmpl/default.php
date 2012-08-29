@@ -3,10 +3,6 @@
 $cecfg = ContinuEdHelper::getConfig();
 defined('_JEXEC') or die('Restricted access');
 echo '<h2 class="componentheading">'.$this->mtext->course_name.'</h2>';
-echo '<script type="text/javascript">';
-echo 'var numtohave = '.$this->numreq.';';
-echo 'var numans=0;';
-echo '</script>';
 //Gve error message if they tryed to jummop over material staright to the eval
 if ($this->jumpedover) echo '<div class="continued-error">Please complete all material before proceeding</div>';
 //Show Material
@@ -169,107 +165,68 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 			<div id="qabox-bot"></div>
 		</div>
 		<?php 
-	}
-	echo '<form name="continued_material" id="continued_material" method="post" action="" onsubmit="return isDone();">';
-	//set up hidden variable for inter required question status
-	if ($this->mtext->course_hasinter) {
-		foreach ($this->reqids as $r) {
-			echo '<input type="hidden" name="req'.$r.'d" value="';
-			if (in_array($r,$this->reqans)) echo '1'; 
-			else echo '0';
-			echo '">';
-		}
-	}
+	} ?> 
+	<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery.metadata.setType("attr", "validate");
+		jQuery("#continued_material").validate({
+			ignore: [],
+			errorPlacement: function(error, element) {
+				error.appendTo("#continued-mat-verify-error");
+			},
+			highlight: function(element, errorClass, validClass) {
+				jQuery("#continued-mat-verify").addClass("continued-verify-errorstate");
+			},
+			unhighlight: function(element, errorClass, validClass){
+				jQuery("#continued-mat-verify").removeClass("continued-verify-errorstate");
+			}
+				
+		});
 	
+	});
+	
+	
+	</script><?php 
+	echo '<form name="continued_material" id="continued_material" method="post" action="">';
 	//continue button form
 	?>
 	<input type="hidden" name="token" value="<?php echo $this->token; ?>">
-	<div align="center">
-	<table id="agreet" style="border: medium none; padding: 5px;" border="0"
-		cellpadding="0" cellspacing="0" width="500" align="center">
-		<tbody>
-			<tr>
-				<td colspan="2" align="center">
-				<div id="cbError"
-					style="color: rgb(136, 0, 0); font-size: 10pt; font-weight: bold; display: none; position: relative;">Please complete the material above before continuing<br>
-				<br>
-				</div>
-				</td>
+	<input type="hidden" name="courseid" value="<?php echo $this->mtext->course_id; ?>" validate="{remote: { url: '<?php echo JURI::base( true ); ?>/components/com_continued/helpers/chkmat.php', type: 'post'}, messages:{remote:'Please complete the material above before continuing'}}">
 	
-			</tr>
-			<tr>
-				<td colspan="2" align="center"><br>
-	
-				<?php
+<div id="continued-mat-verify">
+	<div id="continued-mat-verify-error"></div>	
+	<div id="continued-mat-verify-hidden">
+		<div style="width:5%;display:block;float:left;text-align:right;"><?php
 				if ($this->mtext->course_haseval) {
 					//continue to eval
 					echo '<input type="hidden" name="gte" value="eval">';
-					echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="submit"  class="cebutton">';
 				} else if ($this->mtext->course_haspre) {
 					//continue to check page if no eval and pretest
 					echo '<input type="hidden" name="gte" value="eval">';
-					echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="submit"  class="cebutton">';
 				} else {
 					//return to menu, no eval, no pretest, or done/exp/nonce
 					echo '<input type="hidden" name="gte" value="return">';
+				}
+				?></div>
+		<div style="width:5%;display:block;float:left;"></div>
+		<div style="clear:both"></div>
+	</div>
+	<div id="continued-mat-verify-submit"><?php
+				if ($this->mtext->course_haseval) {
+					//continue to eval
+					echo '<input name="Submit" id="Continue to Evaluation" value="Continue to Assessment"  type="submit"  class="cebutton">';
+				} else if ($this->mtext->course_haspre) {
+					//continue to check page if no eval and pretest
+					echo '<input name="Submit" id="Continue to Evaluation" value="Continue"  type="submit"  class="cebutton">';
+				} else {
+					//return to menu, no eval, no pretest, or done/exp/nonce
 					echo '<input name="Submit" id="Return" value="Return"  type="submit" class="cebutton">';
 				}
-				?></td>
-			</tr>
-	
-		</tbody>
-	</table>
-	<br>
-	</div>
+				?></div>
+</div>
+				
 	</form>
-	<script type="text/javascript">  
-				function getCheckedValue(radioObj) {
-					if(!radioObj)
-						return "";
-					var radioLength = radioObj.length;
-					if(radioLength == undefined)
-						if(radioObj.checked)
-							return radioObj.value;
-						else
-							return "";
-					for(var i = 0; i < radioLength; i++) {
-						if(radioObj[i].checked) {
-							return radioObj[i].value;
-						}
-					}
-					return "";
-				}
-				
-				function isNCheckedR(elem, helperMsg,cnt,msgl){
-					var isit = false;
-					for (var i=0; i<cnt; i++) {
-						if(elem[i].checked){ isit = true; }
-					}
-					if (isit == false) {
-						document.getElementById(msgl).innerHTML = helperMsg;
-						elem[0].focus(); // set the focus to this input
-						return true;
-					}
-					document.getElementById(msgl).innerHTML = '';
-						return false;
-				}
-				function isDone() {
-					var lyr = document.getElementById('cbError');
-					var tbl = document.getElementById('agreet');
-					if (numans>=numtohave) {
-						lyr.style.display='none'; 
-						tbl.style.border='none';
-						return true;
-					} else { 
-						lyr.style.display='inline'; 
-						tbl.style.border='thick #880000 solid';
-						return false; 
-					}
-				}
-				
 	
-	 
-			</script> 
 	<?php 
 } 
 ?>

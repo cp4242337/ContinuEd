@@ -33,39 +33,42 @@ if ($this->expired) { ?>
 } else {
 	?>
 
-<form name="agreement" method="post" action=""	onsubmit="return isChecked(this.fmagree);">
-	<input type="hidden" name="token" value="<?php echo $this->token; ?>">
-	<div align="center">
-		<table id="continued-fm-agree" border="0" cellpadding="0" cellspacing="0" width="500" align="center">
-			<tbody>
-				<tr><td colspan="2" align="center"><div id="continued-fm-error"><?php echo $config->FM_AGREE_ERROR; ?><br /><br /></div></td></tr>
-				<tr><td align="left" valign="top" width="30"><input name="fmagree" id="fmagree" value="true" type="checkbox"></td>
-				<td valign="top" width="470" align="left"><?php echo $config->FM_TEXT; ?></td></tr>
-				<tr><td colspan="2" align="center"><br><input name="Submit" id="Continue" value="Continue" type="submit" class="cebutton"></td></tr>
-			</tbody>
-		</table>
-	</div>
-</form>
-
+	
+	
 <script type="text/javascript">
-<!--
-function isChecked(elem) {
-	var lyr = document.getElementById('continued-fm-error');
-	var tbl = document.getElementById('continued-fm-agree');
-	if (elem.checked) {
-		lyr.style.display='none'; 
-		tbl.style.border='none';
-		return true;
-	} else { 
-		lyr.style.display='inline'; 
-		tbl.style.border='thick #880000 solid';
-		elem.focus();
-		return false; 
-	}
-}
+	jQuery(document).ready(function() {
+		jQuery.metadata.setType("attr", "validate");
+		jQuery("#verify").validate({
+			errorPlacement: function(error, element) {
+		    	error.appendTo( element.parent("div").parent("div").prev("div") );
+		    },
+		    highlight: function(element, errorClass, validClass) {
+		    	jQuery("#continued-fm-verify").addClass("continued-verify-errorstate");
+		    },
+		    unhighlight: function(element, errorClass, validClass){
+		        	jQuery("#continued-fm-verify").removeClass("continued-verify-errorstate");
+		    }
+			
+	    });
 
-//-->
+	});
+
+
 </script>
+
+<form name="verify" id="verify" method="post" action="">
+<div id="continued-fm-verify">
+	<div id="continued-fm-verify-error"></div>	
+	<div id="continued-fm-verify-checkbox">
+		<div style="width:5%;display:block;float:left;text-align:right;"><input name="fmagree" id="fmagree" value="true" type="checkbox" validate="{required:true, messages:{required:'<?php echo $config->FM_AGREE_ERROR; ?>'}}"></div>
+		<div style="width:90%;display:block;float:left;"><label for="fmagree"><?php echo $config->FM_TEXT; ?></label></div>
+		<div style="width:5%;display:block;float:left;"></div>
+		<div style="clear:both"></div>
+	</div>
+	<div id="continued-fm-verify-submit"><input name="Submit" id="Continue" value="Continue" type="submit" class="cebutton"></div>
+</div>
+</form>	
+	
 
 <?php } } else { 
 	if ($username == 'Guest') echo '<p align="center"><span style="color:#800000;font-weight:bolder;">'.$config->LOGIN_MSG.'</span></p>';

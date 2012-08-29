@@ -14,7 +14,7 @@ $user = &JFactory::getUser();
 
 $courseid = JRequest::getVar('course');
 $qid  = JRequest::getVar('question');
-$qans  = JRequest::getVar('qans');
+$qans  = JRequest::getVar('q'.$qid);
 $token  = JRequest::getVar('token');
 $userid = $user->id;
 $session =& JFactory::getSession();
@@ -25,7 +25,7 @@ $queryd = 'DELETE FROM #__ce_evalans WHERE question= '.$qid.' && userid="'.$user
 $db->setQuery($queryd);
 $db->query();
 $qc = 'INSERT INTO #__ce_evalans (userid,course,question,part,answer,sessionid,tokenid,ans_area) ';
-$qc .= 'VALUES ('.$userid.','.$courseid.','.$qid.',1,"'.$qans.'","'.$session->getId().'","'.$tokenid.'","inter")';
+$qc .= 'VALUES ('.$userid.','.$courseid.','.$qid.',1,"'.$qans.'","'.$session->getId().'","'.$token.'","inter")';
 $db->setQuery( $qc );
 $db->query();
 
@@ -86,6 +86,7 @@ case 'multi':
 	
 }
 echo '</div>';
+echo '<div style="clear:both"></div>';
 if ($expl) {
 	echo '<div class="continued-ceq-qexpl">'.$expl.'</div>';
 }

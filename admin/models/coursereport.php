@@ -60,7 +60,7 @@ class ContinuEdModelCourseReport extends JModel
 		//$usergroup = $this->getState('usergroup');
 		$stnum = JRequest::getVar('stnum');
 		if ($cid) $questions = $this->getQuestions($cid,$this->area);
-		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,c.course_cpeprognum';
+		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,c.course_cpeprognum,c.course_cat';
 		$q .= ' FROM #__ce_records as r';
 		$q .= ' STRAIGHT_JOIN #__ce_courses as c ON r.rec_course = c.course_id';
 		//if ($usergroup) {
@@ -126,7 +126,7 @@ class ContinuEdModelCourseReport extends JModel
 		$data = $db->loadObjectList();
 		$catids = Array();
 		foreach ($data as $d) {
-			$catids[$d->usr_user]=$d->usr_data;
+			$catids[$d->cat_id]=$d->cat_name;
 		}
 		return $catids;
 	}

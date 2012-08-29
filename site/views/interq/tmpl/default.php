@@ -72,7 +72,7 @@ $output .= '				var ajaxDisplay = document.getElementById("qi_'.$qid.'");'."\n";
 $output .= '				ajaxDisplay.innerHTML = ajaxRequest.responseText;'."\n";
 $output .= '			}'."\n";
 $output .= '		}'."\n";
-$output .= '		var queryString = "?" + "course='.$qdata->q_course.'&question='.$qid.'&qans=" + getCheckedValue(ev.q'.$qid.');'."\n";
+$output .= '		var queryString = "?" + "course='.$qdata->q_course.'&question='.$qid.'&q'.$qid.'=" + getCheckedValue(ev.q'.$qid.');'."\n";
 $output .= '		ajaxRequest.open("GET", "components/com_continued/interq.php" + queryString, true);'."\n";
 $output .= '		ajaxRequest.send(null);'."\n"; 
 $output .= '	}'."\n";

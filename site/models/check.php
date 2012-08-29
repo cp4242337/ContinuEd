@@ -22,7 +22,7 @@ class ContinuEdModelCheck extends JModel
 		$sessionid = $sewn->getId();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query  = 'SELECT q.*,q.q_id as ques_id,a.*,o.opt_text,o.opt_expl,o.opt_correct ';
+		$query  = 'SELECT q.*,q.q_id as ques_id,a.*,o.opt_text,o.opt_expl,o.opt_correct,p.* ';
 		$query .= 'FROM #__ce_questions as q ';
 		$query .= 'LEFT JOIN #__ce_evalans as a ON q.q_id = a.question ';
 		$query .= 'LEFT JOIN #__ce_questions_opts AS o ON a.answer = o.opt_id ';
