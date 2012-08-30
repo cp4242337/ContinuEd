@@ -72,7 +72,6 @@ class plgContinuedCeQu extends JPlugin
 		$output .= '			error.appendTo("#q'.$qdata->q_id.'_msg");'."\n";
 		$output .= '		},'."\n";
 		$output .= '		submitHandler: function(form) {'."\n";
-		$output .= ' alert(jQuery("#qf_'.$qid.'").serialize());';
 		$output .= '			jQuery.post( "'.JURI::base( true ).'/components/com_continued/interq.php", jQuery("#qf_'.$qid.'").serialize(),function( data ) {'."\n";
 		$output .= '       			jQuery( "#qi_'.$qid.'" ).empty().append( data );'."\n";
 		$output .= '   			});'."\n";
@@ -181,9 +180,6 @@ class plgContinuedCeQu extends JPlugin
 		if ($expl) {
 			$output .=  '<div class="continued-ceq-qexpl">'.$expl.'</div>';
 		}
-		$output .= '<script type="text/javascript">'."\n";
-		$output .= '	numans++;'."\n";
-		$output .= '</script>'."\n";
 		$output .= '<div style="clear:both"></div>';
 		return $output;
 	}

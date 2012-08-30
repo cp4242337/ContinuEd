@@ -27,7 +27,7 @@ class ContinuEdModelCheck extends JModel
 		$query .= 'LEFT JOIN #__ce_evalans as a ON q.q_id = a.question ';
 		$query .= 'LEFT JOIN #__ce_questions_opts AS o ON a.answer = o.opt_id ';
 		$query .= 'LEFT JOIN #__ce_parts AS p ON p.part_part = q.q_part AND p.part_course = '.$courseid.' ';
-		$query .= 'WHERE q.q_type != "message" && q.q_area="'.$area.'" && q.q_course = '.$courseid.' && a.userid="'.$userid.'" && a.tokenid = "'.$token.'" ';
+		$query .= 'WHERE q.q_type != "message" && q.q_area="'.$area.'" && q.q_course = '.$courseid.' && a.userid="'.$userid.'" && (a.tokenid = "'.$token.'" || a.tokenid = "interq") ';
 		$query .= 'GROUP BY q.q_id ';
 		$query .= 'ORDER BY q.q_part ASC , q.ordering ASC ';
 		$db->setQuery( $query ); 

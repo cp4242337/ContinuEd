@@ -48,7 +48,7 @@ if ($this->catalog) {
 			case "dispute": echo "Dispute"; break;
 		}
 		echo '</td><td>';
-		echo $course->course_purchaseprice;
+		if ($course->purchase_type == "paypal" || $course->purchase_type=="google") echo $course->course_purchaseprice;
 		echo '</td></tr>';
 	}
 	echo '</tbody></table>';

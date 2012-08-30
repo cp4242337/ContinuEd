@@ -16,7 +16,7 @@ if ($this->haspre) { foreach ($this->preqa as $preqa) {
 		echo '<table align="center" width="100%" class="zebra"><thead>';
 		$cpart = $preqa->q_part;
 		//echo '<tr><td><hr size="1" /></td></tr>';
-		echo '<tr><th width="20">&nbsp;</th><th align="left"><b>Posttest Part '.$cpart;
+		echo '<tr><th width="20">&nbsp;</th><th align="left"><b>Pretest Part '.$cpart;
 		if ($preqa->part_name) echo ' - '.$preqa->part_name;
 		echo '</b>';
 		echo '</th></tr></thead>';

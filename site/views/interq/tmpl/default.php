@@ -8,6 +8,7 @@ $courseid = JRequest::getVar('course');
 $qid  = JRequest::getVar('question');
 $userid = $user->id;
 $session =& JFactory::getSession();
+$token = "interq";
 global $cecfg;
 
 //Get question
@@ -24,107 +25,111 @@ $aquery .= ' && question="'.$qid.'" ORDER BY anstime DESC';
 $db->setQuery($aquery); 
 $havans = $db->loadObject();
 
-$output .= '<div id="qi_'.$qid.'" class="continued_mat_q">';
-$output .= '<p><form name="qf_'.$qid.'">'."\n";
-$output .= '<b>'.$qdata->q_text.'</b><br /><br />'."\n";
-$output .= '<div id="q'.$qdata->q_id.'_msg" class="error_msg"></div>';
-switch ($qdata->q_type) {
-	case 'multi':
-		$query  = 'SELECT * FROM #__ce_questions_opts ';
-		$query .= 'WHERE opt_question = '.$qid.' ORDER BY ordering ASC';
-		$db->setQuery( $query );
-		$qopts = $db->loadAssocList();
-		foreach ($qopts as $opts) {
-			$numans++;
-			$output .= ' <label><input type="radio" name="q'.$qid.'" value="'.$opts['opt_id'].'" id="q'.$qid.'"';
-			if ($havans->answer==$opts['opt_id']) $output.=' checked="checked"';
-			$output .= '> '.$opts['opt_text'].'</label><br>'."\n";
+if (!$havans) {
+	$output .= '<div id="qi_'.$qid.'" class="continued_mat_q">';
+	$output .= '<script type="text/javascript">'."\n";
+	$output .= 'jQuery(document).ready(function() {'."\n";
+	$output .= '	jQuery.metadata.setType("attr", "validate");'."\n";
+	$output .= '	jQuery("#qf_'.$qid.'").validate({'."\n";
+	$output .= '		errorPlacement: function(error, element) {'."\n";
+	$output .= '			error.appendTo("#q'.$qdata->q_id.'_msg");'."\n";
+	$output .= '		},'."\n";
+	$output .= '		submitHandler: function(form) {'."\n";
+	$output .= '			jQuery.post( "'.JURI::base( true ).'/components/com_continued/interq.php", jQuery("#qf_'.$qid.'").serialize(),function( data ) {'."\n";
+	$output .= '       			jQuery( "#qi_'.$qid.'" ).empty().append( data );'."\n";
+	$output .= '   			});'."\n";
+	$output .= '		}'."\n";
+	$output .= '	});'."\n";
+	$output .= '});'."\n";
+	$output .= '</script>'."\n";
+	$output .= '<p><form name="qf_'.$qid.'" id="qf_'.$qid.'" action="'.JURI::base( true ).'/components/com_continued/interq.php" method="post">'."\n";
+	$output .= '<b>'.$qdata->q_text.'</b><br /><br />'."\n";
+	$output .= '<div id="q'.$qdata->q_id.'_msg" class="error_msg"></div>';
+	switch ($qdata->q_type) {
+		case 'multi':
+			$query  = 'SELECT * FROM #__ce_questions_opts ';
+			$query .= 'WHERE opt_question = '.$qid.' ORDER BY ordering ASC';
+			$db->setQuery( $query );
+			$qopts = $db->loadAssocList();
+			$first = true;
+			foreach ($qopts as $opts) {
+				$numans++;
+				$output .= ' <label><input type="radio" name="q'.$qid.'" value="'.$opts['opt_id'].'" id="q'.$qid.'"';
+				if ($qdata->q_req && $first) {
+					$output .= ' validate="{required:true, messages:{required:\'This Field is required\'}}"'; $first=false;
+				}
+				$output .= '> '.$opts['opt_text'].'</label><br>'."\n";
+			}
+			break;
 		}
-		break;
+	if ($user->id) {
+		$output .= '<input type="submit" id="qf'.$qid.'sub" name="qf'.$qid.'sub" value="Submit" class="cebutton">';
+	} else {
+		$output .= '<br /><span style="color:#800000"><b>Please log in to answer</b></span>';
 	}
-if ($user->id) {
-	$output .= '<br /><div id="sb_'.$qdata->q_id.'"><a href="javascript:CEQ_'.$qid.'()" id="qf'.$qid.'sub" class="cebutton">';
-	$output .= 'Submit</a></div>';
+	$output .= '<input type="hidden" name="token" value="'.$token.'">';
+	$output .= '<input type="hidden" name="course" value="'.$qdata->q_course.'">';
+	$output .= '<input type="hidden" name="question" value="'.$qid.'">';
+	$output .= '<br></form></p></div>'."\n";
 } else {
-	$output .= '<br /><span style="color:#800000"><b>Please log in to answer</b></span>';
+	$anscor=false;
+	$output .=  '<div class="continued-ceq-question">';
+	$output .=  '<div class="continued-ceq-question-text">'.$qdata->q_text.'</div>';
+	switch ($qdata->q_type) {
+		case 'multi':
+			$qnum = 'SELECT count(question) FROM #__ce_evalans WHERE question = '.$qid.' GROUP BY question';
+			$db->setQuery( $qnum );
+			$qnums = $db->loadAssoc();
+			$numr=$qnums['count(question)'];
+			$query  = 'SELECT o.* FROM #__ce_questions_opts as o ';
+			$query .= 'WHERE o.opt_question = '.$qid.' ORDER BY ordering ASC';
+			$db->setQuery( $query );
+			$qopts = $db->loadObjectList();
+			$tph=0;
+			foreach ($qopts as &$o) {
+				$qa = 'SELECT count(*) FROM #__ce_evalans WHERE question = '.$qid.' && answer = '.$o->opt_id.' GROUP BY answer';
+				$db->setQuery($qa);
+				$o->anscount = $db->loadResult();
+				if ($o->anscount == "") $o->anscount = 0;
+				$tph = $tph + $o->prehits;
+			}
+			$barc=1; $gper=0; $ansper=0; $gperid = 0;
+			foreach ($qopts as $opts) {
+				if ($numr != 0) $per = ($opts->anscount+$opts->prehits)/($numr+$tph); else $per=1;
+				if ($qans == $opts->id && $opts->correct) {
+					$anscor=true;
+				}
+				$output .=  '<div class="continued-ceq-opt">';
+				$output .=  '<div class="continued-ceq-opt-text">';
+				if ($opts->opt_correct) $output .=  '<div class="continued-ceq-opt-correct"><b>'.$opts->opt_text.'</b></div>';
+				else $output .=  $opts->opt_text;
+				$output .=  '</div>';
+				$output .=  '<div class="continued-ceq-opt-count">';
+				$output .=  ($opts->anscount+$opts->prehits);
+				$output .=  '</div>';
+				$output .=  '<div class="continued-ceq-opt-bar-box"><div class="continued-ceq-opt-bar-bar" style="width:'.($per*100).'%"></div></div>';
+				$output .=  '</div>';
+	
+	
+				$barc = $barc + 1;
+				if ($barc==5) $barc=1;
+				if ($gper < $per) {
+					$gper = $per; $gperid = $opts->id;
+				}
+				if ($qans==$opts->opt_id) {
+					if ($qdata->q_expl) $expl=$qdata->q_expl;
+					else $expl=$opts->opt_expl;
+				}
+			}
+				
+			break;
+				
+	}
+	$output .=  '</div>';
+	if ($expl) {
+		$output .=  '<div class="continued-ceq-qexpl">'.$expl.'</div>';
+	}
+	$output .= '<div style="clear:both"></div>';
 }
-$output .= '<br></form></p></div>'."\n";
-$output .= '<script type="text/javascript">'."\n";
-$output .= 'function CEQ_'.$qid.'(){'."\n";
-$output .= '	var ev = document.qf_'.$qid.';'."\n";
-$output .= "	erMsg = '<span style=\"color:#800000\"><b>Answer is Required</b></span>';\n";
-$output .= '	errs = false;';
-$output .= '	if(isNCheckedR(ev.q'.$qid.', erMsg,'.$numans.',"q'.$qid.'"+"_msg")) { errs=true; }'."\n";
-$output .= '	if (!errs) {'."\n";
-$output .= '		document.getElementById("sb_'.$qid.'").innerHTML="Loading results";';
-$output .= '		var ajaxRequest; '."\n";
-$output .= '		try{ajaxRequest = new XMLHttpRequest();'."\n";
-$output .= '		} catch (e){';
-$output .= '			try{ ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");'."\n";
-$output .= '			} catch (e) {'."\n";
-$output .= '				try{ ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP"); } '."\n";
-$output .= '				catch (e){ alert("Your browser broke!"); return false;}'."\n";
-$output .= '			}'."\n";
-$output .= '		}'."\n";
-$output .= '		ajaxRequest.onreadystatechange = function(){'."\n";
-$output .= '			if(ajaxRequest.readyState == 4){'."\n";
-$output .= '				var ajaxDisplay = document.getElementById("qi_'.$qid.'");'."\n";
-$output .= '				ajaxDisplay.innerHTML = ajaxRequest.responseText;'."\n";
-$output .= '			}'."\n";
-$output .= '		}'."\n";
-$output .= '		var queryString = "?" + "course='.$qdata->q_course.'&question='.$qid.'&q'.$qid.'=" + getCheckedValue(ev.q'.$qid.');'."\n";
-$output .= '		ajaxRequest.open("GET", "components/com_continued/interq.php" + queryString, true);'."\n";
-$output .= '		ajaxRequest.send(null);'."\n"; 
-$output .= '	}'."\n";
-$output .= '}'."\n";
-$output .= '</script>'."\n";
 echo $output;
 ?>
-<script type="text/javascript">  
-			function getCheckedValue(radioObj) {
-				if(!radioObj)
-					return "";
-				var radioLength = radioObj.length;
-				if(radioLength == undefined)
-					if(radioObj.checked)
-						return radioObj.value;
-					else
-						return "";
-				for(var i = 0; i < radioLength; i++) {
-					if(radioObj[i].checked) {
-						return radioObj[i].value;
-					}
-				}
-				return "";
-			}
-			
-			function isNCheckedR(elem, helperMsg,cnt,msgl){
-				var isit = false;
-				for (var i=0; i<cnt; i++) {
-					if(elem[i].checked){ isit = true; }
-				}
-				if (isit == false) {
-					document.getElementById(msgl).innerHTML = helperMsg;
-					elem[0].focus(); // set the focus to this input
-					return true;
-				}
-				document.getElementById(msgl).innerHTML = '';
-					return false;
-			}
-			function isDone() {
-				var lyr = document.getElementById('cbError');
-				var tbl = document.getElementById('agreet');
-				if (numans>=numtohave) {
-					lyr.style.display='none'; 
-					tbl.style.border='none';
-					return true;
-				} else { 
-					lyr.style.display='inline'; 
-					tbl.style.border='thick #880000 solid';
-					return false; 
-				}
-			}
-			
-
- 
-		</script> 

@@ -22,15 +22,15 @@ if (!$user->id) {
 		echo '</td>';
 	}
 	if ($config->redemption) {
-		echo '<td align="center">';
+		echo '<td align="center"><div id="continued-purchase-code">';
 		echo '<form action="" method="post" name="redeemcodecheckout" id="redeemcodecheckout">';
-		echo '<div>';
-		echo '<input type="text" name="redeemcode" class="field_purchase required" /><br />';
+		echo '<div id="continued-purchase-code-error"></div>';
+		echo '<input type="text" name="redeemcode" class="field_purchase" validate="{required:true, messages:{required:\'Please enter a code to redeem\'}}" /><br />';
 		echo '<input type="submit" name="submit" value="Redeem Code" class="cebutton" />';
 		echo '<input type="hidden" name="layout" value="redeem" />';
 		echo $formtoken;
 		echo '</form>';
-		echo '</td>';
+		echo '</div></td>';
 	}
 	echo '</tr></table>';
 }
@@ -38,8 +38,17 @@ if (!$user->id) {
 ?>
 <script type="text/javascript">
 	jQuery(document).ready(function() {
+		jQuery.metadata.setType("attr", "validate");
 		jQuery("#redeemcodecheckout").validate({
-			errorClass:"uf_error"
+			errorPlacement: function(error, element) {
+			   	error.appendTo("#continued-purchase-code-error");
+			},
+			highlight: function(element, errorClass, validClass) {
+				jQuery("#continued-purchase-code").addClass("continued-verify-errorstate");
+			},
+			unhighlight: function(element, errorClass, validClass){
+			   	jQuery("#continued-purchase-code").removeClass("continued-verify-errorstate");
+			}
 	    });	
 	});
 </script>

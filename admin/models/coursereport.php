@@ -57,20 +57,14 @@ class ContinuEdModelCourseReport extends JModel
 		$type = $this->getState('type');
 		$cid = $this->getState('course');
 		$cat = $this->getState('cat');
-		//$usergroup = $this->getState('usergroup');
 		$stnum = JRequest::getVar('stnum');
 		if ($cid) $questions = $this->getQuestions($cid,$this->area);
 		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,c.course_cpeprognum,c.course_cat';
 		$q .= ' FROM #__ce_records as r';
 		$q .= ' STRAIGHT_JOIN #__ce_courses as c ON r.rec_course = c.course_id';
-		//if ($usergroup) {
-		//	$q .= ' LEFT JOIN #__ce_usergroup as g ON r.rec_user = g.userg_user';
-		//	$q .= ' LEFT JOIN #__ce_ugroups as ug ON g.userg_group = ug.ug_id';
-		//}
 		$q .= ' WHERE date(r.rec_start) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
 		if ($cid) $q .= ' && r.rec_course = '.$cid.' ';
 		else if ($cat) $q .= ' && c.course_cat = '.$cat.' '; 
-		//if ($usergroup) $q .= ' && ug.ug_id = '.$usergroup.' '; 
 		if ($pf) $q .= ' && r.rec_pass = "'.$pf.'" ';
 		if ($type) $q .= ' && r.rec_type = "'.$type.'" ';
 		$q .= ' ORDER BY r.rec_start DESC'; 
@@ -79,7 +73,6 @@ class ContinuEdModelCourseReport extends JModel
 	
 	function getData($csv=false)
 	{
-		// Lets load the data if it doesn't already exist
 		$cid = $this->getState('course');
 		if (empty( $this->_data ))
 		{
@@ -196,7 +189,7 @@ class ContinuEdModelCourseReport extends JModel
 		foreach ($records as $r) {
 			$q2  = 'SELECT a.* FROM #__ce_evalans as a ';//q.*,q.q_id,
 			//$q2 .= 'LEFT JOIN #__ce_questions as q ON q.q_id=a.question ';
-			$q2 .= 'WHERE a.tokenid = "'.$r->rec_token.'" && a.userid = "'.$r->rec_user.'" && a.course = "'.$cid.'" ';
+			$q2 .= 'WHERE (a.tokenid = "'.$r->rec_token.'" || a.tokenid = "interq") && a.userid = "'.$r->rec_user.'" && a.course = "'.$cid.'" ';
 			$q2 .= 'GROUP BY a.question ';
 			// .= 'GROUP BY q.q_id ';
 			//$q2 .= 'ORDER BY q.q_part, q.ordering';
