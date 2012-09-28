@@ -92,6 +92,7 @@ class ContinuEdModelMaterial extends JModel
 		$cecfg = ContinuEdHelper::getConfig();
 		$q  = 'SELECT * FROM #__ce_material ';
 		$q .= 'WHERE published = 1 && mat_course = '.$cid;
+		$q .= ' ORDER BY ordering';
 		$db->setQuery( $q );
 		$matpages = $db->loadObjectList();
 		

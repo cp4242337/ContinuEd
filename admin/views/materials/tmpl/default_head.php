@@ -26,7 +26,7 @@ $saveOrder	= $listOrder == 'm.ordering';
 	</th>	
 	<th width="100">
 		<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'm.ordering', $listDirn, $listOrder); ?>
-		<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'questions.saveorder'); ?>
+		<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'materials.saveorder'); ?>
 	</th>
 	<th width="75">
 		<?php echo JText::_( 'COM_CONTINUED_MATERIAL_HEADING_TYPE' ); ?>

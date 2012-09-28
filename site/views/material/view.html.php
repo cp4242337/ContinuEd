@@ -93,7 +93,7 @@ class ContinuEdViewMaterial extends JView
 		}
 		
 		//Logged in, Token exists, had done appropriate steps
-		if ($user->id && $token && $viewed) {
+		if ($token && $viewed) {
 			//Valid Course, Not done with material, course has material, cannot go to eval
 			if ($courseid && !$gotoeval  && $hasmat) {
 				//Run plugin on text data

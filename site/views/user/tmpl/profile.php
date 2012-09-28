@@ -5,6 +5,7 @@ $cecfg = ContinuEdHelper::getConfig();
 	?>
 <h2 class="componentheading">User Profile</h2>
 <?php 
+echo $cecfg->PROFILE_PAGE_CONTENT;
 echo '<p><a href='.JRoute::_("index.php?option=com_continued&view=user&layout=proedit").'" class="cebutton">';
 echo 'Edit Profile</a>';
 //echo '<a href='.JRoute::_("index.php?option=com_continued&view=login&layout=logout").'">';

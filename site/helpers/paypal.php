@@ -84,7 +84,7 @@ class PayPalAPI {
 			//Confirm Email
 			$cmsg  = '<html><head></head><body><table width="662" cellspacing="0" border="0" cellpadding="0" style="border: 1px solid black;">';
 			$cmsg .= '<tr><td style="font-family:Arial, Helvetica, sans-serif; font-size:12px;padding:10px;"><br>';
-			$cmsg .= 'Dear '.$user->name.':<br><br>We are pleased to confirm your of $'.$paymentAmount.' USD for <strong>'.$cinfo->course_name.'</strong><br><br>';
+			$cmsg .= 'Dear '.$user->name.':<br><br>We are pleased to confirm your purchase of $'.$paymentAmount.' USD for <strong>'.$cinfo->course_name.'</strong><br><br>';
 			$cmsg .= 'Thank You';
 			$cmsg .= '</td></tr></table></body></html>';
 			$mail = &JFactory::getMailer();
@@ -161,6 +161,7 @@ class PayPalAPI {
 		$currencyCodeType="USD";
 		$paymentType="Sale";
 		$L_NAME0 = $cinfo->course_name;
+		$L_DESC0 = $cinfo->course_desc;
 		$L_AMT0 = $cinfo->course_purchaseprice;
 		$L_QTY0 = 1;
 		
@@ -173,7 +174,7 @@ class PayPalAPI {
 		
 		$nvpstr="";
 		$nvpstr  = "&NOSHIPPING=1&ALLOWNOTE=0&INVNUM=$ivn";
-		$nvpstr .= "&L_NAME0=".$L_NAME0."&L_DESC0=Course Reg&L_AMT0=".$L_AMT0."&L_QTY0=".$L_QTY0;
+		$nvpstr .= "&L_NAME0=".$L_NAME0."&L_DESC0=Course Purchase&L_AMT0=".$L_AMT0."&L_QTY0=".$L_QTY0;
 		$nvpstr .= "&AMT=".(string)$itemamt."&ITEMAMT=".(string)$itemamt;
 		$nvpstr .= "&ReturnUrl=".$returnURL."&CANCELURL=".$cancelURL ."&CURRENCYCODE=".$currencyCodeType."&PAYMENTACTION=".$paymentType;
 		$nvpstr = $nvpstr;
