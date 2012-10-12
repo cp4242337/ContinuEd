@@ -49,7 +49,7 @@ class ContinuEdViewCertif extends JView
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->ctmpl_id == 0;
-		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_CERTIF_NEW') : JText::_('COM_CONTINUE_MANAGER_CERTIF_EDIT'), 'certif');
+		JToolBarHelper::title($isNew ? JText::_('COM_CONTINUED_MANAGER_CERTIF_NEW') : JText::_('COM_CONTINUED_MANAGER_CERTIF_EDIT'), 'certif');
 		// Built the actions for new and existing records.
 		if ($isNew) 
 		{

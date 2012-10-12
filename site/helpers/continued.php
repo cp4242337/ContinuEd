@@ -55,6 +55,29 @@ class ContinuEdHelper {
 	* Set material page as started, incomplete.
 	*
 	* @param int $page Material page id number
+	* @param string $tracktype Type of view
+	*
+	* @return boolean true if scucessfull, false if not.
+	*
+	* @since 1.20
+	*/
+	function trackMat($page,$tracktype) {
+		$db =& JFactory::getDBO();
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$sewn = JFactory::getSession();
+		$sessionid = $sewn->getId();
+		$q  = 'INSERT INTO #__ce_mattrack (mt_user,mt_mat,mt_time,mt_session,mt_type,mt_ipaddr) ';
+		$q .= 'VALUES ("'.$userid.'","'.$page.'",NOW(),"'.$sessionid.'","'.$tracktype.'","'.$_SERVER['REMOTE_ADDR'].'")';
+		$db->setQuery( $q );
+		if ($db->query()) return 1;
+		else return 0;
+	}
+	
+	/**
+	* Set material page as started, incomplete.
+	*
+	* @param int $page Material page id number
 	*
 	* @return boolean true if scucessfull, false if not.
 	*

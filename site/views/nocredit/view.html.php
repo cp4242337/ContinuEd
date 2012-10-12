@@ -45,7 +45,7 @@ class ContinuEdViewNoCredit extends JView
 		} else{
 			$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&nocredit=1&course='.$course->course_id;
 		}
-		if (!$user->id) {
+		if (!$user->id && $cecfg->VO_REGREQ) {
 			$url = 'index.php?option=com_continued&view=login&layout=login&return='.base64_encode($url);
 		}
 		//redirect user

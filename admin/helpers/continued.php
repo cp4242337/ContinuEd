@@ -15,6 +15,7 @@ abstract class ContinuEdHelper
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_GROUPCERTS'), 'index.php?option=com_continued&view=groupcerts', $submenu == 'groupcerts');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_CERTTYPES'), 'index.php?option=com_continued&view=certtypes', $submenu == 'certtypes');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_COURSESTATS'), 'index.php?option=com_continued&view=coursestat', $submenu == 'coursestat');
+		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_MATSTATS'), 'index.php?option=com_continued&view=matstat', $submenu == 'matstat');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_CATSTATS'), 'index.php?option=com_continued&view=catstat', $submenu == 'catstat');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_UGROUPS'), 'index.php?option=com_continued&view=ugroups', $submenu == 'ugroups');
 		JSubMenuHelper::addEntry(JText::_('COM_CONTINUED_SUBMENU_UFIELDS'), 'index.php?option=com_continued&view=ufields', $submenu == 'ufields');

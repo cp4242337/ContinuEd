@@ -137,10 +137,7 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		echo $clink;
 		if ($course->course_nocredit && $course->type != "ce") {
 			$urlnc = 'index.php?option=com_continued&view=nocredit&course='.$course->course_id;
-			if ($this->user->id) {
-				echo '<a href="'.$urlnc.'" class="cebutton">';
-				echo 'View Only, No Credit</a>';
-			} else {
+			if (!$this->user->id && $cecfg->VO_REGREQ) {
 				$urlnc='index.php?option=com_continued&view=login&layout=login&tmpl=component&return='.base64_encode($urlnc);
 				echo '<a href="#" onclick="open'.$course->course_id.'();" class="cebutton">';
 				echo 'View Only, No Credit</a>';
@@ -151,6 +148,9 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 				echo ' closeHTML:"",containerCss:{backgroundColor:"#fff",borderColor:"#fff",height:420,	padding:0,width:700},overlayClose:true,opacity:80,overlayCss: {backgroundColor:"#000"}});';
 				echo ' }';
 				echo '</script>';
+			} else {
+				echo '<a href="'.$urlnc.'" class="cebutton">';
+				echo 'View Only, No Credit</a>';
 			}
 				
 		}

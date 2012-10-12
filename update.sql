@@ -31,3 +31,12 @@ CREATE TABLE IF NOT EXISTS `jos_ce_purchased_codes` (
   `code_limit` int(11) NOT NULL,
   PRIMARY KEY (`code_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `jos_ce_mattrack` (
+  `mt_mat` int(11) NOT NULL,
+  `mt_user` int(11) NOT NULL,
+  `mt_time` datetime NOT NULL,
+  `mt_session` varchar(255) NOT NULL,
+  `mt_type` VARCHAR( 10 ) NOT NULL,
+  `mt_ipaddr` varchar(15) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

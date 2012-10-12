@@ -29,15 +29,11 @@ $stepsl[14] = JHTML::_('select.option','fme','Front Matter - Exp');
 				echo '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_user.value=\'\'; submitform(); return false;">';
 				echo 'Clear User</a></div></div>';
 			}
-			if ($this->session) {
-				echo '<div class="button2-left"><div class="page">';
-				echo '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_session.value=\'\'; submitform(); return false;">';
-				echo 'Clear Session</a></div></div>';
-			}
-			?></th>
+			echo 'Start: '.JHTML::_('calendar',$this->startdate,'startdate','startdate','%Y-%m-%d','');
+			echo ' End: '.JHTML::_('calendar',$this->enddate,'enddate','enddate','%Y-%m-%d','');
+			?>	<button type="submit">Go</button>
+			</th>
 			<th align="right" width="50%"><?php
-			echo 'Start: '.JHTML::_('calendar',$this->startdate,'startdate','startdate','%Y-%m-%d','onchange="submitform();"');
-			echo ' End: '.JHTML::_('calendar',$this->enddate,'enddate','enddate','%Y-%m-%d','onchange="submitform();"').'<br />';
 			echo ' Category: '.JHTML::_('select.genericlist',$this->catlist,'filter_cat','onchange="submitform();"','value','text',$this->cat);
 			echo ' What: '.JHTML::_('select.genericlist',$stepsl,'filter_step','onchange="submitform();"','value','text',$this->step);
 			echo '<br>';
@@ -70,7 +66,7 @@ $stepsl[14] = JHTML::_('select.option','fme','Front Matter - Exp');
 
 
 	
-		$sessionlink = '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_session.value=\''.$row->sessionid.'\'; submitform(); return false;">'.$row->sessionid.'</a>';
+		$sessionlink = $row->sessionid;
 
 		?>
 	<tr class="<?php echo "row$k"; ?>">
@@ -79,13 +75,16 @@ $stepsl[14] = JHTML::_('select.option','fme','Front Matter - Exp');
 		<td><?php echo $row->cat_name; ?></td>
 		<td><?php echo $row->tdhit; ?></td>
 		<td><?php 
-		echo '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_user.value='.$row->user.'; submitform(); return false;">'.$this->users[$row->user]->name.'</a>';
+		if ($row->user == 0) echo "Guest";
+		else echo '<a href="javascript:void(0);" onclick="javascript: document.adminForm.filter_user.value='.$row->user.'; submitform(); return false;">'.$this->users[$row->user]->name.'</a>';
 		?></td>
 		<td><?php 
-		echo $this->users[$row->user]->email;
+		if ($row->user == 0) echo "Guest";
+		else echo $this->users[$row->user]->email;
 		?></td>
 		<td><?php 
-		echo $this->users[$row->user]->usergroup;
+		if ($row->user == 0) echo "Guest";
+		else echo $this->users[$row->user]->usergroup;
 		?></td>
 		<td><?php 
 		switch ($row->step) {

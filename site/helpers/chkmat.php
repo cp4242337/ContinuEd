@@ -19,7 +19,7 @@ $matdone=true;
 $q  = 'SELECT mat_id FROM #__ce_material ';
 $q .= 'WHERE published = 1 && mat_course = '.$cid;
 $db->setQuery( $q );
-$matarr = $db->loadAssoc();
+$matarr = $db->loadResultArray();
 
 if ($matarr) {
 	$query  = 'SELECT * ';

@@ -1,6 +1,7 @@
 <div id="continued">
 <?php // no direct access
 $cecfg = ContinuEdHelper::getConfig();
+$user = JFactory::getUser();
 defined('_JEXEC') or die('Restricted access');
 echo '<h2 class="componentheading">'.$this->mtext->course_name.'</h2>';
 //Gve error message if they tryed to jummop over material staright to the eval
@@ -97,8 +98,8 @@ if (count($this->matpages) == 1) {
 		echo '<a href="index.php?option=com_continued&view=matpage&token='.$this->token;
 		if ($this->nocredit != 0) echo '&nocredit=1';
 		echo '&Itemid='.JRequest::getVar('Itemid').'&matid='.$mp->mat_id.'&course='.$mp->mat_course.'" class="cebutton">';
-		if ($this->mpdata[$mp->mat_id]->mu_status == 'complete') echo 'Review';
-		else if ($this->mpdata[$mp->mat_id]->mu_status == 'incomplete') echo 'Resume';
+		if ($this->mpdata[$mp->mat_id]->mu_status == 'complete' && $user->id) echo 'Review';
+		else if ($this->mpdata[$mp->mat_id]->mu_status == 'incomplete' && $user->id) echo 'Resume';
 		else echo 'Begin';
 		echo '</a><br /><br />';
 	}

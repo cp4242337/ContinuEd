@@ -1,6 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access');
 $path = JPATH_SITE.'/cache/';
-$filename = 'ContinuEd_Course_'.$this->course.'_Report' . '-' . date("Y-m-d").'.csv';
+$filename = 'ContinuEd_Course_'.$this->course.'_Report' . '-' . date("Y-m-d_H-i-s").'.csv';
 $contents = "";
 
 

@@ -179,6 +179,15 @@ CREATE TABLE IF NOT EXISTS `#__ce_matmed` (
   PRIMARY KEY (`mm_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `#__ce_mattrack` (
+  `mt_mat` int(11) NOT NULL,
+  `mt_user` int(11) NOT NULL,
+  `mt_time` datetime NOT NULL,
+  `mt_session` varchar(255) NOT NULL,
+  `mt_type` VARCHAR( 10 ) NOT NULL,
+  `mt_ipaddr` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `#__ce_matuser` (
   `mu_mat` int(11) NOT NULL,
   `mu_user` int(11) NOT NULL,

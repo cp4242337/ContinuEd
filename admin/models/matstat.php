@@ -5,7 +5,7 @@ defined('_JEXEC') or die();
 
 jimport( 'joomla.application.component.model' );
 
-class ContinuEdModelCourseStat extends JModel
+class ContinuEdModelMatStat extends JModel
 {
 
 	var $_data;
@@ -40,22 +40,23 @@ function __construct()
 		$user = JRequest::getVar('filter_user');
 		$cat = JRequest::getVar('filter_cat');
 		$course = JRequest::getVar('filter_course');
-		$step = JRequest::getVar('filter_step');
+		$type = JRequest::getVar('filter_type');
 		$startdate = $this->getState('startdate');
 		$enddate = $this->getState('enddate');
 		$tand = 0;
 
-		$q  = 'SELECT s.*,c.course_name,ca.cat_name';
-		$q .= ' FROM #__ce_track as s ';
-		$q .= 'LEFT JOIN #__ce_courses as c ON s.course = c.course_id ';
+		$q  = 'SELECT mt.*,m.*,c.course_name,ca.cat_name';
+		$q .= ' FROM #__ce_mattrack as mt ';
+		$q .= 'LEFT JOIN #__ce_material as m ON m.mat_id = mt.mt_mat ';
+		$q .= 'LEFT JOIN #__ce_courses as c ON c.course_id = m.mat_course ';
 		$q .= 'LEFT JOIN #__ce_cats as ca ON c.course_cat = ca.cat_id ';
 		$q .= ' WHERE ';
-		if ($user) { $q .= 's.user = "'.$user.'"'; $tand = 1; }
+		if ($user) { $q .= 'mt.mt_user = "'.$user.'"'; $tand = 1; }
 		if ($cat) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' c.course_cat = "'.$cat.'"'; $tand = 1; }
-		if ($course) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.course = "'.$course.'"'; $tand = 1; }
-		if ($step) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' s.step = "'.$step.'"'; $tand = 1; }
-		if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' DATE(s.tdhit) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
-		$q .= ' ORDER BY s.tdhit DESC';
+		if ($course) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' m.mat_course = "'.$course.'"'; $tand = 1; }
+		if ($type) { if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' mt.mt_type = "'.$type.'"'; $tand = 1; }
+		if ($tand) { $q .= ' && '; $tand = 0; } $q .= ' DATE(mt.mt_time) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
+		$q .= ' ORDER BY mt.mt_time DESC';
 		
 		return $q;
 	}
@@ -109,7 +110,7 @@ function __construct()
 		$query .= 'ORDER BY c.cat_name ASC';
 		$db->setQuery( $query );
 		$catlist = $db->loadObjectList();
-		$cats[]=JHTML::_('select.option','','--All--');
+		$cats[]=JHTML::_('select.option','','-- Select Category --');
 		foreach ($catlist as $cl) {
 			$cats[]=JHTML::_('select.option',$cl->cat_id,$cl->cat_name);
 		}
@@ -123,7 +124,7 @@ function __construct()
 		$query .= 'ORDER BY c.course_name ASC';
 		$db->setQuery( $query );
 		$catlist = $db->loadObjectList();
-		$cats[]=JHTML::_('select.option','','--All--');
+		$cats[]=JHTML::_('select.option','','-- Select Course --');
 		foreach ($catlist as $cl) {
 			$cats[]=JHTML::_('select.option',$cl->course_id,$cl->course_name);
 		}

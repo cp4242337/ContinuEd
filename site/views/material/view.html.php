@@ -92,7 +92,7 @@ class ContinuEdViewMaterial extends JView
 			if (!$gotoeval) $jumpedover=true;
 		}
 		
-		//Logged in, Token exists, had done appropriate steps
+		//Token exists, had done appropriate steps
 		if ($token && $viewed) {
 			//Valid Course, Not done with material, course has material, cannot go to eval
 			if ($courseid && !$gotoeval  && $hasmat) {

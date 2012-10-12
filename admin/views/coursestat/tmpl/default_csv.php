@@ -1,6 +1,6 @@
 <?php defined('_JEXEC') or die('Restricted access');
 $path = JPATH_SITE.'/cache/';
-$filename = 'ContinuEd_Course_Stats' . '-' . date("Y-m-d").'.csv';
+$filename = 'ContinuEd_Course_Stats' . '-' . date("Y-m-d_H-i-s").'.csv';
 $contents = "";
 
 
@@ -13,9 +13,12 @@ foreach ($this->items as $row)
 	$contents .= '"'.$row->course_name.'",';
 	$contents .= '"'.$row->cat_name.'",';
 	$contents .= '"'.$row->tdhit.'",';
-	$contents .= '"'.$this->users[$row->user]->name.'",';
-	$contents .= '"'.$this->users[$row->user]->email.'",';
-	$contents .= '"'.$this->users[$row->user]->usergroup.'",';
+	if ($row->user == 0) $contents .= '"Guest",';
+	else $contents .= '"'.$this->users[$row->user]->name.'",';
+	if ($row->user == 0) $contents .= '"Guest",';
+	else $contents .= '"'.$this->users[$row->user]->email.'",';
+	if ($row->user == 0) $contents .= '"Guest",';
+	else $contents .= '"'.$this->users[$row->user]->usergroup.'",';
 	$contents .= '"';
 	switch ($row->step) {
 		case 'fm': $contents .= 'Front Matter'; break;

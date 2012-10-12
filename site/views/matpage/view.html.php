@@ -29,17 +29,24 @@ class ContinuEdViewMatpage extends JView
 		$token = JRequest::getVar( 'token' );
 		$ret = JRequest::getVar( 'ret',0 );
 		$nocredit = JRequest::getVar('nocredit','0');
+		$user = JFactory::getUser();
 		
 		//Get page data
 		$matpage=$model->getMatPage($pageid);
 		
 		//Page exists, Token exists, no return flag
 		if ($matpage && $token && !$ret) {
+			
 			//get user status of page
 			$matstatus = ContinuEdHelper::checkMat($pageid);
 			
 			//Start matpage view, if non existant
-			if (!$matstatus) ContinuEdHelper::startMat($pageid);
+			if (!$matstatus) { ContinuEdHelper::startMat($pageid); $tracktype="view"; }
+			else { $tracktype="review"; }
+			
+			if ($nocredit || !$user->id) $tracktype="nocredit";
+			
+			ContinuEdHelper::trackMat($pageid,$tracktype);
 			
 			//run plugins
 			$results = $dispatcher->trigger('onContinuEdPrepare', array(&$matpage->mat_content));
