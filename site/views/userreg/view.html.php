@@ -19,10 +19,14 @@ jimport( 'joomla.application.component.view');
  */
 class ContinuEdViewUserReg extends JView
 {
+	
+	protected $return;
+	
 	public function display($tpl = null)
 	{
 		$cecfg = ContinuEdHelper::getConfig();
 		$layout = $this->getLayout();
+		$this->return = base64_decode(JRequest::getVar('return', ''));
 		
 		switch($layout) {
 			case "default": 
@@ -51,6 +55,7 @@ class ContinuEdViewUserReg extends JView
 		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 		$app=Jfactory::getApplication();
 		$app->setUserState('continued.userreg.groupid',JRequest::getInt('groupid')); 
+		$app->setUserState('continued.userreg.return',$this->return); 
 		$app->redirect('index.php?option=com_continued&view=userreg&layout=regform');
 		
 	}
@@ -59,6 +64,7 @@ class ContinuEdViewUserReg extends JView
 		$model =& $this->getModel();
 		$app=Jfactory::getApplication();
 		$groupid = $app->getUserState('continued.userreg.groupid');
+		if (!$this->return) $this->return=$app->getUserState('continued.userreg.return');
 		if ($groupid) {
 			$groupinfo = $model->getUserGroups($groupid);
 			$userfields=$model->getUserFields($groupid);

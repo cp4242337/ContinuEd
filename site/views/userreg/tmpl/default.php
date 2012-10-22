@@ -47,6 +47,7 @@ echo '</div>';
 echo '<input type="hidden" name="option" value="com_continued">';
 echo '<input type="hidden" name="view" value="userreg">';
 echo '<input type="hidden" name="layout" value="groupuser">';
+echo '<input type="hidden" name="return" value="'.base64_encode($this->return).'" />';
 echo JHtml::_('form.token');
 echo '</form>';
 echo '<div style="clear:both;"></div>';
