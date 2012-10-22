@@ -86,7 +86,7 @@ echo '<div class="continued-login-login-footer">';
 echo '<a href="'.JRoute::_("index.php?option=com_continued&view=lost").'">Lost Username/Password</a><br />';
 $usersConfig = JComponentHelper::getParams('com_users');
 if ($usersConfig->get('allowUserRegistration')) {
-	echo '<a href="'.JRoute::_("index.php?option=com_continued&view=userreg").'">Register</a>';
+	echo '<a href="'.JRoute::_("index.php?option=com_continued&view=userreg&return=".base64_encode($this->redirurl)).'">Register</a>';
 }
 echo '</div>';
 echo '</div>';
