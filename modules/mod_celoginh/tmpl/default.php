@@ -53,7 +53,7 @@ if ($type == 'logout') {
 	echo '<a href="'.JRoute::_('index.php?option=com_continued&view=lost').'" class="uf_btnlink">'.JText::_('MOD_CELOGINH_FORGOT_YOUR_INFO').'</a><br />';
 	$usersConfig = JComponentHelper::getParams('com_users');
 	if ($usersConfig->get('allowUserRegistration')) {
-		echo '<a href="'.JRoute::_('index.php?option=com_continued&view=userreg').'" class="uf_btnlink">'.JText::_('MOD_CELOGINH_REGISTER').'</a>';
+		echo '<a href="'.JRoute::_('index.php?option=com_continued&view=userreg&return='.$return).'" class="uf_btnlink">'.JText::_('MOD_CELOGINH_REGISTER').'</a>';
 	}
 	
 	echo '<input type="hidden" name="option" value="com_continued" />';
