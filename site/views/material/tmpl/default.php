@@ -143,7 +143,7 @@ if ($this->mtext->course_qanda == "submit") {
 					<form id="qandaform" name="qandaform" action="components/com_continued/qanda.php" method="post">
 						<textarea  name="qtext" id="qatext" rows="3" cols="70" class="required"></textarea><br />
 						<input type="hidden" name="courseid" value="<?php echo $this->mtext->course_id; ?>" />
-						<input type="submit" name="button" id="submitter" class="qabox-btn" />
+						<input type="submit" name="button" id="submitter" class="qabox-btn cebutton" />
 						<span style="clear:both"><!-- spanner --></span>
 					</form>
 				</div>
