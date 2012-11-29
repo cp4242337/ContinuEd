@@ -43,11 +43,13 @@ class ContinuEdViewCourseReport extends JView
 		$catids=$model->getCatbyId();
 		$pf=$model->getState('pf');
 		$type=$model->getState('type');
+		$recent=$model->getState('recent');
 
 		$this->assignRef('startdate',$startdate);
 		$this->assignRef('enddate',$enddate);
 		$this->assignRef('qarea',$qarea);
 		$this->assignRef('pf',$pf);
+		$this->assignRef('recent',$recent);
 		$this->assignRef('type',$type);
 		$this->assignRef('cat',$cat);
 		$this->assignRef('course',$cid);

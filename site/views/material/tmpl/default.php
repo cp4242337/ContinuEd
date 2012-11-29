@@ -11,7 +11,7 @@ if (count($this->matpages) == 1) {
 //only 1 material page
 	echo $this->matpages[0]->mat_content;//Media
 	if ($this->matpages[0]->media && $cecfg->mams) {
-		$mamscfg = MAMSHelper::getConfig();
+		$mamscfg = MAMSHelper::getConfig();	
 		echo '<div class="continued-material-media">';
 		echo '<div align="center">';
 		if ($this->matpages[0]->media[0]->med_type == 'vid' || $this->matpages[0]->media[0]->med_type == 'vids') { //Video Player
@@ -109,25 +109,11 @@ if ($this->mtext->course_material) {
 	//material in course info 
 	echo $this->mtext->course_material;
 }
-//Expired or Passed/Completed or NoCredit, show return Button
-if ($this->expired || $this->passed || $this->nocredit != 0) {
-	echo '<div align="center">';
-	echo '<form name="continued_material" id="continued_material" method="post" action="">';
-	echo '<input type="hidden" name="gte" value="return">';
-	echo '<input name="Submit" id="Return" value="Return"  type="submit" class="cebutton">';
-	echo '<input type="hidden" name="token" value="'.$this->token.'">';
-	if ($this->nocredit != 0) echo '<input type="hidden" name="nocredit" value="1">';
-	if ($this->mtext->course_hasinter) {
-		foreach ($this->reqids as $r) {
-			echo '<input type="hidden" name="req'.$r.'d" value="1">';
-		}
-	}
-	echo '</form></div>';
-} else {
-//Not done and Valid, show Q&A and continue button
-	//Show Q&A Entry box
-	if ($this->mtext->course_qanda == "submit") {
-		?>
+
+
+//Show Q&A Entry box
+if ($this->mtext->course_qanda == "submit") {
+	?>
 		<script type="text/javascript">
 		  /* attach a submit handler to the form */
 		  window.onload = (function(){
@@ -166,7 +152,26 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 			<div id="qabox-bot"></div>
 		</div>
 		<?php 
-	} ?> 
+} ?> 
+
+
+//Expired or Passed/Completed or NoCredit, show return Button
+if ($this->expired || $this->passed || $this->nocredit != 0) {
+	echo '<div align="center">';
+	echo '<form name="continued_material" id="continued_material" method="post" action="">';
+	echo '<input type="hidden" name="gte" value="return">';
+	echo '<input name="Submit" id="Return" value="Return"  type="submit" class="cebutton">';
+	echo '<input type="hidden" name="token" value="'.$this->token.'">';
+	if ($this->nocredit != 0) echo '<input type="hidden" name="nocredit" value="1">';
+	if ($this->mtext->course_hasinter) {
+		foreach ($this->reqids as $r) {
+			echo '<input type="hidden" name="req'.$r.'d" value="1">';
+		}
+	}
+	echo '</form></div>';
+} else {
+//Not done and Valid, show Q&A and continue button
+	
 	<script type="text/javascript">
 	jQuery(document).ready(function() {
 		jQuery.metadata.setType("attr", "validate");

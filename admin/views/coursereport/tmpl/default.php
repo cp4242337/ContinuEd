@@ -20,6 +20,9 @@ $area[2]=JHTML::_('select.option','post','Post Test');
 $area[3]=JHTML::_('select.option','inter','Intermediate');
 $area[4]=JHTML::_('select.option','qanda','Q & A');
 
+$recent[0]=JHTML::_('select.option','0','All Attempts');
+$recent[1]=JHTML::_('select.option','1','Last Attempt');
+
 ?>
 <form action="" method="post" name="adminForm">
 <table>
@@ -37,6 +40,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 		//echo JText::_(' User Group:').JHTML::_('select.genericlist',$this->grouplist,'usergroup','onchange="submitform();"','value','text',$this->usergroup,'grouplist');
 		echo JText::_(' Completion Status:').JHTML::_('select.genericlist',$pf,'pf','onchange="submitform();"','value','text',$this->pf,'pf');
 		echo JText::_(' Record Type:').JHTML::_('select.genericlist',$type,'type','onchange="submitform();"','value','text',$this->type,'type');
+		echo JText::_(' Attempt:').JHTML::_('select.genericlist',$recent,'recent','onchange="submitform();"','value','text',$this->recent,'recent');
 		?></td>
 	</tr>
 </table>
@@ -45,7 +49,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 <table class="adminlist">
 	<thead>
 		<tr>
-		
+		<th width="20">#</th>th>
 	<th width="20">
 		<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 	</th>	
@@ -92,6 +96,9 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 
 		?>
 	<tr class="<?php echo "row$k"; ?>">
+	<td>
+			<?php echo ($i+1); ?>
+		</td>
 	<td>
 			<?php echo JHtml::_('grid.id', $i, $row->rec_token); ?>
 		</td>
@@ -229,7 +236,7 @@ $area[4]=JHTML::_('select.option','qanda','Q & A');
 	$k = 1 - $k;
 	$cq = $row->disporder+1;
 	}
-	$colcount = 12 + count($qinter) + count($qpre) + count($qpost);
+	$colcount = 13 + count($this->qinter) + count($this->qpre) + count($this->qpost);
 	if ($this->course) $count = $count - 2;
 	?>
 	</tbody>

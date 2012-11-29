@@ -25,6 +25,7 @@ class ContinuEdModelCourseReport extends JModel
 		$limit			= $mainframe->getUserStateFromRequest( 'global.list.limit','limit',$mainframe->getCfg( 'list_limit' ),'int' );
 		$limitstart		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.limitstart','limitstart',0,'int' );
 		$pf				= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.pf','pf','' );
+		$recent			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.recent','recent','0' );
 		$type			= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.type','type','' );
 		$startdate		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.startdate','startdate',date("Y-m-d",strtotime("-1 months") ));
 		$enddate		= $mainframe->getUserStateFromRequest( 'com_continued.coursereport.enddate','enddate',date("Y-m-d") );
@@ -37,6 +38,7 @@ class ContinuEdModelCourseReport extends JModel
 		$this->setState('startdate', $startdate);
 		$this->setState('enddate', $enddate);
 		$this->setState('pf', $pf);
+		$this->setState('recent',$recent);
 		$this->setState('type', $type);
 		$this->setState('limit', $limit);
 		$this->setState('limitstart', $limitstart);
@@ -54,15 +56,17 @@ class ContinuEdModelCourseReport extends JModel
 		$startdate = $this->getState('startdate');
 		$enddate = $this->getState('enddate');
 		$pf = $this->getState('pf');
+		$recent = $this->getState('recent');
 		$type = $this->getState('type');
 		$cid = $this->getState('course');
 		$cat = $this->getState('cat');
 		$stnum = JRequest::getVar('stnum');
-		if ($cid) $questions = $this->getQuestions($cid,$this->area);
+		if ($recent) $q .= ' && rec_recent = 1 ';
 		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,c.course_cpeprognum,c.course_cat';
 		$q .= ' FROM #__ce_records as r';
 		$q .= ' STRAIGHT_JOIN #__ce_courses as c ON r.rec_course = c.course_id';
 		$q .= ' WHERE date(r.rec_start) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
+		if ($cid) $questions = $this->getQuestions($cid,$this->area);
 		if ($cid) $q .= ' && r.rec_course = '.$cid.' ';
 		else if ($cat) $q .= ' && c.course_cat = '.$cat.' '; 
 		if ($pf) $q .= ' && r.rec_pass = "'.$pf.'" ';
