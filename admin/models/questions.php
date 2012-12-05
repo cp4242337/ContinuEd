@@ -58,7 +58,7 @@ class ContinuEdModelQuestions extends JModelList
 		$query->from('#__ce_questions as q');
 		
 		// Join over the users.
-		$query->select('u.username AS username');
+		$query->select('u.username AS username, u.name AS usersname, u.id AS userid');
 		$query->join('LEFT', '#__users AS u ON u.id = q.q_addedby');
 		
 		// Join over the question group.

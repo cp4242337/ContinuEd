@@ -26,7 +26,7 @@ class ContinuEdTableQuestion extends JTable
 			// Existing item
 		} else {
 			if (empty($this->q_addedby)) {
-				$this->q_addedby = $user->get('id');
+				$this->q_addedby = $user->id;
 			}
 		}
 

@@ -20,7 +20,7 @@ class ContinuEdModelQandA extends JModel
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query  = 'SELECT q.*,u.username ';
+		$query  = 'SELECT q.*,u.name ';
 		$query .= 'FROM #__ce_questions as q ';
 		$query .= 'RIGHT JOIN #__users as u ON q.q_addedby = u.id ';
 		$query .= 'WHERE q.q_course = '.$courseid.' && q.q_area="qanda" && q.published = 1 ';

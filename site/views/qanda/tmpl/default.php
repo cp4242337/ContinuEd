@@ -6,7 +6,7 @@ $db =& JFactory::getDBO();
 echo '<div class="componentheading">'.$this->cinfo->course_name.'</div>';
 $cpart = 0;
 foreach ($this->qanda as $qanda) {
-	echo '<p><b>'.$qanda->q_text.'</b><br /><em>From: '.$qanda->username.'</p>';
+	echo '<p style="margin:0;padding:10px 0;border-bottom:1px dotted #cccccc;"><b>'.$qanda->q_text.'</b><br /><em>From: '.$qanda->name.'</em></p>';
 }
 echo '<p align="center">';
 //Refresh Button

@@ -85,7 +85,7 @@ defined('_JEXEC') or die('Restricted Access');
 		?>
 		</td>
 		<td>
-			<?php echo $item->username; ?>
+			<?php echo $item->usersname.'<br />'.$item->username.' ('.$item->userid.')<br />'.$item->q_added; ?>
 		</td>
 	
 	</tr>

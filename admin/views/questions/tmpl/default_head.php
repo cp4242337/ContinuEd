@@ -40,7 +40,7 @@ $saveOrder	= $listOrder == 'q.ordering';
 	<th width="75">
 		<?php echo JText::_( 'COM_CONTINUED_QUESTION_HEADING_ANSWERS' ); ?>
 	</th>
-	<th width="100">
+	<th width="130">
 		<?php echo JText::_( 'COM_CONTINUED_QUESTION_HEADING_ADDEDBY' ); ?>
 	</th>
 				

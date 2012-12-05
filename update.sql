@@ -40,3 +40,5 @@ CREATE TABLE IF NOT EXISTS `jos_ce_mattrack` (
   `mt_type` VARCHAR( 10 ) NOT NULL,
   `mt_ipaddr` varchar(15) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE  `j25_ce_questions` ADD  `q_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;

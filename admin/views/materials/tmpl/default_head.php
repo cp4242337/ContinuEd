@@ -17,7 +17,7 @@ $saveOrder	= $listOrder == 'm.ordering';
 	</th>	
 	<?php
 	if (ContinuEdHelper::getConfig()->mams) {
-		echo '<td>'.JText::_('COM_CONTINUED_MATERIAL_HEADING_DLOADS').'</td>';
+		echo '<th>'.JText::_('COM_CONTINUED_MATERIAL_HEADING_DLOADS').'</th>';
 	}
 	
 	?>

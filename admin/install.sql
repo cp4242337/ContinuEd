@@ -265,7 +265,8 @@ CREATE TABLE IF NOT EXISTS `#__ce_questions` (
   `q_area` enum('pre','post','inter','qanda') NOT NULL DEFAULT 'post',
   `q_expl` text NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '1',
-  `q_addedby` int(11) NOT NULL DEFAULT '62',
+  `q_addedby` int(11) NOT NULL,
+  `q_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`q_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
