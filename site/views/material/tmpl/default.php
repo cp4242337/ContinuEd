@@ -152,7 +152,7 @@ if ($this->mtext->course_qanda == "submit") {
 			<div id="qabox-bot"></div>
 		</div>
 		<?php 
-} ?> 
+}
 
 
 //Expired or Passed/Completed or NoCredit, show return Button
@@ -171,7 +171,7 @@ if ($this->expired || $this->passed || $this->nocredit != 0) {
 	echo '</form></div>';
 } else {
 //Not done and Valid, show Q&A and continue button
-	
+	?>
 	<script type="text/javascript">
 	jQuery(document).ready(function() {
 		jQuery.metadata.setType("attr", "validate");

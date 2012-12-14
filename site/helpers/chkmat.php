@@ -21,7 +21,7 @@ $q .= 'WHERE published = 1 && mat_course = '.$cid;
 $db->setQuery( $q );
 $matarr = $db->loadResultArray();
 
-if ($matarr) {
+if ($matarr && count($matrr) > 1) {
 	$query  = 'SELECT * ';
 	$query .= 'FROM #__ce_matuser ';
 	$query .= 'WHERE mu_user = '.$user->id;
