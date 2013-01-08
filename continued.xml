@@ -5,7 +5,7 @@
 	<author>Corona Productions</author>
 	<authorEmail>mamundsen@coronapro.com</authorEmail>
 	<authorUrl>http://www.coronapro.com</authorUrl>
-	<copyright>Copyright 2008-2011 Corona Productions</copyright>
+	<copyright>Copyright 2008-2013 Corona Productions</copyright>
 	<license>GPL v2</license>
 	<version>1.30.0</version>
 	<releaseDate>2011.06.30</releaseDate>
@@ -14,10 +14,15 @@
 	<description>COM_CONTINUED_DESC</description>
 	<install>
 		<sql>
-			<file charset="utf8" driver="mysql">install.sql</file>
+			<file charset="utf8" driver="mysql">sql/install.sql</file>
 		</sql>
 	</install>
-	<files folder="site">
+	<update>
+	    <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+	    </schemas>
+    </update>
+    <files folder="site">
 		<filename>index.html</filename>
 		<filename>interq.php</filename>
 		<filename>qanda.php</filename>

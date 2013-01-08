@@ -1,5 +1,6 @@
 ALTER TABLE  `jos_ce_courses` CHANGE  `course_purchaselink`  `course_purchaseprice` FLOAT NOT NULL;
 ALTER TABLE  `jos_ce_courses` CHANGE  `course_purchasesku`  `course_purchaseco` BOOLEAN NOT NULL DEFAULT  '0';
+ALTER TABLE  `jos_ce_courses` ADD  `course_purchaseinfo` TEXT NOT NULL AFTER  `course_purchasesku`;
 
 CREATE TABLE IF NOT EXISTS `jos_ce_purchased` (
   `purchase_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -12,8 +13,6 @@ CREATE TABLE IF NOT EXISTS `jos_ce_purchased` (
   `purchase_status` enum('notyetstarted','verified','canceled','accepted','pending','started','denied','refunded','failed','pending','reversed','canceled_reversal','expired','voided','completed','dispute') NOT NULL,
   PRIMARY KEY (`purchase_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-ALTER TABLE  `jos_ce_courses` ADD  `course_purchaseinfo` TEXT NOT NULL AFTER  `course_purchasesku`;
 
 CREATE TABLE IF NOT EXISTS `jos_ce_purchased_log` (
   `pl_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -40,5 +39,3 @@ CREATE TABLE IF NOT EXISTS `jos_ce_mattrack` (
   `mt_type` VARCHAR( 10 ) NOT NULL,
   `mt_ipaddr` varchar(15) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-ALTER TABLE  `j25_ce_questions` ADD  `q_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
