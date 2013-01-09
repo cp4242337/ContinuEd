@@ -14,11 +14,9 @@ if ($this->adata) echo '<input type="hidden" name="hasans" value="1">';
 else echo '<input type="hidden" name="hasans" value="0">';
 foreach ($this->qdata as $qdata) {
 	if ($qdata->q_cat == 'assess') {
-		if ($cecfg->EVAL_ASSD) echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_ASSI.'" alt="required">';
 		$assess=1;
 	}
 	if ($qdata->q_req) {
-		if ($cecfg->EVAL_REQD) echo '<img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_REQI.'" alt="required"> ';
 		$req_q[] = 'p'.$this->part.'q'.$qdata->q_id;
 		$req_t[] = $qdata->q_type;
 	}
@@ -110,8 +108,6 @@ foreach ($this->qdata as $qdata) {
 	echo '<br>';
 }
 
-if (count($req_q) != 0) if ($cecfg->EVAL_REQD) echo '<br><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_REQI.'" alt="required"> - Required';
-if ($assess == 1) if ($cecfg->EVAL_ASSD) echo '<br><img src="media/com_continued/template/'.$cecfg->TEMPLATE.'/'.$cecfg->EVAL_ASSI.'" alt="Assess"> - Assessment Question';
 echo '<p align="center">';
 if ($this->part != $this->mtext->course_preparts) {
 	?>

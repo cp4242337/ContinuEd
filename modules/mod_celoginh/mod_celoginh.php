@@ -18,7 +18,7 @@ require_once('components'.DS.'com_continued'.DS.'helpers'.DS.'continued.php');
 // Load StyleSheet for template, based on config
 $cecfg = ContinuEdHelper::getConfig();
 $doc = &JFactory::getDocument();
-//$doc->addStyleSheet('media'.DS.'com_continued'.DS.'template'.DS.''.$cecfg->TEMPLATE.DS.'continued.css');
+if ($cecfg->use_component_css) $doc->addStyleSheet('components'.DS.'com_continued'.DS.'continued.css');
 
 
 $params->def('greeting', 1);

@@ -18,16 +18,6 @@
 			<option value="0">JHIDE</option>
 			<option value="1">JSHOW</option>
 		</field>
-		<field name="EVAL_REQD" type="radio" label="COM_CONTINUED_CONFIG_FIELD_EVAL_REQD_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_REQD_DESC" default="0">
-			<option value="0">JHIDE</option>
-			<option value="1">JSHOW</option>
-		</field>
-		<field name="EVAL_ASSD" type="radio" label="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSD_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSD_DESC" default="0">
-			<option value="0">JHIDE</option>
-			<option value="1">JSHOW</option>
-		</field>
-		<field name="EVAL_REQI" type="text" label="COM_CONTINUED_CONFIG_FIELD_EVAL_REQI_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_REQI_DESC" size="120" class="inputbox" required="false" default="" />
-		<field name="EVAL_ASSI" type="text" label="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSI_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_ASSI_DESC" size="120" class="inputbox" required="false" default="" />
 		<field name="CAT_PROV" type="radio" label="COM_CONTINUED_CONFIG_FIELD_CAT_PROV_LABEL" description="COM_CONTINUED_CONFIG_FIELD_CAT_PROV_DESC" default="0">
 			<option value="0">JHIDE</option>
 			<option value="1">JSHOW</option>
@@ -53,15 +43,9 @@
 			<option value="0">No</option>
 			<option value="1">Yes</option>
 		</field>
-		<field name="TEMPLATE" type="list" label="COM_CONTINUED_CONFIG_FIELD_TEMPLATE_LABEL" description="COM_CONTINUED_CONFIG_FIELD_TEMPLATE_DESC" default="0">
-			<option value="esp">ESP</option>
-			<option value="default">MM/Default</option>
-			<option value="iapcd">IAPCD</option>
-			<option value="iaps">IAPS</option>
-			<option value="medicaled">MedicalEd</option>
-			<option value="mrn">MRN</option>
-			<option value="naadac">NAADAC</option>
-			<option value="tpo">Practical Oncologist</option>
+		<field name="use_component_css" type="list" label="COM_CONTINUED_CONFIG_FIELD_TEMPLATE_LABEL" description="COM_CONTINUED_CONFIG_FIELD_TEMPLATE_DESC" default="0">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
 		</field>
 		<field name="INTER_REQMSG" type="text" label="COM_CONTINUED_CONFIG_FIELD_INTER_REQMSG_LABEL" description="COM_CONTINUED_CONFIG_FIELD_INTER_REQMSG_DESC" size="120" class="inputbox" required="false" default="" />
 		

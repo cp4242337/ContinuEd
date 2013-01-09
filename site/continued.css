@@ -128,16 +128,23 @@ input.continued-user-pick-radio {top: -9999px; position:absolute;}
 .continued-user-reg-submit {float:left; width: 360px; text-align:left; border-top: 1px solid #999999; padding: 3px 3px 3px 5px; min-height:20px;font-size:12px;}
 .continued-user-reg-error { font-weight:bold; float:left; width:140px; text-align:left; padding: 3px 5px 3px 3px; min-height:20px; font-size:10px;}
 
-#qabox-outer { margin: 10px auto; padding: 0; text-align:center; }
-#qabox-inner { margin: 0 auto; width: 450px; background: url(qabox-mid.png) repeat-y; text-align:left; color:#000; }
-#qabox-top { margin: 0 auto; width: 450px; background: url(qabox-top.png) no-repeat; text-align:left; color:#000; height: 10px; overflow:hidden; }
-#qabox-bot { margin: 0 auto; width: 450px; background: url(qabox-bot.png) no-repeat; text-align:left; color:#000; height: 10px; }
-#qabox-rate { margin: 0 10px 0 10px; padding: 0; }
+#qabox-outer { 
+	margin: 10px auto; 
+	padding: 0; 
+	text-align:center; 
+	-webkit-box-shadow: 0px 2px 2px 0px #444444; 
+	box-shadow: 0px 2px 2px 0px #444444;
+    border: solid #aaaaaa 1px; width:450px;
+}
+#qabox-inner { margin: 0 auto; width: 450px; text-align:left; color:#000; }
+#qabox-top { margin: 0 auto; width: 450px; text-align:left; color:#000; height: 10px; overflow:hidden; }
+#qabox-bot { margin: 0 auto; width: 450px; text-align:left; color:#000; height: 10px; }
+#qabox-question { margin: 0 10px 0 10px; padding: 0; }
 #qabox-reviews { margin: 0 10px 0 10px; padding: 0; }
 #qabox-rate textarea { width: 425px; border: solid 1px #5f5e5e; }
 #qabox-rate .mreview-box-btn { background-color:#FFF; color:#000; border: solid 1px #000000; }
 #qabox-title { margin: 0 10px 0 10px; padding: 0; font-weight:bold; }
-#qabox-msg { margin: 0 10px 0 10px; padding: 15px; font-weight:bold; text-align:center; }
+#qabox-msg { margin: 0 10px 0 10px; padding: 4px; font-weight:bold; text-align:center; font-size:12px;}
 
 label.uf_error { text-align: left; display: none; color: #800000; font-size:10px; }
 input.uf_error { border: solid 1px #800000; }
@@ -147,7 +154,6 @@ label.uf_pickerror { text-align: left; display: none; color: #800000; font-size:
 .uf_field { font-size:12px; padding:2px; width: 350px; border: solid 1px #888888; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px; }
 .uf_modfield { font-size:12px; padding:2px; width: 120px; border: solid 1px #888888; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px;}
 .uf_modfieldh { font-size:12px; padding:2px; width: 80px; border: solid 1px #444444; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px;}
-.field_purchase { font-size:12px; padding:2px; width: 120px; border: solid 1px #888888; -webkit-border-radius: 2px 2px 2px 2px; -moz-border-radius: 2px 2px 2px 2px; border-radius: 2px 2px 2px 2px;}
 .uf_login { font-size:12px; padding:2px; width: 140px; border: solid 1px #888888;}
 .uf_lost { font-size:12px; padding:2px; width: 190px; border: solid 1px #888888;}
 .uf_select { }
@@ -446,3 +452,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#122543', end
 	
 .continued-ceq-opt-bar-bar { height: 20px; background-color: rgb(35,71,128);}
 
+
+.continued-verify-errorstate { border: 1px solid #c90000; background-color: #fd9e9e;padding: 10px 0;}
+
+#continued-fm-text { height: 240px; overflow: auto; padding: 2px; margin-bottom: 10px; border: 1px solid #000000;}
+#continued-fm-verify-error { color: #800000;padding: 4px 10px;}
+#continued-fm-verify-checkbox { padding: 4px 10px; }
+#continued-fm-verify-submit { padding: 4px 10px;text-align:center;margin: 0 auto; } 
+
+#continued-mat-verify-error { color: #800000;padding: 4px 10px;}
+#continued-mat-verify-submit { padding: 4px 10px;text-align:center;margin: 0 auto; } 
+
+.continued-check-question { font-weight:bold;}
+.continued-check-answer {color:#000080;}
+#continued-check-verify-error { color: #800000;padding: 4px 10px;}
+#continued-check-verify-checkbox { padding: 4px 10px; }
+#continued-check-verify-submit { padding: 4px 10px;text-align:center;margin: 0 auto; }
+
+.continued-assess-question { font-weight:bold;}
+.continued-assess-answer-correct {color:#008000;}
+.continued-assess-answer-incorrect {color:#800000;}
+.continued-assess-expl { font-style:italic; }
+
+#continued-purchase-code-error { color: #800000;padding: 4px 10px;}
