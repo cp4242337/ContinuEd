@@ -253,6 +253,16 @@
 	</fieldset>
 	<fieldset name="matcontent">
 		<field
+			name="course_materialintro"
+			type="editor"
+			label="COM_CONTINUED_COURSE_FIELD_MATINTRO_LABEL"
+			description="COM_CONTINUED_COURSE_FIELD_MATINTRO_DESC"
+			class="inputbox"
+			required="false"
+			filter="raw"
+			buttons="false"
+		/>
+		<field
 			name="course_material"
 			type="editor"
 			label="COM_CONTINUED_COURSE_FIELD_MATTEXT_LABEL"

@@ -54,6 +54,7 @@ class ContinuEdModelAssess extends JModel
 			if ($totq != 0) $score = ($numcorrect / $totq) * 100;
 			else $score=100;
 			if ($score >= $cecfg->EVAL_PERCENT || $etype == 'unassess') $pass = 'pass'; else $pass = 'fail';
+			if ($pass == 'fail' && ContinuEdHelper::attemptCount($courseid) >= $cecfg->fail_limit) $pass= 'flunked';
 		}
 
 		//Grade PreTest

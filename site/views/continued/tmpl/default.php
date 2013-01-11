@@ -67,7 +67,12 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 			$clink  .= 'Begin';
 			$clink  .= '</a>';
 		} else {
-			if (($course->status == 'fail') && $course->cantake && !$course->expired) {
+			if (($course->status == 'flunked') && $course->cantake && !$course->expired) {
+				// Failed, Can Take, Not Expired
+				$clink  = '<a href="'.$courseurl.'" class="cebutton">';
+				$clink  .= 'Flunked, Review';
+				$clink  .= '</a>';
+			} if (($course->status == 'fail') && $course->cantake && !$course->expired) {
 				// Failed, Can Take, Not Expired
 				$clink  = '<a href="'.$courseurl.'" class="cebutton_red">';
 				$clink  .= 'Take Again';

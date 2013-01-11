@@ -45,7 +45,7 @@ class ContinuEdViewCourse extends JView
 		} else{
 			if ($course->status == 'fail'  && $course->cantake && !$course->expired) { //Failed,Can Take,Not Expired
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
-			} else if ($course->status == 'pass' || $course->status == 'complete'  || $course->status == 'audit' && $course->cantake && !$course->expired) {  //Passes, Can Take, NotExpired
+			} else if ($course->status == 'flunked' || $course->status == 'pass' || $course->status == 'complete'  || $course->status == 'audit' && $course->cantake && !$course->expired) {  //Passes, Can Take, NotExpired
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;
 			} else if (($course->status == 'incomplete' || !$course->status) && $course->cantake && !$course->expired && $paid) { //Not Yet Taken, Can TAke, NOt Expired, Paid
 				$url = JURI::current().'?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$course->course_id;

@@ -13,6 +13,7 @@
 		<field name="FM_TEXT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_FM_TEXT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FM_TEXT_DESC" rows="4" cols="70" class="inputbox" required="true" filter="safehtml" buttons="false" />
 		<field name="FM_AGREE_ERROR" type="text" label="COM_CONTINUED_CONFIG_FIELD_FM_AGREE_ERROR_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FM_AGREE_ERROR_DESC" size="120" class="inputbox" required="false" default="" />
 		<field name="EV_TEXT" type="textarea" label="COM_CONTINUED_CONFIG_FIELD_EV_TEXT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EV_TEXT_DESC" rows="4" cols="70" class="inputbox" required="true" filter="safehtml" buttons="false" />
+		<field name="fail_limit" type="text" label="COM_CONTINUED_CONFIG_FIELD_FAIL_LIMIT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_FAIL_LIMIT_DESC" size="10" class="inputbox" required="false" default="3" />
 		<field name="EVAL_PERCENT" type="text" label="COM_CONTINUED_CONFIG_FIELD_EVAL_PERCENT_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_PERCENT_DESC" size="10" class="inputbox" required="false" default="" />
 		<field name="EVAL_EXPL" type="radio" label="COM_CONTINUED_CONFIG_FIELD_EVAL_EXPL_LABEL" description="COM_CONTINUED_CONFIG_FIELD_EVAL_EXPL_DESC" default="0">
 			<option value="0">JHIDE</option>

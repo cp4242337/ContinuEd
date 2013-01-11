@@ -52,6 +52,11 @@ class ContinuEdModelCourses extends JModelList
 
 		// From the hello table
 		$query->from('#__ce_courses as c');
+		
+		// Join over the users for the checked out user.
+		$query->select('uc.name AS editor');
+		$query->join('LEFT', '#__users AS uc ON uc.id=c.checked_out');
+		
 		// Join over the categories.
 		$query->select('cat.cat_name AS category_name');
 		$query->join('RIGHT', '#__ce_cats AS cat ON cat.cat_id = c.course_cat');

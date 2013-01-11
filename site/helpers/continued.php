@@ -206,7 +206,15 @@ class ContinuEdHelper {
 			$db->query();
 			$recent=1;
 		}
-		$q = 'INSERT INTO #__ce_records (rec_user,rec_course,rec_start,rec_session,rec_token,rec_ipaddr,rec_recent,rec_pass,rec_type) VALUES ("'.$userid.'","'.$course.'","'.date("Y-m-d H:i:s").'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'","'.$recent.'","incomplete","'.$type.'")';
+		if ($type == 'ce') {
+			$attempt=ContinuEdHelper::attemptCount($course);
+			if ($attempt) $attempt = $attempt+1;
+			else $attempt = 1;
+		} else {
+			$attempt=0;
+		}
+		$q = 'INSERT INTO #__ce_records (rec_user,rec_course,rec_start,rec_session,rec_token,rec_ipaddr,rec_recent,rec_pass,rec_type,rec_attempt) ';
+		$q.= 'VALUES ("'.$userid.'","'.$course.'","'.date("Y-m-d H:i:s").'","'.$sessionid.'","'.$token.'","'.$_SERVER['REMOTE_ADDR'].'","'.$recent.'","incomplete","'.$type.'","'.$attempt.'")';
 		$db->setQuery( $q );
 		if ($db->query()) return 1;
 		else return 0;
@@ -259,6 +267,25 @@ class ContinuEdHelper {
 	}
 	
 	/**
+	* User attempt count on course.
+	*
+	* @param int $course Course id number
+	*
+	* @return int of count.
+	*
+	* @since 1.35
+	*/
+	function attemptCount($course) {
+		$user =& JFactory::getUser();
+		$userid = $user->id;
+		$query = 'SELECT rec_attempt FROM #__ce_records WHERE rec_user = '.$userid.' && rec_course = '.$course.' ORDER BY rec_attempt DESC';
+		$db =& JFactory::getDBO();
+		$db->setQuery( $query );
+		$ac = $db->loadResult();
+		return $ac;
+	}
+	
+	/**
 	* Has user passed course.
 	*
 	* @param int $course Course id number
@@ -270,7 +297,7 @@ class ContinuEdHelper {
 	function passedCourse($course) {
 		$user =& JFactory::getUser();
 		$userid = $user->id;
-		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass IN ("pass","complete") && rec_course = '.$course;
+		$query = 'SELECT * FROM #__ce_records WHERE rec_user = '.$userid.' && rec_pass IN ("pass","complete","flunked") && rec_course = '.$course;
 		$db =& JFactory::getDBO();
 		$db->setQuery( $query );
 		$fmtext = $db->loadAssoc();

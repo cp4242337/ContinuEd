@@ -33,6 +33,7 @@ if ($this->catalog) {
 		if ($course->course_haseval) {
 			if ($course->rec_pass == 'fail') echo '<span style="color:#800000">Failed</span> ';
 			if ($course->rec_pass == 'pass') echo '<span style="color:#008000">Passed</span> ';
+			if ($course->rec_pass == 'flunked') echo '<span style="color:#800000">Flunked</span> ';
 			if ($course->rec_pass == 'incomplete') echo '<span style="color:#800000">Incomplete</span> ';
 	
 			echo '</td><td>';

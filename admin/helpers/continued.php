@@ -64,4 +64,23 @@ abstract class ContinuEdHelper
 		$cecfg = $ceConfig->toObject();
 		return $cecfg;
 	}
+	
+	/**
+	 * Gets a list of the actions that can be performed.
+	 *
+	 * @return	JObject
+	 */
+	public static function getActions()
+	{
+		$user	= JFactory::getUser();
+		$result	= new JObject;
+	
+		$actions = JAccess::getActions('com_continued');
+	
+		foreach ($actions as $action) {
+			$result->set($action->name, $user->authorise($action->name, 'com_continued'));
+		}
+	
+		return $result;
+	}
 }

@@ -57,6 +57,10 @@ class ContinuEdModelQuestions extends JModelList
 		// From the hello table
 		$query->from('#__ce_questions as q');
 		
+		// Join over the users for the checked out user.
+		$query->select('uc.name AS editor');
+		$query->join('LEFT', '#__users AS uc ON uc.id=q.checked_out');
+		
 		// Join over the users.
 		$query->select('u.username AS username, u.name AS usersname, u.id AS userid');
 		$query->join('LEFT', '#__users AS u ON u.id = q.q_addedby');

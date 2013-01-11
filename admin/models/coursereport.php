@@ -62,7 +62,8 @@ class ContinuEdModelCourseReport extends JModel
 		$cat = $this->getState('cat');
 		$stnum = JRequest::getVar('stnum');
 		if ($recent) $q .= ' && rec_recent = 1 ';
-		$q = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,c.course_cpeprognum,c.course_cat';
+		$q  = 'SELECT STRAIGHT_JOIN DISTINCT r.*,c.course_name,c.course_cpeprognum,c.course_cat';
+		$q .= ',TIMESTAMPDIFF(MINUTE,r.rec_start,r.rec_end) AS time_taken';
 		$q .= ' FROM #__ce_records as r';
 		$q .= ' STRAIGHT_JOIN #__ce_courses as c ON r.rec_course = c.course_id';
 		$q .= ' WHERE date(r.rec_start) BETWEEN "'.$startdate.'" AND "'.$enddate.'"';
@@ -215,7 +216,7 @@ class ContinuEdModelCourseReport extends JModel
 				' ORDER BY cat_name';
 		$this->_db->setQuery($query);
 		$clist = $this->_db->loadObjectList();
-		$clist[]->text='-- All --';
+		$clist[]->text='-- Select Category --';
 		return $clist;
 	}
 	
@@ -238,7 +239,7 @@ class ContinuEdModelCourseReport extends JModel
 		$q .= ' ORDER BY ug.ug_name';
 		$this->_db->setQuery($q);
 		$glist = $this->_db->loadObjectList();
-		$glist[]->text='-- All --';
+		$glist[]->text='-- Select User Group --';
 		return $glist;
 	}
 	
@@ -249,7 +250,7 @@ class ContinuEdModelCourseReport extends JModel
 		$query .= ' ORDER BY course_name';
 		$this->_db->setQuery($query);
 		$clist = $this->_db->loadObjectList();
-		$clist[]->text='-- All --';
+		$clist[]->text='-- Select Course --';
 		return $clist;
 	}
 	
@@ -259,7 +260,7 @@ class ContinuEdModelCourseReport extends JModel
 				' ORDER BY qg_name';
 		$this->_db->setQuery($query);
 		$glist = $this->_db->loadObjectList();
-		$glist[]->text='-- All --';
+		$glist[]->text='-- Select Question Group --';
 		return $glist;
 	}
 	

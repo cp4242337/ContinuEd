@@ -7,7 +7,7 @@
 	<authorUrl>http://www.coronapro.com</authorUrl>
 	<copyright>Copyright 2008-2013 Corona Productions</copyright>
 	<license>GPL v2</license>
-	<version>1.30.1</version>
+	<version>1.35.0</version>
 	<releaseDate>2013.01.08</releaseDate>
 	<releaseType>Update</releaseType>
 	<downloadUrl>http://www.coronapro.com/</downloadUrl>
@@ -29,6 +29,7 @@
 		<filename>router.php</filename>
 		<filename>gencert.php</filename>
 		<filename>continued.php</filename>
+		<filename>continued.css</filename>
 		<filename>controller.php</filename>
 		<filename>metadata.xml</filename>
 		<filename>printButton.png</filename>
@@ -42,7 +43,6 @@
     <media destination="com_continued" folder="media">
             <filename>index.html</filename>
             <filename>admin.css</filename>
-            <folder>template</folder>
             <folder>scripts</folder>
 			<folder>images</folder>
     </media>

@@ -20,6 +20,7 @@ $contents .= '"'.JText::_( 'Record Type' ).'",';
 $contents .= '"'.JText::_( 'Last Step Completed' ).'",';
 $contents .= '"'.JText::_( 'Start' ).'",'; 
 $contents .= '"'.JText::_( 'End' ).'",'; 
+$contents .= '"'.JText::_("Time Taken").'",';
 $contents .= '"'.JText::_( 'Pre Score' ).'",'; 
 $contents .= '"'.JText::_( 'Post Score' ).'",'; 
 
@@ -59,6 +60,7 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 	switch ($row->rec_pass) {
 		case 'pass': $contents .= '"Completed - Pass",'; break;
 		case 'fail': $contents .= '"Completed - Fail",'; break;
+		case 'flunked': $contents .= '"Completed - Flunked",'; break;
 		case 'incomplete': $contents .= '"Incomplete",'; break;
 		case 'audit': $contents .= '"Completed - No Credit",'; break;
 		case 'complete': $contents .= '"Completed",'; break;
@@ -92,6 +94,9 @@ for ($i=0, $n=count( $this->items ); $i < $n; $i++)
 	}
 	$contents .= '"'.$row->rec_start.'",';
 	$contents .= '"'.$row->rec_end.'",'; 
+	$contents .= '"';
+	if ($row->rec_end != "0000-00-00 00:00:00") $contents .= $row->time_taken;
+	$contents .= '",';
 	if ($row->rec_prescore == -1 || !$row->rec_user || $row->rec_type != 'ce') $contents .= '"N/A",'; else $contents .= '"'.$row->rec_prescore.'",'; 
 	if ($row->rec_postscore == -1 || !$row->rec_user || $row->rec_type != 'ce') $contents .= '"N/A",'; else $contents .= '"'.$row->rec_postscore.'",'; 
 	//Fill in answers if we are showing only 1 course

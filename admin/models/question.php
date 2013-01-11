@@ -16,12 +16,12 @@ class ContinuEdModelQuestion extends JModelAdmin
 	 *
 	 * @return	boolean
 	 * @since	1.6
-	 */
+	*/
 	protected function allowEdit($data = array(), $key = 'q_id')
 	{
 		// Check specific edit permission then general edit permission.
 		return JFactory::getUser()->authorise('core.edit', 'com_continued.question.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
-	}
+	} 
 	/**
 	 * Returns a reference to the a Table object, always creating it.
 	 *
@@ -127,6 +127,53 @@ class ContinuEdModelQuestion extends JModelAdmin
 		return $condition;
 	}
 	
+	public function getItem($pk = null)
+	{
+		/*
+		// Initialise variables.
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+		$table = $this->getTable();
+	
+		if ($pk > 0)
+		{
+			// Attempt to load the row.
+			$return = $table->load($pk);
+				
+			// Check for a table object error.
+			if ($return === false && $table->getError())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+	
+		// Convert to the JObject before adding other data.
+		$properties = $table->getProperties(1);
+		$item = JArrayHelper::toObject($properties, 'JObject');
+	
+		if (property_exists($item, 'params'))
+		{
+			$registry = new JRegistry();
+			$registry->loadString($item->params);
+			$item->params = $registry->toArray();
+		}
+	
+		$q = 'SELECT qtag_tag FROM #__ce_questiontags WHERE qtag_q = '.$item->q_id;
+		$this->_db->setQuery($q);
+		$item->questiontags=$this->_db->loadResultArray();
+	
+		return $item;
+		*/
+		
+		if ($item = parent::getItem($pk)) {
+			$q = 'SELECT qtag_tag FROM #__ce_questiontags WHERE qtag_q = '.$item->q_id;
+			$this->_db->setQuery($q);
+			$item->questiontags=$this->_db->loadResultArray();
+		}
+		
+		return $item;
+	}
+	
 	public function copy(&$pks)
 	{
 		// Initialise variables.
@@ -151,12 +198,27 @@ class ContinuEdModelQuestion extends JModelAdmin
 				} else {
 					if ($table->q_type == 'multi' || $table->q_type == 'mcbox') {
 						$newid = $table->q_id;
+						
+						//Options
 						$qoq='SELECT * FROM #__ce_questions_opts WHERE opt_question = '.$pk;
 						$this->_db->setQuery($qoq);
 						$qos = $this->_db->loadObjectList();
 						foreach($qos as $qo) {
 							$q  = 'INSERT INTO #__ce_questions_opts (opt_question,opt_text,opt_correct,opt_expl,ordering,published) ';
 							$q .= 'VALUES ("'.$newid.'","'.$qo->opt_text.'","'.$qo->opt_correct.'","'.$qo->opt_expl.'","'.$qo->ordering.'","'.$qo->published.'")';
+							$this->_db->setQuery($q);
+							if (!$this->_db->query($q)) {
+								return false;
+							}
+						}
+						
+						//Tags
+						$qtq='SELECT * FROM #__ce_questiontags WHERE qtag_q = '.$pk;
+						$this->_db->setQuery($qtq);
+						$qts = $this->_db->loadObjectList();
+						foreach($qts as $qt) {
+							$q  = 'INSERT INTO #__ce_questiontags (qtag_q,qtag_tag) ';
+							$q .= 'VALUES ("'.$newid.'","'.$qt->qtag_tag.'")';
 							$this->_db->setQuery($q);
 							if (!$this->_db->query($q)) {
 								return false;
@@ -176,5 +238,110 @@ class ContinuEdModelQuestion extends JModelAdmin
 		$this->cleanCache();
 		
 		return true;
+	}
+	
+	public function save($data)
+	{
+		// Initialise variables;
+		$dispatcher = JDispatcher::getInstance();
+		$table = $this->getTable();
+		$key = $table->getKeyName();
+		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+		$isNew = true;
+	
+		// Include the content plugins for the on save events.
+		JPluginHelper::importPlugin('content');
+	
+		// Allow an exception to be thrown.
+		try
+		{
+			// Load the row if saving an existing record.
+			if ($pk > 0)
+			{
+				$table->load($pk);
+				$isNew = false;
+			}
+				
+			// Bind the data.
+			if (!$table->bind($data))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+				
+			// Prepare the row for saving
+			$this->prepareTable($table);
+				
+			// Check the data.
+			if (!$table->check())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+				
+			// Trigger the onContentBeforeSave event.
+			$result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, &$table, $isNew));
+			if (in_array(false, $result, true))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+				
+			// Store the data.
+			if (!$table->store())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+				
+			// Clean the cache.
+			$this->cleanCache();
+				
+			// Trigger the onContentAfterSave event.
+			$dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, &$table, $isNew));
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e->getMessage());
+				
+			return false;
+		}
+	
+		$pkName = $table->getKeyName();
+	
+		if (isset($table->$pkName))
+		{
+			$this->setState($this->getName() . '.id', $table->$pkName);
+		}
+		$this->setState($this->getName() . '.new', $isNew);
+	
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
+		$query->delete();
+		$query->from('#__ce_questiontags');
+		$query->where('qtag_q = '.(int)$table->q_id);
+		$db->setQuery((string)$query);
+		$db->query();
+	
+		if (!empty($data['questiontags'])) {
+			foreach ($data['questiontags'] as $cc) {
+				$qc = 'INSERT INTO #__ce_questiontags (qtag_q,qtag_tag) VALUES ('.(int)$table->q_id.','.(int)$cc.')';
+				$db->setQuery($qc);
+				if (!$db->query()) {
+					$this->setError($db->getErrorMsg());
+					return false;
+				}
+			}
+		}
+	
+		return true;
+	}
+	
+	public function getQuestionTags() {
+		$query = 'SELECT qt_id, qt_name' .
+				' FROM #__ce_questions_tags' .
+				' ORDER BY qt_name';
+		$this->_db->setQuery($query);
+		return $this->_db->loadObjectList();
 	}
 }

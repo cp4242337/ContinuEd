@@ -18,6 +18,7 @@ class ContinuEdViewQuestion extends JView
 		$form = $this->get('Form');
 		$item = $this->get('Item');
 		$script = $this->get('Script');
+		$qtags = $this->get('QuestionTags');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
@@ -29,6 +30,7 @@ class ContinuEdViewQuestion extends JView
 		$this->form = $form;
 		$this->item = $item;
 		$this->script = $script;
+		$this->qtags = $qtags;
 
 		// Set the toolbar
 		$this->addToolBar();

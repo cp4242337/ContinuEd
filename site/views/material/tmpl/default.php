@@ -6,6 +6,11 @@ defined('_JEXEC') or die('Restricted access');
 echo '<h2 class="componentheading">'.$this->mtext->course_name.'</h2>';
 //Gve error message if they tryed to jummop over material staright to the eval
 if ($this->jumpedover) echo '<div class="continued-error">Please complete all material before proceeding</div>';
+if ($this->mtext->course_materialintro) {
+	echo '<div id="continued-material-intro">';
+	echo $this->mtext->course_materialintro;
+	echo '</div>';
+}
 //Show Material
 if (count($this->matpages) == 1) {
 //only 1 material page

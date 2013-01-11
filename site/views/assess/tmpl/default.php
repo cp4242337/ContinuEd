@@ -43,9 +43,12 @@ if ($totq != 0) $score = ($numcorrect / $totq) * 100;
 else $score = 101;
 
 if ($score >= $cecfg->EVAL_PERCENT) $pass = 1; else $pass = 0;
+if (ContinuEdHelper::attemptCount($this->courseid) < $cecfg->fail_limit) $flunked = false; else $flunked = true;
+
 $assess .= '<tr><td colspan="3" align="center">Score: '.(int)$score.'% You Have: ';
 if ($pass) $assess .= '<span style="color:#008000">Passed</span>';
-else  $assess .= '<span style="color:#800000">Failed</span>';
+else  if (!$pass && !$flunked) $assess .= '<span style="color:#800000">Failed</span>';
+else $assess .= '<span style="color:#800000">Flunked</span>';
 $assess .= '</td></tr></tfoot></table>';
 if ($score != 101) {
 	echo  $assess;
@@ -78,8 +81,11 @@ if ($pass) {
 else
 {
 	if ($this->cinfo->course_failmsg) echo '<p>'.$this->cinfo->course_failmsg.'</p>';
-	echo '<p align="center"><a href="index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->courseid.'" class="cebutton_red">';
-	echo 'Take Again</a>';
+	echo '<p align="center">';
+	if (!$flunked) {
+		echo '<a href="index.php?option=com_continued&view=frontmatter&Itemid='.JRequest::getVar( 'Itemid' ).'&course='.$this->courseid.'" class="cebutton_red">';
+		echo 'Take Again</a>';
+	}
 	echo '<a href="'.$this->redirurl.'" class="cebutton">Return</a>';
 }
 ?>

@@ -2,12 +2,21 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
-?>
-<?php foreach($this->items as $i => $item): 
 	$listOrder	= $this->escape($this->state->get('list.ordering'));
 	$listDirn	= $this->escape($this->state->get('list.direction'));
 	$saveOrder	= $listOrder == 'q.ordering';
+	$user		= JFactory::getUser();
+	$userId		= $user->get('id');
+?>
+<?php 
+
+foreach($this->items as $i => $item): 
 	$ordering	= ($listOrder == 'q.ordering');
+	$canCreate	= $user->authorise('core.create',		'com_continued');
+	$canEdit	= $user->authorise('core.edit',			'com_continued');
+	$canCheckin	= $user->authorise('core.manage',		'com_checkin') || $item->checked_out==$user->get('id') || $item->checked_out==0;
+	$canChange	= $user->authorise('core.edit.state',	'com_continued') && $canCheckin;
+		
 	?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td>
@@ -17,8 +26,15 @@ defined('_JEXEC') or die('Restricted Access');
 			<?php echo JHtml::_('grid.id', $i, $item->q_id); ?>
 		</td>
 		<td>
-				<a href="<?php echo JRoute::_('index.php?option=com_continued&task=question.edit&q_id='.(int) $item->q_id); ?>">
-				<?php echo $item->q_text; ?></a>
+				<?php if ($item->checked_out) : ?>
+					<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'weblinks.', $canCheckin); ?>
+				<?php endif; ?>
+				<?php if ($canEdit) : ?>
+					<a href="<?php echo JRoute::_('index.php?option=com_continued&task=question.edit&q_id='.(int) $item->q_id); ?>">
+						<?php echo $this->escape($item->q_text); ?></a>
+				<?php else : ?>
+						<?php echo $this->escape($item->q_text); ?>
+				<?php endif; ?>
 		</td>
 		<td class="center">
 			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'questions.', true);?>
