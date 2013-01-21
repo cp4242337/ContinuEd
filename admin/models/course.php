@@ -349,8 +349,8 @@ class ContinuEdModelCourse extends JModelAdmin
 					if ($qus)
 					{
 						foreach($qus as $qu) {
-							$q  = 'INSERT INTO #__ce_questions (q_course,ordering,q_text,q_type,q_cat,q_part,q_req,q_depq,q_area,published) ';
-							$q .= 'VALUES ("'.$newcourse.'","'.$qu->ordering.'","'.addslashes($qu->q_text).'","'.$qu->q_type.'","'.$qu->q_cat.'","'.$qu->q_part.'","'.$qu->q_req.'","'.$qu->q_depq.'","'.$qu->q_area.'","'.$qu->published.'")';
+							$q  = 'INSERT INTO #__ce_questions (q_course,ordering,q_text,q_type,q_group,q_cat,q_part,q_req,q_depq,q_area,published) ';
+							$q .= 'VALUES ("'.$newcourse.'","'.$qu->ordering.'","'.addslashes($qu->q_text).'","'.$qu->q_type.'","'.$qu->q_group.'","'.$qu->q_cat.'","'.$qu->q_part.'","'.$qu->q_req.'","'.$qu->q_depq.'","'.$qu->q_area.'","'.$qu->published.'")';
 							$this->_db->setQuery($q);
 							if (!$this->_db->query($q)) {
 								$this->setError($this->_db->getErrorMsg());

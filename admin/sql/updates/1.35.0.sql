@@ -18,4 +18,4 @@ ALTER TABLE  `#__ce_courses` ADD    `checked_out` int(11) NOT NULL DEFAULT '0';
 ALTER TABLE  `#__ce_courses` ADD   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 
 ALTER TABLE  `#__ce_records` CHANGE  `rec_pass`  `rec_pass` ENUM(  'pass',  'fail',  'incomplete',  'audit',  'complete',  'flunked' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
-ALTER TABLE  `#__ce_courses` ADD  `course_materialintro` TEXT NOT NULL AFTER  `course_frontmatter`
+ALTER TABLE  `#__ce_courses` ADD  `course_materialintro` TEXT NOT NULL AFTER  `course_frontmatter`;
