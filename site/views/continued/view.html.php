@@ -28,6 +28,7 @@ class ContinuEdViewContinuEd extends JView
 		
 		//Get vars
 		$cat = JRequest::getVar('cat');
+		$course = JRequest::getVar('course',0);
 		$fmv = JRequest::getVar('fmv');
 		$showfm = JRequest::getVar('showfm',false);
 		
@@ -39,7 +40,7 @@ class ContinuEdViewContinuEd extends JView
 		}
 		
 		//Get Catalog
-		$catalog=$model->getCatalog($cat);
+		$catalog=$model->getCatalog($cat,$course);
 		
 		//Get Category Info
 		if ($cat != 0) {
@@ -84,6 +85,7 @@ class ContinuEdViewContinuEd extends JView
 		
 		//Assign Vars
 		$this->catalog=$catalog;
+		$this->course=$course;
 		$this->model=$model;
 		$this->showfm=$showfm;
 		$this->cat=$cat;

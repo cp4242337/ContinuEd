@@ -165,6 +165,10 @@ if (!$this->dispfm && !$this->showfm && $this->cat != 0) {
 		} else if ($this->user->id && $course->course_hascertif && !$course->expired) {
 			echo '<span class="cebutton_grey">Get Certificate</span>';
 		}
+		if ($this->course) {
+			echo '<a href="'.JRoute::_('index.php?option=com_continued&view=continued&cat='.$course->course_cat.')'.'" target="_blank" class="cebutton">';
+			echo 'Show More</a>';
+		}
 
 
 		echo '</td></tr>';

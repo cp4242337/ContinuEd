@@ -33,7 +33,7 @@ class ContinuEdModelContinuEd extends JModel
 	*
 	* @since always
 	*/
-	function getCatalog($cat)
+	function getCatalog($cat,$course=0)
 	{
 		$db =& JFactory::getDBO();
 		$user =& JFactory::getUser();
@@ -43,6 +43,7 @@ class ContinuEdModelContinuEd extends JModel
 		$query .= 'LEFT JOIN #__ce_providers as p ON c.course_provider = p.prov_id ';
 		$query .= 'LEFT JOIN #__ce_courses as r ON c.course_catrate = r.course_id ';
 		$query .= 'WHERE c.published = 1 && c.access IN ('.implode(",",$user->getAuthorisedViewLevels()).') ';
+		if ($course) $query .= 'c.course_id = '.$course;
 		if ($cat != 0) $query .= ' && c.course_cat = '.$cat;
 		$query .= ' GROUP BY c.course_id ORDER BY c.ordering ASC';
 		$db->setQuery( $query );
